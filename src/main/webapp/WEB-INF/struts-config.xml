@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts-config PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+        "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+
+    <form-beans>
+        <form-bean name="helloWorldForm" type="common.form.HelloWorldForm"/>
+        <form-bean name="loginForm" type="common.form.LoginForm"/>
+        <form-bean name="userForm" type="common.form.UserForm"/>
+    </form-beans>
+
+    <action-mappings>
+        <action path="/helloWorld"
+                type="common.action.HelloWorldAction"
+                name="helloWorldForm">
+            <forward name="success" path="/WEB-INF/index.jsp"/>
+        </action>
+        <!-- Login -->
+        <action path="/welcome" forward="/WEB-INF/pages/loginPage.jsp">
+        </action>
+        <action path="/login"
+                name="loginForm"
+                type="common.action.LoginAction">
+            <forward name="success" path="/system/usersList.html" redirect="true"/>
+            <forward name="access denied" path="/welcome.html" redirect="true"/>
+            <forward name="failure" path="/welcome.html" redirect="true"/>
+        </action>
+        <!-- Sign Out -->
+        <action path="/system/signOut" type="common.action.SignOutAction" >
+            <forward name="success" path="/welcome.html" redirect="true"/>
+        </action>
+        <!-- Create User -->
+        <action path="/system/signUp" forward="/WEB-INF/pages/createUserPage.jsp"/>
+        <action path="/system/createUser" type="common.action.CreateUserAction"
+                name="userForm"
+                scope="request">
+            <forward name="success" path="/WEB-INF/pages/successUserCreate.jsp"/>
+            <forward name="duplicate user" path="/WEB-INF/pages/createUserPage.jsp"/>
+            <forward name="error" path="/WEB-INF/pages/createUserPage.jsp"/>
+        </action>
+        <!-- Show Users -->
+        <action path="/system/usersList" type="common.action.UserListAction">
+            <forward name="success" path="/WEB-INF/pages/userList/usersListPage.jsp"/>
+        </action>
+
+        <!-- Update User -->
+        <action path="/system/editUser" type="common.action.EditUserAction" name="userForm" scope="request">
+            <forward name="success" path="/WEB-INF/pages/updateUserPage.jsp"/>
+        </action>
+        <action path="/system/updateUser" type="common.action.UpdateUser" name="userForm" scope="request">
+            <forward name="success" path="/system/usersList.html" redirect="true"/>
+            <forward name="error" path="/system/editUser.html"/>
+        </action>
+
+        <!-- Delete User -->
+        <action path="/system/deleteUser" type="common.action.DeleteUserAction">
+            <forward name="success" path="/system/usersList.html" redirect="true"/>
+        </action>
+    </action-mappings>
+
+    <message-resources parameter="i18n.messages"/>
+
+</struts-config>

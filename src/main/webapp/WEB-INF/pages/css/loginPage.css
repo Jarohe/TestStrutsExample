@@ -1,0 +1,9 @@
+.center{
+    width: 400px;
+    margin: 0 auto;
+}
+
+.right-button{
+    float: right;
+    margin-right: 11em;
+}
