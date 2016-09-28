@@ -3,6 +3,7 @@ package common.action;
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
 import common.db.dao.impl.UserDaoImpl;
+import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
 import common.utils.StatusAction;
@@ -19,6 +20,10 @@ import java.sql.SQLException;
 public class CreateUserAction extends SmartAction {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException {
+
+        if(!isManager(request)) {
+            return mapping.findForward(StatusAction.ERROR);
+        }
         UserForm userForm = (UserForm) form;
         if(userForm.getLogin() != null && userForm.getPass() != null && userForm.getFirstName() !=null && userForm.getLastName() != null) {
 

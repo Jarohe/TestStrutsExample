@@ -15,6 +15,9 @@ import java.sql.Connection;
 public class DeleteUserAction extends SmartAction {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if(!isManager(request)) {
+            return mapping.findForward(StatusAction.ERROR);
+        }
         Integer userId = Integer.valueOf(request.getParameter("id"));
         UserDao userDao = getUserDao(request);
         userDao.deleteUserById(userId);

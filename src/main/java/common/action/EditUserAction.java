@@ -19,6 +19,9 @@ public class EditUserAction extends SmartAction {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if(!isManager(request)) {
+            return mapping.findForward(StatusAction.ERROR);
+        }
         Integer userId = Integer.valueOf(request.getParameter("id"));
         UserForm userForm = (UserForm) form;
         UserDao userDao = getUserDao(request);

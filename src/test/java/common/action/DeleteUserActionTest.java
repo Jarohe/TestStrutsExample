@@ -2,6 +2,8 @@ package common.action;
 
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
+import common.db.model.Role;
+import common.db.model.User;
 import common.utils.StatusAction;
 import servletunit.struts.MockStrutsTestCase;
 
@@ -10,6 +12,7 @@ import java.sql.SQLException;
 
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,11 +22,13 @@ public class DeleteUserActionTest extends MockStrutsTestCase {
     private Connection connection = mock(Connection.class);
     private UserDao userDao = mock(UserDao.class);
     private DaoFactory factory = mock(DaoFactory.class);
+    private User userSession = createSessionUser();
 
     public void setUp() throws Exception {
         super.setUp();
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
+        getSession().setAttribute("sessionUser", userSession);
     }
 
     public void testSuccessUserDelete() throws SQLException {
@@ -33,6 +38,10 @@ public class DeleteUserActionTest extends MockStrutsTestCase {
         addRequestParameter("id", "1");
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
+    }
+
+    private User createSessionUser() {
+        return new User.Builder(1,"","").role(Role.MANAGER).build();
     }
 
 }

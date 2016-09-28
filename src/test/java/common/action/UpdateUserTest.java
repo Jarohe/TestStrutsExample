@@ -2,6 +2,7 @@ package common.action;
 
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
+import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
 import common.utils.StatusAction;
@@ -24,11 +25,13 @@ public class UpdateUserTest extends MockStrutsTestCase {
     private DaoFactory factory = mock(DaoFactory.class);
     private User user = mock(User.class);
     private User user2 = mock(User.class);
+    private User sessionUser = createSessionUser();
 
     public void setUp() throws Exception {
         super.setUp();
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
+        getSession().setAttribute("sessionUser",sessionUser);
     }
 
     public void testSuccessUpdateUserWithPassword() throws SQLException {
@@ -114,6 +117,10 @@ public class UpdateUserTest extends MockStrutsTestCase {
         form.setFirstName("");
         form.setRole(true);
         return form;
+    }
+
+    private User createSessionUser() {
+        return new User.Builder(1,"","").role(Role.MANAGER).build();
     }
 
 }

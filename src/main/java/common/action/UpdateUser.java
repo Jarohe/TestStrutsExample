@@ -17,6 +17,9 @@ import java.sql.Connection;
 public class UpdateUser extends SmartAction {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        if(!isManager(request)) {
+            return mapping.findForward(StatusAction.ERROR);
+        }
         UserForm userForm = (UserForm) form;
         if (userForm.getLogin() != null && userForm.getPass() != null && userForm.getFirstName() != null && userForm.getLastName() != null) {
 

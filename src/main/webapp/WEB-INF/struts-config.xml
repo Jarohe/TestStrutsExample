@@ -49,6 +49,7 @@
         <!-- Update User -->
         <action path="/system/editUser" type="common.action.EditUserAction" name="userForm" scope="request">
             <forward name="success" path="/WEB-INF/pages/updateUserPage.jsp"/>
+            <forward name="error" path="/login.html" redirect="true"/>
         </action>
         <action path="/system/updateUser" type="common.action.UpdateUser" name="userForm" scope="request">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
@@ -58,6 +59,7 @@
         <!-- Delete User -->
         <action path="/system/deleteUser" type="common.action.DeleteUserAction">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
+            <forward name="error" path="/login.html" redirect="true"/>
         </action>
     </action-mappings>
 
