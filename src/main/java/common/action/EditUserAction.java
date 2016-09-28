@@ -15,16 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 
 
-public class EditUserAction extends Action {
+public class EditUserAction extends SmartAction {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Integer userId = Integer.valueOf(request.getParameter("id"));
         UserForm userForm = (UserForm) form;
-
-        Connection connection = (Connection) request.getAttribute("connection");
-        UserDao userDao = new UserDaoImpl(connection);
-
+        UserDao userDao = getUserDao(request);
         User user = userDao.getUserById(userId);
         userForm.setUserForm(user.convertToForm());
         return mapping.findForward(StatusAction.SUCCESS);

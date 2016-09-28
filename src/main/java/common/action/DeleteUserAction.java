@@ -12,16 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 
-public class DeleteUserAction extends Action {
+public class DeleteUserAction extends SmartAction {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Integer userId = Integer.valueOf(request.getParameter("id"));
-
-        Connection connection = (Connection) request.getAttribute("connection");
-        UserDao userDao = new UserDaoImpl(connection);
-
+        UserDao userDao = getUserDao(request);
         userDao.deleteUserById(userId);
         return mapping.findForward(StatusAction.SUCCESS);
-
     }
 }

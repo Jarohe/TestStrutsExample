@@ -3,6 +3,7 @@ package common.action;
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
 import common.db.model.User;
+import common.form.LoginForm;
 import common.utils.StatusAction;
 import servletunit.struts.MockStrutsTestCase;
 
@@ -12,15 +13,15 @@ import java.sql.SQLException;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by derevyanko on 27.09.2016.
- */
+
 public class LoginActionTest extends MockStrutsTestCase {
 
-    Connection connection = mock(Connection.class);
-    UserDao userDao = mock(UserDao.class);
-    DaoFactory factory = mock(DaoFactory.class);
-    User user = mock(User.class);
+    private static String PATH_INFO = "/login";
+
+    private Connection connection = mock(Connection.class);
+    private UserDao userDao = mock(UserDao.class);
+    private DaoFactory factory = mock(DaoFactory.class);
+    private User user = mock(User.class);
 
     public void setUp() throws Exception {
         super.setUp();
@@ -29,7 +30,7 @@ public class LoginActionTest extends MockStrutsTestCase {
     }
 
     public void testSuccessLogin() throws SQLException {
-        setRequestPathInfo("/login");
+        setRequestPathInfo(PATH_INFO);
         when(user.getUsername()).thenReturn("login");
         when(user.getPassword()).thenReturn("password");
         when(userDao.getUserByUsername("login")).thenReturn(user);
@@ -40,6 +41,29 @@ public class LoginActionTest extends MockStrutsTestCase {
         addRequestParameter("pass","password");
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
+    }
+
+    public void testFailLogin() throws SQLException {
+        setRequestPathInfo(PATH_INFO);
+        when(user.getUsername()).thenReturn("login");
+        when(user.getPassword()).thenReturn("pass");
+        when(userDao.getUserByUsername("login")).thenReturn(user);
+
+        getActionServlet().getServletContext().setAttribute("daoFactory",factory);
+
+        addRequestParameter("login","login");
+        addRequestParameter("pass","password");
+        actionPerform();
+        verifyForward(StatusAction.LoginUser.ACCESS_DENIED);
+    }
+
+    public void testPassNull() {
+        setRequestPathInfo(PATH_INFO);
+        LoginForm loginForm = new LoginForm();
+        loginForm.setLogin("login");
+        setActionForm(loginForm);
+        actionPerform();
+        verifyForward(StatusAction.FAILURE);
     }
 
 }

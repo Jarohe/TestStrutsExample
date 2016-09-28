@@ -14,14 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 
-public class UpdateUser extends Action {
+public class UpdateUser extends SmartAction {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         UserForm userForm = (UserForm) form;
         if (userForm.getLogin() != null && userForm.getPass() != null && userForm.getFirstName() != null && userForm.getLastName() != null) {
-            Connection connection = (Connection) request.getAttribute("connection");
 
-            UserDao userDao = new UserDaoImpl(connection);
+            UserDao userDao = getUserDao(request);
             User user = userDao.getUserById(userForm.getId());
             User findDuplicate = userDao.getUserByUsername(userForm.getLogin());
             if(user != null && findDuplicate != null && user.getId() != findDuplicate.getId()) {

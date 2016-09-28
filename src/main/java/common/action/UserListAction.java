@@ -15,16 +15,13 @@ import java.sql.Connection;
 import java.util.List;
 
 
-public class UserListAction extends Action {
+public class UserListAction extends SmartAction {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Connection connection = (Connection) request.getAttribute("connection");
-        UserDao userDao = new UserDaoImpl(connection);
-
+        UserDao userDao = getUserDao(request);
         List<User> users = userDao.getAllUsers();
         request.setAttribute("userList", users);
-
         return mapping.findForward(StatusAction.SUCCESS);
     }
 }

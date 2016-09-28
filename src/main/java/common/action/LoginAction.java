@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 
-public class LoginAction extends Action {
+public class LoginAction extends SmartAction {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response)
@@ -21,10 +21,7 @@ public class LoginAction extends Action {
         ActionErrors errors = new ActionErrors();
         if(loginForm.getLogin() != null && loginForm.getPass() != null) {
 
-            Connection connection = (Connection) request.getAttribute("connection");
-            DaoFactory factory = (DaoFactory) getServlet().getServletContext().getAttribute("daoFactory");
-            UserDao userDao = factory.createUserDao(connection);
-
+            UserDao userDao = getUserDao(request);
             User user = userDao.getUserByUsername(loginForm.getLogin());
             if(user != null && user.getPassword().equals(loginForm.getPass())){
                 request.getSession().setAttribute("sessionUser",user);
@@ -39,9 +36,5 @@ public class LoginAction extends Action {
         }
         loginForm.setError("Fill out the fields.");
         return mapping.findForward(StatusAction.FAILURE);
-    }
-
-    public UserDao getUserDao(Connection connection) {
-        return new UserDaoImpl(connection);
     }
 }
