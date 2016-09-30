@@ -46,15 +46,22 @@ public class UserDaoImplTest extends TestCase {
     }
 
     public void testGetUserById() throws SQLException {
-        User userAdmin = buildAdminUser();
-        User resultUser = userDao.getUserById(1);
-        assertTrue(userAdmin.equals(resultUser));
+        UserForm form  = buildDefoultUserForm();
+        userDao.addUser(form);
+        User user1 = userDao.getUserByUsername(form.getLogin());
+        User user2 = userDao.getUserById(user1.getId());
+        assertTrue(user1.equals(user2));
     }
 
     public void testGetUserByUsername() throws SQLException {
-        User userAdmin = buildAdminUser();
-        User resultUser = userDao.getUserByUsername("admin");
-        assertTrue(userAdmin.equals(resultUser));
+        UserForm form  = buildDefoultUserForm();
+        userDao.addUser(form);
+        User user = userDao.getUserByUsername(form.getLogin());
+        assertTrue(form.getLogin().equals(user.getUsername()));
+        assertTrue(form.getPass().equals(user.getPassword()));
+        assertTrue(form.getFirstName().equals(user.getFirstName()));
+        assertTrue(form.getLastName().equals(user.getLastName()));
+        assertTrue(Role.DEFAULT.equals(user.getRole()));
     }
 
     public void testGetAllUsers() throws SQLException {
@@ -118,10 +125,6 @@ public class UserDaoImplTest extends TestCase {
         form.setLastName("testUser");
         form.setRole(false);
         return form;
-    }
-
-    private User buildAdminUser() {
-        return new User.Builder(1,"admin","admin").role(Role.MANAGER).firstName("Derevyanko").lastName("Nikita").build();
     }
 
 }
