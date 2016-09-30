@@ -113,11 +113,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean updateUser(User oldUser, User updateUser) {
-        return false;
-    }
-
-    @Override
     public boolean updateUserByUserForm(UserForm user) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement("UPDATE users SET username=?, password=?,firstName=?,lastName=?,role=? WHERE id = ?")) {
             statement.setString(1, user.getLogin());
@@ -130,10 +125,7 @@ public class UserDaoImpl implements UserDao {
                 statement.setInt(5, 1);
             }
             statement.setInt(6, user.getId());
-            if (statement.executeUpdate() == 1){
-                return true;
-            }
-            return false;
+            return statement.executeUpdate() == 1;
         }
     }
 
@@ -149,10 +141,7 @@ public class UserDaoImpl implements UserDao {
                 statement.setInt(4, 1);
             }
             statement.setInt(5, user.getId());
-            if (statement.executeUpdate() == 1){
-                return true;
-            }
-            return false;
+            return statement.executeUpdate() == 1;
         }
     }
 }

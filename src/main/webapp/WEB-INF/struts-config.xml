@@ -7,17 +7,11 @@
 <struts-config>
 
     <form-beans>
-        <form-bean name="helloWorldForm" type="common.form.HelloWorldForm"/>
         <form-bean name="loginForm" type="common.form.LoginForm"/>
         <form-bean name="userForm" type="common.form.UserForm"/>
     </form-beans>
 
     <action-mappings>
-        <action path="/helloWorld"
-                type="common.action.HelloWorldAction"
-                name="helloWorldForm">
-            <forward name="success" path="/WEB-INF/index.jsp"/>
-        </action>
         <!-- Login -->
         <action path="/welcome" forward="/WEB-INF/pages/loginPage.jsp">
         </action>

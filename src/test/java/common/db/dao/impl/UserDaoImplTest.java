@@ -117,6 +117,16 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(user1.equals(user2));
     }
 
+    public void testDeleteUserByUsername() throws SQLException {
+        UserForm form = buildDefoultUserForm();
+        userDao.addUser(form);
+        User user = userDao.getUserByUsername(form.getLogin());
+        assertTrue(user != null);
+        userDao.deleteUserByUsername(user.getUsername());
+        user = userDao.getUserById(user.getId());
+        assertTrue(user == null);
+    }
+
     private UserForm buildDefoultUserForm() {
         UserForm form = new UserForm();
         form.setLogin("testUser");

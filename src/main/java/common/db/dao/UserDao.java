@@ -14,7 +14,6 @@ public interface UserDao {
     boolean deleteUserById(int id) throws SQLException;
     boolean deleteUserByUsername(String login) throws SQLException;
     boolean addUser(UserForm form) throws SQLException;
-    boolean updateUser(User oldUser, User updateUser);
     boolean updateUserByUserForm(UserForm user) throws SQLException;
     boolean updateWithoutPassword(UserForm user) throws SQLException;
 }

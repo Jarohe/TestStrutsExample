@@ -1,5 +1,6 @@
 package common.filters;
 
+import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
 import common.db.dao.impl.UserDaoImpl;
 import common.db.model.User;
@@ -32,7 +33,8 @@ public class AccessFilter implements Filter {
         } else{
             try {
                 Connection connection = (Connection) servletRequest.getAttribute("connection");
-                UserDao userDao = new UserDaoImpl(connection);
+                DaoFactory factory = (DaoFactory)session.getServletContext().getAttribute("daoFactory");
+                UserDao userDao = factory.createUserDao(connection);
                 User userFromDb = userDao.getUserById(user.getId());
 
                 if(!user.equals(userFromDb)) {
