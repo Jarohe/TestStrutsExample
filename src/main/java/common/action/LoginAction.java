@@ -30,7 +30,7 @@ public class LoginAction extends SmartAction {
             } else {
                 errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("error.login.password"));
                 saveErrors(request.getSession(),errors);
-                //loginForm.setError("Invalid login or password. Try again please.");
+                loginForm.setError("Invalid login or password. Try again please.");
                 return mapping.findForward(StatusAction.LoginUser.ACCESS_DENIED);
             }
         }
