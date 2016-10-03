@@ -65,8 +65,11 @@ public class UserDaoImplTest extends TestCase {
     }
 
     public void testGetAllUsers() throws SQLException {
+        UserForm form = buildDefoultUserForm();
         List<User> resultUsers = userDao.getAllUsers();
-        assertTrue(resultUsers.size() == 3);
+        userDao.addUser(form);
+        List<User> userList = userDao.getAllUsers();
+        assertTrue(resultUsers.size()+1 == userList.size());
     }
 
     public void testAddUser() throws SQLException {
