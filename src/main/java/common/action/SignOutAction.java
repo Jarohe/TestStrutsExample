@@ -13,9 +13,8 @@ import javax.servlet.http.HttpSession;
 public class SignOutAction extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        HttpSession session = request.getSession();
-        session.setAttribute("sessionUser", null);
-        session.removeAttribute("loginForm");
+        HttpSession session = request.getSession(false);
+        session.invalidate();
         return mapping.findForward(StatusAction.SUCCESS);
     }
 }
