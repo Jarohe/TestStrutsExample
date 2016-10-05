@@ -19,22 +19,15 @@ public class LoginAction extends SmartAction {
             throws Exception {
         LoginForm loginForm = (LoginForm) form;
         ActionErrors errors = new ActionErrors();
-        if(loginForm.getLogin() != null && loginForm.getPass() != null) {
 
-            UserDao userDao = getUserDao(request);
-            User user = userDao.getUserByUsername(loginForm.getLogin());
-            if(user != null && user.getPassword().equals(loginForm.getPass())){
-                request.getSession().setAttribute("sessionUser",user);
-                loginForm.setError(null);
-                return mapping.findForward(StatusAction.SUCCESS);
-            } else {
-                errors.add(ActionErrors.GLOBAL_MESSAGE, new ActionMessage("error.login.password"));
-                saveErrors(request.getSession(),errors);
-                loginForm.setError("Invalid login or password. Try again please.");
-                return mapping.findForward(StatusAction.LoginUser.ACCESS_DENIED);
-            }
+        UserDao userDao = getUserDao(request);
+        User user = userDao.getUserByLoginAndPassword(loginForm.getLogin(),loginForm.getPass());
+        if(user == null ){
+            errors.add("error_authorization", new ActionMessage("error.login.password"));
+            saveErrors(request.getSession(),errors);
+            return mapping.getInputForward();
         }
-        loginForm.setError("Fill out the fields.");
-        return mapping.findForward(StatusAction.FAILURE);
+        request.getSession().setAttribute("sessionUser",user);
+        return mapping.findForward(StatusAction.SUCCESS);
     }
 }

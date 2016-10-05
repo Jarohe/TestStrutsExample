@@ -13,24 +13,26 @@
 
     <action-mappings>
         <!-- Login -->
-        <action path="/welcome" forward="/WEB-INF/pages/loginPage.jsp">
-        </action>
+        <action path="/welcome" forward="/WEB-INF/pages/loginPage.jsp" input="/welcome.html"/>
         <action path="/login"
                 name="loginForm"
-                type="common.action.LoginAction">
+                scope="request"
+                type="common.action.LoginAction"
+                input="/welcome.html"
+                validate="true">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
-            <forward name="access denied" path="/welcome.html" redirect="true"/>
-            <forward name="failure" path="/welcome.html" redirect="true"/>
         </action>
         <!-- Sign Out -->
         <action path="/system/signOut" type="common.action.SignOutAction" >
             <forward name="success" path="/welcome.html" redirect="true"/>
         </action>
         <!-- Create User -->
-        <action path="/system/signUp" forward="/WEB-INF/pages/createUserPage.jsp"/>
+        <action path="/system/signUp" forward="/WEB-INF/pages/createUserPage.jsp" input="/system/signUp.html"/>
         <action path="/system/createUser" type="common.action.CreateUserAction"
                 name="userForm"
-                scope="request">
+                scope="request"
+                input="/system/signUp.html"
+                validate="true">
             <forward name="success" path="/WEB-INF/pages/successUserCreate.jsp"/>
             <forward name="duplicate user" path="/WEB-INF/pages/createUserPage.jsp"/>
             <forward name="error" path="/WEB-INF/pages/createUserPage.jsp"/>
@@ -41,11 +43,15 @@
         </action>
 
         <!-- Update User -->
-        <action path="/system/editUser" type="common.action.EditUserAction" name="userForm" scope="request">
+        <action path="/system/editUser"
+                type="common.action.EditUserAction"
+                name="userForm" scope="request"
+                input="/system/editUser.html"
+                validate="false">
             <forward name="success" path="/WEB-INF/pages/updateUserPage.jsp"/>
             <forward name="error" path="/login.html" redirect="true"/>
         </action>
-        <action path="/system/updateUser" type="common.action.UpdateUser" name="userForm" scope="request">
+        <action path="/system/updateUser" type="common.action.UpdateUser" name="userForm" scope="request" validate="true">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
             <forward name="error" path="/system/editUser.html"/>
         </action>
@@ -57,6 +63,6 @@
         </action>
     </action-mappings>
 
-    <message-resources parameter="i18n.messages"/>
+    <message-resources parameter="i18n.errors"/>
 
 </struts-config>

@@ -21,6 +21,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public User getUserByLoginAndPassword(String login, String password) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT id, username, firstName,lastName,password,role FROM users WHERE username = ? AND password = ?")) {
+            statement.setString(1, login);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            return getUser(resultSet);
+        }
+    }
+
+    @Override
     public User getUserById(int id) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(
                 "SELECT id, username, firstName,lastName,password,role FROM users WHERE id = ?")) {
@@ -103,7 +114,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(2, form.getFirstName());
             statement.setString(3, form.getLastName());
             statement.setString(4, form.getPass());
-            if (form.getRole()) {
+            if (form.isManager()) {
                 statement.setInt(5, 2);
             } else {
                 statement.setInt(5, 1);
@@ -119,7 +130,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(2, user.getPass());
             statement.setString(3, user.getFirstName());
             statement.setString(4, user.getLastName());
-            if (user.getRole() != null) {
+            if (user.isManager()) {
                 statement.setInt(5, 2);
             } else {
                 statement.setInt(5, 1);
@@ -135,7 +146,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, user.getLogin());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
-            if (user.getRole()) {
+            if (user.isManager()) {
                 statement.setInt(4, 2);
             } else {
                 statement.setInt(4, 1);

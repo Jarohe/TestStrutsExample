@@ -9,7 +9,6 @@
 <body>
 <jsp:include page="general/header.jsp"/>
 <html:form action="/system/updateUser" method="POST">
-    <p style="color: red"><bean:write name="userForm" property="error" filter="false"/></p>
     <table border="0">
         <tbody>
         <html:hidden property="id"/>
@@ -31,7 +30,7 @@
         </tr>
         <tr>
             <td>Manager:</td>
-            <td><html:checkbox property="role"/></td>
+            <td><html:checkbox property="manager"/></td>
         </tr>
         <tr>
             <td></td>

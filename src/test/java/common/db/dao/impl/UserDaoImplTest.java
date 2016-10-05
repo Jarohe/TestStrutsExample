@@ -98,7 +98,7 @@ public class UserDaoImplTest extends TestCase {
         userDao.addUser(form);
         User user1 = userDao.getUserByUsername(form.getLogin());
         form.setId(user1.getId());
-        form.setRole(true);
+        form.setManager(true);
         userDao.updateUserByUserForm(form);
         User user2 = userDao.getUserById(user1.getId());
         assertTrue(!user1.getRole().equals(user2.getRole()));
@@ -136,7 +136,7 @@ public class UserDaoImplTest extends TestCase {
         form.setPass("testUser");
         form.setFirstName("testUser");
         form.setLastName("testUser");
-        form.setRole(false);
+        form.setManager(false);
         return form;
     }
 

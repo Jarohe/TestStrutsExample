@@ -8,8 +8,9 @@
 </head>
 <body>
 <html:form action="/login" method="POST">
-    <html:errors />
-    <p style="color: red"><bean:write name="loginForm" property="error" filter="false"/></p>
+    <div>
+        <html:errors />
+    </div>
     <table border="0">
         <tbody>
         <tr>

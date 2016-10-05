@@ -104,7 +104,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         form.setPass("");
         form.setLastName("");
         form.setFirstName("");
-        form.setRole(true);
+        form.setManager(true);
         return form;
     }
 
@@ -115,7 +115,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         form.setPass("pass");
         form.setLastName("");
         form.setFirstName("");
-        form.setRole(true);
+        form.setManager(true);
         return form;
     }
 

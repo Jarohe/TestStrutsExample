@@ -41,7 +41,7 @@ public class EditUserActionTest extends MockStrutsTestCase {
         assertTrue(user.getPassword().equals(form.getPass()));
         assertTrue(user.getFirstName().equals(form.getFirstName()));
         assertTrue(user.getLastName().equals(form.getLastName()));
-        assertTrue(!form.getRole());
+        assertTrue(!form.isManager());
     }
 
     private User createSessionUser() {

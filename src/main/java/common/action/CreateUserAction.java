@@ -8,9 +8,11 @@ import common.db.model.User;
 import common.form.UserForm;
 import common.utils.StatusAction;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,24 +27,24 @@ public class CreateUserAction extends SmartAction {
             return mapping.findForward(StatusAction.ERROR);
         }
         UserForm userForm = (UserForm) form;
-        if(userForm.getLogin() != null && userForm.getPass() != null && userForm.getFirstName() !=null && userForm.getLastName() != null) {
+        ActionErrors errors = new ActionErrors();
 
-            UserDao userDao = getUserDao(request);
-
-            User user = userDao.getUserByUsername(userForm.getLogin());
-            if(user != null) {
-                userForm.setError("Duplicate User Login");
-                return mapping.findForward(StatusAction.CreateUser.DUBLICATE_USER);
-            } else {
-                if(userForm.getRole() == null) {
-                    userForm.setRole(false);
-                }
-                userDao.addUser(userForm);
-                return mapping.findForward(StatusAction.SUCCESS);
-            }
-        } else {
-            userForm.setError("Error. User can't be create!");
-            return mapping.findForward(StatusAction.ERROR);
+        if(userForm.getPass() == null || userForm.getPass().length() < 1){
+            errors.add("pass",new ActionMessage("errors.required","Password"));
+            saveErrors(request,errors);
+            return mapping.getInputForward();
         }
+
+        UserDao userDao = getUserDao(request);
+
+        User user = userDao.getUserByUsername(userForm.getLogin());
+        if(user != null) {
+            errors.add("dublicateUser", new ActionMessage("error.dublicate.user.login"));
+            saveErrors(request,errors);
+            return mapping.getInputForward();
+        }
+
+        userDao.addUser(userForm);
+        return mapping.findForward(StatusAction.SUCCESS);
     }
 }

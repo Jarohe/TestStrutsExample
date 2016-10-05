@@ -1,6 +1,11 @@
 package common.form;
 
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class UserForm extends ActionForm {
     private int id;
@@ -8,8 +13,7 @@ public class UserForm extends ActionForm {
     private String pass;
     private String firstName;
     private String lastName;
-    private String error;
-    private Boolean role;
+    private boolean isManager;
 
     public UserForm() {
     }
@@ -20,7 +24,7 @@ public class UserForm extends ActionForm {
         this.pass = form.getPass();
         this.firstName = form.getFirstName();
         this.lastName = form.getLastName();
-        this.role = form.getRole();
+        this.isManager = form.isManager();
         return this;
     }
 
@@ -56,27 +60,45 @@ public class UserForm extends ActionForm {
         this.lastName = lastName;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public Boolean getRole() {
-        return role;
-    }
-
-    public void setRole(Boolean role) {
-        this.role = role;
-    }
-
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isManager() {
+        return isManager;
+    }
+
+    public void setManager(boolean manager) {
+        isManager = manager;
+    }
+
+    @Override
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        id = 0;
+        login = null;
+        pass = null;
+        firstName = null;
+        lastName = null;
+        isManager = false;
+        super.reset(mapping, request);
+    }
+
+    @Override
+    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
+        ActionErrors errors = new ActionErrors();
+        if (login == null || login.length() < 1) {
+            errors.add("login",new ActionMessage("errors.required", "Username"));
+        }
+        if(firstName == null || firstName.length()<1){
+            errors.add("firstName",new ActionMessage("errors.required","FirstName"));
+        }
+        if(lastName == null || lastName.length()<1){
+            errors.add("lastName",new ActionMessage("errors.required","LastName"));
+        }
+        return errors;
     }
 }

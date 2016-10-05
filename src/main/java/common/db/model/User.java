@@ -50,7 +50,7 @@ public class User {
         form.setFirstName(this.firstName);
         form.setLastName(this.lastName);
         form.setId(this.id);
-        form.setRole(this.role.equals(Role.MANAGER));
+        form.setManager(this.role.equals(Role.MANAGER));
         return form;
     }
 

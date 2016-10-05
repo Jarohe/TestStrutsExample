@@ -1,11 +1,16 @@
 package common.form;
 
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+
+
+import javax.servlet.http.HttpServletRequest;
 
 public class LoginForm extends ActionForm {
     private String login;
     private String pass;
-    private String error;
 
     public String getLogin() {
         return login;
@@ -23,11 +28,22 @@ public class LoginForm extends ActionForm {
         this.pass = pass;
     }
 
-    public String getError() {
-        return error;
+    @Override
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        login = "";
+        pass = "";
+        super.reset(mapping,request);
     }
 
-    public void setError(String error) {
-        this.error = error;
+    @Override
+    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
+        ActionErrors errors = new ActionErrors();
+        if(getLogin() == null || getLogin().length() < 1) {
+            errors.add("login",new ActionMessage("errors.required","Login"));
+        }
+        if(getPass() == null || getPass().length() < 1) {
+            errors.add("pass",new ActionMessage("errors.required","Password"));
+        }
+        return errors;
     }
 }
