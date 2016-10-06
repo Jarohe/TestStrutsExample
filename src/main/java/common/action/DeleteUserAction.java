@@ -28,7 +28,12 @@ public class DeleteUserAction extends SmartAction {
             return mapping.findForward(StatusAction.ERROR);
         }
         UserDao userDao = getUserDao(request);
-        userDao.deleteUserById(userId);
-        return mapping.findForward(StatusAction.SUCCESS);
+        if(userDao.deleteUserById(userId)){
+            return mapping.findForward(StatusAction.SUCCESS);
+        }
+
+        errors.add("noFoundId", new ActionMessage("error.not.found.user.id", userId));
+        saveErrors(request.getSession(),errors);
+        return mapping.findForward(StatusAction.ERROR);
     }
 }

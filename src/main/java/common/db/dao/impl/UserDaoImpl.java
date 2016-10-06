@@ -1,7 +1,9 @@
 package common.db.dao.impl;
 
 
+import com.mysql.jdbc.Statement;
 import common.db.dao.UserDao;
+import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
@@ -52,18 +54,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     private User getUser(ResultSet resultSet) throws SQLException {
-        resultSet.next();
-        Role role = null;
-        for(Role i : Role.values()){
-            if(i.getId() == resultSet.getInt("role")) {
-                role = i;
+        if (resultSet.next()) {
+            Role role = null;
+            for (Role i : Role.values()) {
+                if (i.getId() == resultSet.getInt("role")) {
+                    role = i;
+                }
             }
+            return new User.Builder(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"))
+                    .firstName(resultSet.getString("firstName"))
+                    .lastName(resultSet.getString("lastName"))
+                    .role(role).build();
         }
-        return new User.Builder(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"))
-                .firstName(resultSet.getString("firstName"))
-                .lastName(resultSet.getString("lastName"))
-                .role(role).build();
 
+        return null;
     }
 
     @Override
@@ -90,72 +94,66 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(
                 "DELETE FROM users WHERE id = ?")) {
             statement.setInt(1, id);
-            return statement.execute(); // TODO: Это не правильно
-        }
-    }
-
-    // TODO: Этот метод нигде не используется
-    @Override
-    public boolean deleteUserByUsername(String login) throws SQLException {
-        boolean execute;
-        try (PreparedStatement statement = connection.prepareStatement(
-                "DELETE FROM users WHERE username = ?")) {
-            statement.setString(1, login);
-            execute = statement.execute();
-
-        }
-        return execute;
-    }
-
-    @Override
-    public boolean addUser(UserForm form) throws SQLException { // TODO: Нельзя тут использовать UserForm
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO users (username, firstName,lastName, password,role) VALUES (?, ?, ?, ?, ?)")) {
-            statement.setString(1, form.getLogin());
-            statement.setString(2, form.getFirstName());
-            statement.setString(3, form.getLastName());
-            statement.setString(4, form.getPass());
-            if (form.isManager()) {
-                statement.setInt(5, 2); // TODO: Тут нужна какая-то конфигурация. Да и что это за магические числа???
-            } else {
-                statement.setInt(5, 1);
-            }
-            return statement.execute();
-        }
-        // TODO: А где обработка дубликата username?
-        // TODO: Правильнее тут вернуть id созданного пользователя
-    }
-
-    @Override
-    public boolean updateUserByUserForm(UserForm user) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE users SET username=?, password=?,firstName=?,lastName=?,role=? WHERE id = ?")) {
-            statement.setString(1, user.getLogin());
-            statement.setString(2, user.getPass());
-            statement.setString(3, user.getFirstName());
-            statement.setString(4, user.getLastName());
-            if (user.isManager()) {
-                statement.setInt(5, 2);
-            } else {
-                statement.setInt(5, 1);
-            }
-            statement.setInt(6, user.getId());
             return statement.executeUpdate() == 1;
         }
-
     }
 
     @Override
-    public boolean updateWithoutPassword(UserForm user) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE users SET username=?, firstName=?,lastName=?,role=? WHERE id = ?")) {
-            statement.setString(1, user.getLogin());
+    public int addUser(User user) throws SQLException, DublicateUserException {
+        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO users (username, firstName,lastName, password,role) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, user.getUsername());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
-            if (user.isManager()) {
-                statement.setInt(4, 2);
-            } else {
-                statement.setInt(4, 1);
+            statement.setString(4, user.getPassword());
+            statement.setInt(5, user.getRole().getId());
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
             }
+            return 0;
+        } catch (SQLException e) {
+            if (getUserByUsername(user.getUsername()) != null) {
+                throw new DublicateUserException();
+            }
+            throw e;
+        }
+    }
+
+    @Override
+    public boolean updateUserByUserForm(User user) throws SQLException, DublicateUserException {
+        String sql = "UPDATE users SET username=?, password=?,firstName=?,lastName=?,role=? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getFirstName());
+            statement.setString(4, user.getLastName());
+            statement.setInt(5, user.getRole().getId());
+            statement.setInt(6, user.getId());
+            return statement.executeUpdate() == 1;
+        }  catch (SQLException e) {
+            if (getUserByUsername(user.getUsername()) != null) {
+                throw new DublicateUserException();
+            }
+            throw e;
+        }
+
+    }
+
+    @Override
+    public boolean updateWithoutPassword(User user) throws SQLException, DublicateUserException {
+        try (PreparedStatement statement = connection.prepareStatement("UPDATE users SET username=?, firstName=?,lastName=?,role=? WHERE id = ?")) {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getFirstName());
+            statement.setString(3, user.getLastName());
+            statement.setInt(4, user.getRole().getId());
             statement.setInt(5, user.getId());
             return statement.executeUpdate() == 1;
+        }  catch (SQLException e) {
+            if (getUserByUsername(user.getUsername()) != null) {
+                throw new DublicateUserException();
+            }
+            throw e;
         }
     }
 }

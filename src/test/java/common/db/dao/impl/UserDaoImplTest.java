@@ -1,6 +1,7 @@
 package common.db.dao.impl;
 
 import common.db.dao.UserDao;
+import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
@@ -45,17 +46,17 @@ public class UserDaoImplTest extends TestCase {
         connection.close();
     }
 
-    public void testGetUserById() throws SQLException {
+    public void testGetUserById() throws SQLException, DublicateUserException {
         UserForm form  = buildDefoultUserForm();
-        userDao.addUser(form);
+        userDao.addUser(form.extractUser());
         User user1 = userDao.getUserByUsername(form.getLogin());
         User user2 = userDao.getUserById(user1.getId());
         assertTrue(user1.equals(user2));
     }
 
-    public void testGetUserByUsername() throws SQLException {
+    public void testGetUserByUsername() throws SQLException, DublicateUserException {
         UserForm form  = buildDefoultUserForm();
-        userDao.addUser(form);
+        userDao.addUser(form.extractUser());
         User user = userDao.getUserByUsername(form.getLogin());
         assertTrue(form.getLogin().equals(user.getUsername()));
         assertTrue(form.getPass().equals(user.getPassword()));
@@ -64,17 +65,17 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(Role.DEFAULT.equals(user.getRole()));
     }
 
-    public void testGetAllUsers() throws SQLException {
+    public void testGetAllUsers() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
         List<User> resultUsers = userDao.getAllUsers();
-        userDao.addUser(form);
+        userDao.addUser(form.extractUser());
         List<User> userList = userDao.getAllUsers();
         assertTrue(resultUsers.size()+1 == userList.size());
     }
 
-    public void testAddUser() throws SQLException {
+    public void testAddUser() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
-        userDao.addUser(form);
+        userDao.addUser(form.extractUser());
         User user = userDao.getUserByUsername(form.getLogin());
         assertTrue(form.getLogin().equals(user.getUsername()));
         assertTrue(form.getPass().equals(user.getPassword()));
@@ -83,9 +84,9 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(Role.DEFAULT.equals(user.getRole()));
     }
 
-    public void testDeleteUserById() throws SQLException {
+    public void testDeleteUserById() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
-        userDao.addUser(form);
+        userDao.addUser(form.extractUser());
         User test1 = userDao.getUserByUsername(form.getLogin());
         assertTrue(test1 != null);
         userDao.deleteUserById(test1.getId());
@@ -93,13 +94,13 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(test2 == null);
     }
 
-    public void testUpdateUserByUserForm() throws SQLException {
+    public void testUpdateUserByUserForm() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
-        userDao.addUser(form);
+        userDao.addUser(form.extractUser());
         User user1 = userDao.getUserByUsername(form.getLogin());
         form.setId(user1.getId());
         form.setManager(true);
-        userDao.updateUserByUserForm(form);
+        userDao.updateUserByUserForm(form.extractUser());
         User user2 = userDao.getUserById(user1.getId());
         assertTrue(!user1.getRole().equals(user2.getRole()));
         assertTrue(user1.getUsername().equals(user2.getUsername()));
@@ -109,25 +110,15 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(user1.getId() == user2.getId());
     }
 
-    public void testUpdateWithoutPassword() throws SQLException {
+    public void testUpdateWithoutPassword() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
-        userDao.addUser(form);
+        userDao.addUser(form.extractUser());
         User user1 = userDao.getUserByUsername(form.getLogin());
         form.setId(user1.getId());
         form.setPass("trololo");
-        userDao.updateWithoutPassword(form);
+        userDao.updateWithoutPassword(form.extractUser());
         User user2 = userDao.getUserById(user1.getId());
         assertTrue(user1.equals(user2));
-    }
-
-    public void testDeleteUserByUsername() throws SQLException {
-        UserForm form = buildDefoultUserForm();
-        userDao.addUser(form);
-        User user = userDao.getUserByUsername(form.getLogin());
-        assertTrue(user != null);
-        userDao.deleteUserByUsername(user.getUsername());
-        user = userDao.getUserById(user.getId());
-        assertTrue(user == null);
     }
 
     private UserForm buildDefoultUserForm() {

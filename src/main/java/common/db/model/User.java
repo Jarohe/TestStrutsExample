@@ -43,17 +43,6 @@ public class User {
         return role;
     }
 
-    public UserForm convertToForm() { // TODO: В модели на должно быть такой зависимости.
-        UserForm form = new UserForm();
-        form.setLogin(this.username);
-        form.setPass(this.password);
-        form.setFirstName(this.firstName);
-        form.setLastName(this.lastName);
-        form.setId(this.id);
-        form.setManager(this.role.equals(Role.MANAGER));
-        return form;
-    }
-
     public static class Builder {
         private final int id;
         private final String username;

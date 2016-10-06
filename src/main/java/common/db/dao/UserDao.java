@@ -1,5 +1,6 @@
 package common.db.dao;
 
+import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.User;
 import common.form.UserForm;
 
@@ -13,8 +14,7 @@ public interface UserDao {
     List<User> getAllUsers() throws SQLException;
     boolean deleteUser(User user) throws SQLException;
     boolean deleteUserById(int id) throws SQLException;
-    boolean deleteUserByUsername(String login) throws SQLException;
-    boolean addUser(UserForm form) throws SQLException;
-    boolean updateUserByUserForm(UserForm user) throws SQLException;
-    boolean updateWithoutPassword(UserForm user) throws SQLException;
+    int addUser(User user) throws SQLException, DublicateUserException;
+    boolean updateUserByUserForm(User user) throws SQLException, DublicateUserException;
+    boolean updateWithoutPassword(User user) throws SQLException, DublicateUserException;
 }

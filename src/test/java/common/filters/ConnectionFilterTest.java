@@ -29,7 +29,7 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
         super.setUp();
         request = getRequest();
         session = getSession();
-        session.getServletContext().setAttribute("db",dataSource);
+        session.getServletContext().setAttribute("db", dataSource);
         when(dataSource.getConnection()).thenReturn(connection);
         when(config.getServletContext()).thenReturn(session.getServletContext());
         filter.init(config);
@@ -37,12 +37,12 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
 
     public void testInit() throws ServletException {
         filter.init(config);
-        verify(config,times(2)).getServletContext();
+        verify(config, times(2)).getServletContext();
     }
 
     public void testSuccessDoFilter() throws IOException, ServletException, SQLException {
-        filter.doFilter(request,response,filterChain);
-        verify(filterChain, times(1)).doFilter(request,response);
-        verify(connection,times(1)).commit();
+        filter.doFilter(request, response, filterChain);
+        verify(filterChain, times(1)).doFilter(request, response);
+        verify(connection, times(1)).commit();
     }
 }

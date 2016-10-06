@@ -40,11 +40,11 @@ public class UpdateUser extends SmartAction {
             return mapping.getInputForward();
         }
         if (userForm.getPass().length() > 0) {
-            if (userDao.updateUserByUserForm(userForm)) {
+            if (userDao.updateUserByUserForm(userForm.extractUser())) {
                 return mapping.findForward(StatusAction.SUCCESS);
             }
         } else {
-            if (userDao.updateWithoutPassword(userForm)) {
+            if (userDao.updateWithoutPassword(userForm.extractUser())) {
                 return mapping.findForward(StatusAction.SUCCESS);
             }
         }

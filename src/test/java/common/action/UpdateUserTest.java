@@ -2,6 +2,7 @@ package common.action;
 
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
+import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
@@ -34,7 +35,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         getSession().setAttribute("sessionUser",sessionUser);
     }
 
-    public void testSuccessUpdateUserWithPassword() throws SQLException {
+    public void testSuccessUpdateUserWithPassword() throws SQLException, DublicateUserException {
         setRequestPathInfo(PATH_INFO);
         UserForm form = createUserFormWithPass();
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
@@ -42,13 +43,13 @@ public class UpdateUserTest extends MockStrutsTestCase {
         when(userDao.getUserByUsername(any(String.class))).thenReturn(user2);
         when(user.getId()).thenReturn(1);
         when(user2.getId()).thenReturn(1);
-        when(userDao.updateUserByUserForm(form)).thenReturn(true);
+        when(userDao.updateUserByUserForm(form.extractUser())).thenReturn(true);
         setActionForm(form);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }
 
-    public void testSuccessUpdateUserNotPassword() throws SQLException {
+    public void testSuccessUpdateUserNotPassword() throws SQLException, DublicateUserException {
         setRequestPathInfo(PATH_INFO);
         UserForm form = createUserFormNotPass();
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
@@ -56,7 +57,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         when(userDao.getUserByUsername(any(String.class))).thenReturn(user2);
         when(user.getId()).thenReturn(1);
         when(user2.getId()).thenReturn(1);
-        when(userDao.updateWithoutPassword(form)).thenReturn(true);
+        when(userDao.updateWithoutPassword(form.extractUser())).thenReturn(true);
         setActionForm(form);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
@@ -75,7 +76,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         verifyForward(StatusAction.ERROR);
     }
 
-    public void testErrorDbUserUpdate() throws SQLException {
+    public void testErrorDbUserUpdate() throws SQLException, DublicateUserException {
         setRequestPathInfo(PATH_INFO);
         UserForm form = createUserFormNotPass();
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
@@ -83,7 +84,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         when(userDao.getUserByUsername(any(String.class))).thenReturn(user2);
         when(user.getId()).thenReturn(1);
         when(user2.getId()).thenReturn(1);
-        when(userDao.updateWithoutPassword(form)).thenReturn(false);
+        when(userDao.updateWithoutPassword(form.extractUser())).thenReturn(false);
         setActionForm(form);
         actionPerform();
         verifyForward(StatusAction.ERROR);

@@ -1,5 +1,7 @@
 package common.form;
 
+import common.db.model.Role;
+import common.db.model.User;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
@@ -91,14 +93,40 @@ public class UserForm extends ActionForm {
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
         ActionErrors errors = new ActionErrors();
         if (login == null || login.length() < 1) {
-            errors.add("login",new ActionMessage("errors.required", "Username"));
+            errors.add("login", new ActionMessage("errors.required", "Username"));
         }
-        if(firstName == null || firstName.length()<1){
-            errors.add("firstName",new ActionMessage("errors.required","FirstName"));
+        if (firstName == null || firstName.length() < 1) {
+            errors.add("firstName", new ActionMessage("errors.required", "FirstName"));
         }
-        if(lastName == null || lastName.length()<1){
-            errors.add("lastName",new ActionMessage("errors.required","LastName"));
+        if (lastName == null || lastName.length() < 1) {
+            errors.add("lastName", new ActionMessage("errors.required", "LastName"));
         }
         return errors;
+    }
+
+    public User extractUser() {
+        return new User.Builder(getId(), getLogin(), getPass())
+                .firstName(getFirstName())
+                .lastName(getLastName())
+                .role(getRole(isManager)).build();
+    }
+
+    private Role getRole(boolean isManager) {
+        if (isManager) {
+            return Role.MANAGER;
+        }
+        return Role.DEFAULT;
+    }
+
+    public UserForm extractUserForm(User user) {
+        this.id = user.getId();
+        this.login = user.getUsername();
+        this.pass = user.getPassword();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        if(Role.MANAGER.equals(user.getRole())){
+            this.isManager = true;
+        }
+        return this;
     }
 }
