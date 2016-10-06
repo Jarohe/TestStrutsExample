@@ -26,7 +26,7 @@ public class EditUserActionTest extends MockStrutsTestCase {
         when(factory.createUserDao(connection)).thenReturn(userDao);
         getSession().setAttribute("sessionUser", userSession);
     }
-    //TODO
+
     public void testSuccessEditUser() throws SQLException {
         setRequestPathInfo(PATH_INFO);
         addRequestParameter("id","1");

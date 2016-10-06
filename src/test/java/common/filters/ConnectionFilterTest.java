@@ -21,7 +21,6 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
     private Connection connection = mock(Connection.class);
     private FilterConfig config = mock(FilterConfig.class);
 
-
     private HttpServletRequest request;
     private HttpSession session;
 

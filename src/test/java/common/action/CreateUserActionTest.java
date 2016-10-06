@@ -2,6 +2,7 @@ package common.action;
 
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
+import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
@@ -24,19 +25,19 @@ public class CreateUserActionTest extends MockStrutsTestCase {
     private DaoFactory factory = mock(DaoFactory.class);
     private User user = createSessionUser();
 
-/*    public void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
         getSession().setAttribute("sessionUser",user);
     }
 
-    public void testSuccessUserCreate() throws SQLException {
+    public void testSuccessUserCreate() throws SQLException, DublicateUserException {
         setRequestPathInfo(PATH_INFO);
         UserForm form = createUserForm();
         setActionForm(form);
         when(userDao.getUserByUsername(any(String.class))).thenReturn(null);
-        when(userDao.addUser(form)).thenReturn(true);
+        //when(userDao.addUser(form.extractUser())).thenReturn(true);
 
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
 
@@ -63,7 +64,7 @@ public class CreateUserActionTest extends MockStrutsTestCase {
 
         actionPerform();
         verifyForward(StatusAction.ERROR);
-    }*/
+    }
 
     private UserForm createUserForm() {
         UserForm form = new UserForm();
