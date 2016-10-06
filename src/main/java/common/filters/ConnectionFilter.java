@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 
 public class ConnectionFilter implements Filter {
-    private ServletContext context;
+    private ServletContext context; // TODO: Idea правильно подсказывает
     private BasicDataSource dataSource;
 
     @Override
@@ -27,7 +27,7 @@ public class ConnectionFilter implements Filter {
             try {
                 filterChain.doFilter(servletRequest, servletResponse);
                 connection.commit();
-            } catch (SQLException e) {
+            } catch (SQLException e) { //TODO: SQLException тебе не придёт из Action'ов
                 connection.rollback();
             }
         } catch (SQLException e) {

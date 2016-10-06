@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class LoginForm extends ActionForm {
     private String login;
-    private String pass;
+    private String pass; // TODO: password
 
     public String getLogin() {
         return login;

@@ -10,6 +10,7 @@
 <%@ taglib prefix="html" uri="http://struts.apache.org/tags-html" %>
 <%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
 
+<html:errors/>
 <table border="1">
     <tbody>
     <tr>

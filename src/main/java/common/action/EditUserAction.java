@@ -22,10 +22,10 @@ public class EditUserAction extends SmartAction {
         if(!isManager(request)) {
             return mapping.findForward(StatusAction.ERROR);
         }
-        Integer userId = Integer.valueOf(request.getParameter("id"));
+        Integer userId = Integer.valueOf(request.getParameter("id"));// TODO: А чего ты форму не используешь?
         UserForm userForm = (UserForm) form;
         UserDao userDao = getUserDao(request);
-        User user = userDao.getUserById(userId);
+        User user = userDao.getUserById(userId);// TODO: Пользователь если не найден?
         userForm.setUserForm(user.convertToForm());
         return mapping.findForward(StatusAction.SUCCESS);
 

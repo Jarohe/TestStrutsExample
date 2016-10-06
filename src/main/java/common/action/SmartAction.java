@@ -4,6 +4,7 @@ import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
 import common.db.model.Role;
 import common.db.model.User;
+import common.utils.Attributes;
 import common.utils.StatusAction;
 import org.apache.struts.action.Action;
 
@@ -20,7 +21,7 @@ class SmartAction extends Action {
     }
 
     protected boolean isManager(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("sessionUser");
+        User user = (User) request.getSession().getAttribute(Attributes.Session.USER);
         return Role.MANAGER.equals(user.getRole());
     }
 }

@@ -38,7 +38,7 @@
             <forward name="error" path="/WEB-INF/pages/createUserPage.jsp"/>
         </action>
         <!-- Show Users -->
-        <action path="/system/usersList" type="common.action.UserListAction">
+        <action path="/system/usersList" type="common.action.UserListAction" input="/system/usersList.html">
             <forward name="success" path="/WEB-INF/pages/userList/usersListPage.jsp"/>
         </action>
 
@@ -59,7 +59,7 @@
         <!-- Delete User -->
         <action path="/system/deleteUser" type="common.action.DeleteUserAction">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
-            <forward name="error" path="/login.html" redirect="true"/>
+            <forward name="error" path="/system/usersList.html" redirect="true"/>
         </action>
     </action-mappings>
 

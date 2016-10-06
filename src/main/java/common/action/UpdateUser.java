@@ -17,7 +17,7 @@ public class UpdateUser extends SmartAction {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        if (!isManager(request)) {
+        if (!isManager(request)) { // TODO: Дублируется
             return mapping.findForward(StatusAction.ERROR);
         }
 
@@ -48,7 +48,7 @@ public class UpdateUser extends SmartAction {
                 return mapping.findForward(StatusAction.SUCCESS);
             }
         }
-        errors.add("userNotUpdate", new ActionMessage("error.user.not.update"));
+        errors.add("userNotUpdate", new ActionMessage("error.user.not.update")); // TODO: А что, точно не определить?
         return mapping.getInputForward();
     }
 

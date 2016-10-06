@@ -5,7 +5,7 @@ import common.form.UserForm;
 public class User {
     private final int id;
     private final String username;
-    private final String password;
+    private final String password; // TODO: Хотелось бы избежать этого поля
     private final String firstName;
     private final String lastName;
     private final Role role;
@@ -43,7 +43,7 @@ public class User {
         return role;
     }
 
-    public UserForm convertToForm() {
+    public UserForm convertToForm() { // TODO: В модели на должно быть такой зависимости.
         UserForm form = new UserForm();
         form.setLogin(this.username);
         form.setPass(this.password);

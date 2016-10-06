@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class AccessFilter implements Filter {
+public class AccessFilter implements Filter { // TODO: Название совершенно не отражает назначение
     private String homePage;
     private String errorPage;
 
@@ -26,7 +26,7 @@ public class AccessFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpSession session = ((HttpServletRequest) servletRequest).getSession();
+        HttpSession session = ((HttpServletRequest) servletRequest).getSession(false);// TODO: Фильтр сам не должен стартовать сессию
         User user = (User) session.getAttribute("sessionUser");
         if (user == null) {
             servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
@@ -39,11 +39,11 @@ public class AccessFilter implements Filter {
 
                 if(!user.equals(userFromDb)) {
                     session.setAttribute("sessionUser", null);
-                    servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
+                    servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse); // TODO: Не стоит логаутить
                     return;
                 }
             } catch (SQLException e) {
-                throw new IOException("SQL:"+this.getClass());
+                throw new IOException("SQL:"+this.getClass()); // TODO: Почему IOException???
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);
