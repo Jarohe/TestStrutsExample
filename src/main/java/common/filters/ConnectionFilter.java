@@ -2,20 +2,25 @@ package common.filters;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 
 public class ConnectionFilter implements Filter {
-    private ServletContext context; // TODO: Idea правильно подсказывает
     private BasicDataSource dataSource;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         if (filterConfig != null) {
-            context = filterConfig.getServletContext();
+            ServletContext context = filterConfig.getServletContext();
             dataSource = (BasicDataSource) context.getAttribute("db");
         }
     }
@@ -27,7 +32,7 @@ public class ConnectionFilter implements Filter {
             try {
                 filterChain.doFilter(servletRequest, servletResponse);
                 connection.commit();
-            } catch (SQLException e) { //TODO: SQLException тебе не придёт из Action'ов
+            } catch (Exception e) {
                 connection.rollback();
             }
         } catch (SQLException e) {

@@ -23,7 +23,7 @@
             <forward name="success" path="/system/usersList.html" redirect="true"/>
         </action>
         <!-- Sign Out -->
-        <action path="/system/signOut" type="common.action.SignOutAction" >
+        <action path="/system/signOut" type="common.action.SignOutAction">
             <forward name="success" path="/welcome.html" redirect="true"/>
         </action>
         <!-- Create User -->

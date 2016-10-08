@@ -14,8 +14,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import static org.junit.Assert.assertTrue;
-
 
 public class UserDaoImplTest extends TestCase {
     //TODO create test DB
@@ -26,6 +24,7 @@ public class UserDaoImplTest extends TestCase {
     private static BasicDataSource db = new BasicDataSource();
     private Connection connection = null;
     private UserDao userDao = null;
+
     static {
         db.setDriverClassName(dbDriver);
         db.setUrl(dbUrl);
@@ -47,19 +46,18 @@ public class UserDaoImplTest extends TestCase {
     }
 
     public void testGetUserById() throws SQLException, DublicateUserException {
-        UserForm form  = buildDefoultUserForm();
-        userDao.addUser(form.extractUser());
+        UserForm form = buildDefoultUserForm();
+        userDao.addUser(form.extractUser(), "testUser");
         User user1 = userDao.getUserByUsername(form.getLogin());
         User user2 = userDao.getUserById(user1.getId());
         assertTrue(user1.equals(user2));
     }
 
     public void testGetUserByUsername() throws SQLException, DublicateUserException {
-        UserForm form  = buildDefoultUserForm();
-        userDao.addUser(form.extractUser());
+        UserForm form = buildDefoultUserForm();
+        userDao.addUser(form.extractUser(), "testUser");
         User user = userDao.getUserByUsername(form.getLogin());
         assertTrue(form.getLogin().equals(user.getUsername()));
-        assertTrue(form.getPass().equals(user.getPassword()));
         assertTrue(form.getFirstName().equals(user.getFirstName()));
         assertTrue(form.getLastName().equals(user.getLastName()));
         assertTrue(Role.DEFAULT.equals(user.getRole()));
@@ -68,17 +66,16 @@ public class UserDaoImplTest extends TestCase {
     public void testGetAllUsers() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
         List<User> resultUsers = userDao.getAllUsers();
-        userDao.addUser(form.extractUser());
+        userDao.addUser(form.extractUser(), "testUser");
         List<User> userList = userDao.getAllUsers();
-        assertTrue(resultUsers.size()+1 == userList.size());
+        assertTrue(resultUsers.size() + 1 == userList.size());
     }
 
     public void testAddUser() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
-        userDao.addUser(form.extractUser());
+        userDao.addUser(form.extractUser(), "testUser");
         User user = userDao.getUserByUsername(form.getLogin());
         assertTrue(form.getLogin().equals(user.getUsername()));
-        assertTrue(form.getPass().equals(user.getPassword()));
         assertTrue(form.getFirstName().equals(user.getFirstName()));
         assertTrue(form.getLastName().equals(user.getLastName()));
         assertTrue(Role.DEFAULT.equals(user.getRole()));
@@ -86,7 +83,7 @@ public class UserDaoImplTest extends TestCase {
 
     public void testDeleteUserById() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
-        userDao.addUser(form.extractUser());
+        userDao.addUser(form.extractUser(), "testUser");
         User test1 = userDao.getUserByUsername(form.getLogin());
         assertTrue(test1 != null);
         userDao.deleteUserById(test1.getId());
@@ -96,15 +93,14 @@ public class UserDaoImplTest extends TestCase {
 
     public void testUpdateUserByUserForm() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
-        userDao.addUser(form.extractUser());
+        userDao.addUser(form.extractUser(), "testUser");
         User user1 = userDao.getUserByUsername(form.getLogin());
         form.setId(user1.getId());
         form.setManager(true);
-        userDao.updateUserByUserForm(form.extractUser());
+        userDao.updateUser(form.extractUser(), "testUser");
         User user2 = userDao.getUserById(user1.getId());
         assertTrue(!user1.getRole().equals(user2.getRole()));
         assertTrue(user1.getUsername().equals(user2.getUsername()));
-        assertTrue(user1.getPassword().equals(user2.getPassword()));
         assertTrue(user1.getFirstName().equals(user2.getFirstName()));
         assertTrue(user1.getLastName().equals(user2.getLastName()));
         assertTrue(user1.getId() == user2.getId());
@@ -112,11 +108,11 @@ public class UserDaoImplTest extends TestCase {
 
     public void testUpdateWithoutPassword() throws SQLException, DublicateUserException {
         UserForm form = buildDefoultUserForm();
-        userDao.addUser(form.extractUser());
+        userDao.addUser(form.extractUser(), "testUser");
         User user1 = userDao.getUserByUsername(form.getLogin());
         form.setId(user1.getId());
-        form.setPass("trololo");
-        userDao.updateWithoutPassword(form.extractUser());
+        form.setPassword("trololo");
+        userDao.updateUser(form.extractUser());
         User user2 = userDao.getUserById(user1.getId());
         assertTrue(user1.equals(user2));
     }
@@ -124,7 +120,7 @@ public class UserDaoImplTest extends TestCase {
     private UserForm buildDefoultUserForm() {
         UserForm form = new UserForm();
         form.setLogin("testUser");
-        form.setPass("testUser");
+        form.setPassword("testUser");
         form.setFirstName("testUser");
         form.setLastName("testUser");
         form.setManager(false);

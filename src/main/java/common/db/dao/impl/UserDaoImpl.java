@@ -6,7 +6,6 @@ import common.db.dao.UserDao;
 import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
-import common.form.UserForm;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -99,12 +98,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int addUser(User user) throws SQLException, DublicateUserException {
-        try (PreparedStatement statement = connection.prepareStatement("INSERT INTO users (username, firstName,lastName, password,role) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+    public int addUser(User user, String password) throws SQLException, DublicateUserException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO users (username, firstName,lastName, password,role) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
-            statement.setString(4, user.getPassword());
+            statement.setString(4, password);
             statement.setInt(5, user.getRole().getId());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -121,17 +121,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean updateUserByUserForm(User user) throws SQLException, DublicateUserException {
+    public boolean updateUser(User user, String password) throws SQLException, DublicateUserException {
         String sql = "UPDATE users SET username=?, password=?,firstName=?,lastName=?,role=? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
-            statement.setString(2, user.getPassword());
+            statement.setString(2, password);
             statement.setString(3, user.getFirstName());
             statement.setString(4, user.getLastName());
             statement.setInt(5, user.getRole().getId());
             statement.setInt(6, user.getId());
             return statement.executeUpdate() == 1;
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             if (getUserByUsername(user.getUsername()) != null) {
                 throw new DublicateUserException();
             }
@@ -141,15 +141,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean updateWithoutPassword(User user) throws SQLException, DublicateUserException {
-        try (PreparedStatement statement = connection.prepareStatement("UPDATE users SET username=?, firstName=?,lastName=?,role=? WHERE id = ?")) {
+    public boolean updateUser(User user) throws SQLException, DublicateUserException {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "UPDATE users SET username=?, firstName=?,lastName=?,role=? WHERE id = ?")) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
             statement.setInt(4, user.getRole().getId());
             statement.setInt(5, user.getId());
             return statement.executeUpdate() == 1;
-        }  catch (SQLException e) {
+        } catch (SQLException e) {
             if (getUserByUsername(user.getUsername()) != null) {
                 throw new DublicateUserException();
             }

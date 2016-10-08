@@ -1,7 +1,7 @@
 package common.db.model;
 
 public enum Role {
-    DEFAULT(1,"default"), MANAGER(2,"manager");
+    DEFAULT(1, "default"), MANAGER(2, "manager");
 
     private Integer id;
     private String name;

@@ -32,7 +32,6 @@ public class LoginActionTest extends MockStrutsTestCase {
     public void testSuccessLogin() throws SQLException {
         setRequestPathInfo(PATH_INFO);
         when(user.getUsername()).thenReturn("login");
-        when(user.getPassword()).thenReturn("password");
         when(userDao.getUserByUsername("login")).thenReturn(user);
 
         getActionServlet().getServletContext().setAttribute("daoFactory",factory);
@@ -46,7 +45,6 @@ public class LoginActionTest extends MockStrutsTestCase {
     public void testFailLogin() throws SQLException {
         setRequestPathInfo(PATH_INFO);
         when(user.getUsername()).thenReturn("login");
-        when(user.getPassword()).thenReturn("pass");
         when(userDao.getUserByUsername("login")).thenReturn(user);
 
         getActionServlet().getServletContext().setAttribute("daoFactory",factory);

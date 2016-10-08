@@ -2,10 +2,14 @@ package common.filters;
 
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
-import common.db.dao.impl.UserDaoImpl;
 import common.db.model.User;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -26,24 +30,27 @@ public class AccessFilter implements Filter { // TODO: Название сове
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        HttpSession session = ((HttpServletRequest) servletRequest).getSession(false);// TODO: Фильтр сам не должен стартовать сессию
+        HttpSession session = ((HttpServletRequest) servletRequest).getSession(false);
         User user = (User) session.getAttribute("sessionUser");
         if (user == null) {
             servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
-        } else{
+        } else {
             try {
                 Connection connection = (Connection) servletRequest.getAttribute("connection");
-                DaoFactory factory = (DaoFactory)session.getServletContext().getAttribute("daoFactory");
+                DaoFactory factory = (DaoFactory) session.getServletContext().getAttribute("daoFactory");
                 UserDao userDao = factory.createUserDao(connection);
                 User userFromDb = userDao.getUserById(user.getId());
 
-                if(!user.equals(userFromDb)) {
-                    session.setAttribute("sessionUser", null);
-                    servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse); // TODO: Не стоит логаутить
-                    return;
+                if (userFromDb == null) {
+                    session.invalidate();
+                    servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
+                }
+
+                if (!user.equals(userFromDb)) {
+                    session.setAttribute("sessionUser", userFromDb);
                 }
             } catch (SQLException e) {
-                throw new IOException("SQL:"+this.getClass()); // TODO: Почему IOException???
+                throw new IOException("SQL:" + this.getClass()); // TODO: Почему IOException???
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);

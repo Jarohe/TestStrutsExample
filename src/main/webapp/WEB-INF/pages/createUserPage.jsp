@@ -20,7 +20,7 @@
         </tr>
         <tr>
             <td>Password:</td>
-            <td><html:password property="pass"/></td>
+            <td><html:password property="password"/></td>
         </tr>
         <tr>
             <td>First Name:</td>

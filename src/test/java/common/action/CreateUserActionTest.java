@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -37,7 +38,7 @@ public class CreateUserActionTest extends MockStrutsTestCase {
         UserForm form = createUserForm();
         setActionForm(form);
         when(userDao.getUserByUsername(any(String.class))).thenReturn(null);
-        //when(userDao.addUser(form.extractUser())).thenReturn(true);
+        when(userDao.addUser(form.extractUser(),"")).thenReturn(anyInt());
 
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
 
@@ -70,7 +71,7 @@ public class CreateUserActionTest extends MockStrutsTestCase {
         UserForm form = new UserForm();
         form.setId(0);
         form.setLogin("");
-        form.setPass("");
+        form.setPassword("");
         form.setFirstName("");
         form.setLastName("");
         form.setManager(true);

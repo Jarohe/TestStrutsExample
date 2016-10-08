@@ -21,28 +21,28 @@ public class CreateUserAction extends SmartAction {
         UserForm userForm = (UserForm) form;
         ActionErrors errors = new ActionErrors();
 
-        if(!isManager(request)) {
+        if (!isManager(request)) {
             errors.add("access denied", new ActionMessage("error.access.denied"));
-            saveErrors(request,errors);
+            saveErrors(request, errors);
             return mapping.getInputForward();// TODO: А как пользователь узнает что случилось?
         }
         // TODO: А почему не используется ActionForm.validate()?
-        if(userForm.getPass() == null || userForm.getPass().length() < 1){
-            errors.add("pass",new ActionMessage("errors.required","Password"));
-            saveErrors(request,errors);
+        if (userForm.getPassword() == null || userForm.getPassword().length() < 1) {
+            errors.add("pass", new ActionMessage("errors.required", "Password"));
+            saveErrors(request, errors);
             return mapping.getInputForward();
         }
 
         UserDao userDao = getUserDao(request);
 
         User user = userDao.getUserByUsername(userForm.getLogin());
-        if(user != null) { // TODO: Так проверять плохо
+        if (user != null) { // TODO: Так проверять плохо
             errors.add("dublicateUser", new ActionMessage("error.dublicate.user.login"));
-            saveErrors(request,errors);
+            saveErrors(request, errors);
             return mapping.getInputForward();
         }
 
-        userDao.addUser(userForm.extractUser());
+        userDao.addUser(userForm.extractUser(), userForm.getPassword());
         return mapping.findForward(StatusAction.SUCCESS);
     }
 }

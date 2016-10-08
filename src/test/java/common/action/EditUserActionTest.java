@@ -29,7 +29,7 @@ public class EditUserActionTest extends MockStrutsTestCase {
 
     public void testSuccessEditUser() throws SQLException {
         setRequestPathInfo(PATH_INFO);
-        addRequestParameter("id","1");
+        addRequestParameter("id", "1");
         User user = createUser(1);
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
         when(userDao.getUserById(1)).thenReturn(user);
@@ -38,18 +38,17 @@ public class EditUserActionTest extends MockStrutsTestCase {
         assertNotNull(form);
         assertTrue(user.getId() == form.getId());
         assertTrue(user.getUsername().equals(form.getLogin()));
-        assertTrue(user.getPassword().equals(form.getPass()));
         assertTrue(user.getFirstName().equals(form.getFirstName()));
         assertTrue(user.getLastName().equals(form.getLastName()));
         assertTrue(!form.isManager());
     }
 
     private User createSessionUser() {
-        return new User.Builder(1,"","").role(Role.MANAGER).build();
+        return new User.Builder(1, "", "").role(Role.MANAGER).build();
     }
 
-    private User createUser(int id){
-        return new User.Builder(id,"test","test").firstName("test").lastName("test").role(Role.DEFAULT).build();
+    private User createUser(int id) {
+        return new User.Builder(id, "test", "test").firstName("test").lastName("test").role(Role.DEFAULT).build();
     }
 
 }

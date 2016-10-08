@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UserForm extends ActionForm {
     private int id;
     private String login;
-    private String pass;
+    private String password;
     private String firstName;
     private String lastName;
     private boolean isManager;
@@ -23,7 +23,7 @@ public class UserForm extends ActionForm {
     public UserForm setUserForm(UserForm form) {
         this.id = form.getId();
         this.login = form.getLogin();
-        this.pass = form.getPass();
+        this.password = form.getPassword();
         this.firstName = form.getFirstName();
         this.lastName = form.getLastName();
         this.isManager = form.isManager();
@@ -38,12 +38,12 @@ public class UserForm extends ActionForm {
         this.login = login;
     }
 
-    public String getPass() {
-        return pass;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPass(String pass) {
-        this.pass = pass;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFirstName() {
@@ -82,7 +82,7 @@ public class UserForm extends ActionForm {
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         id = 0;
         login = null;
-        pass = null;
+        password = null;
         firstName = null;
         lastName = null;
         isManager = false;
@@ -105,7 +105,7 @@ public class UserForm extends ActionForm {
     }
 
     public User extractUser() {
-        return new User.Builder(getId(), getLogin(), getPass())
+        return new User.Builder(getId(), getLogin(), getPassword())
                 .firstName(getFirstName())
                 .lastName(getLastName())
                 .role(getRole(isManager)).build();
@@ -121,10 +121,9 @@ public class UserForm extends ActionForm {
     public UserForm extractUserForm(User user) {
         this.id = user.getId();
         this.login = user.getUsername();
-        this.pass = user.getPassword();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        if(Role.MANAGER.equals(user.getRole())){
+        if (Role.MANAGER.equals(user.getRole())) {
             this.isManager = true;
         }
         return this;

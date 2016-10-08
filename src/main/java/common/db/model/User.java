@@ -1,11 +1,8 @@
 package common.db.model;
 
-import common.form.UserForm;
-
 public class User {
     private final int id;
     private final String username;
-    private final String password; // TODO: Хотелось бы избежать этого поля
     private final String firstName;
     private final String lastName;
     private final Role role;
@@ -13,7 +10,6 @@ public class User {
     private User(Builder builder) {
         id = builder.id;
         username = builder.username;
-        password = builder.password;
         firstName = builder.firstName;
         lastName = builder.lastName;
         role = builder.role;
@@ -25,10 +21,6 @@ public class User {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getFirstName() {
@@ -86,7 +78,6 @@ public class User {
 
         if (id != user.id) return false;
         if (!username.equals(user.username)) return false;
-        if (!password.equals(user.password)) return false;
         if (!firstName.equals(user.firstName)) return false;
         if (!lastName.equals(user.lastName)) return false;
         return role == user.role;
@@ -97,7 +88,6 @@ public class User {
     public int hashCode() {
         int result = id;
         result = 31 * result + username.hashCode();
-        result = 31 * result + password.hashCode();
         result = 31 * result + firstName.hashCode();
         result = 31 * result + lastName.hashCode();
         result = 31 * result + role.hashCode();

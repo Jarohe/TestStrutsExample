@@ -5,11 +5,9 @@ import common.db.dao.UserDao;
 import common.db.model.Role;
 import common.db.model.User;
 import common.utils.Attributes;
-import common.utils.StatusAction;
 import org.apache.struts.action.Action;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 
 class SmartAction extends Action {

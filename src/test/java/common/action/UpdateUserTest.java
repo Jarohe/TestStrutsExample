@@ -32,7 +32,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         super.setUp();
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
-        getSession().setAttribute("sessionUser",sessionUser);
+        getSession().setAttribute("sessionUser", sessionUser);
     }
 
     public void testSuccessUpdateUserWithPassword() throws SQLException, DublicateUserException {
@@ -43,7 +43,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         when(userDao.getUserByUsername(any(String.class))).thenReturn(user2);
         when(user.getId()).thenReturn(1);
         when(user2.getId()).thenReturn(1);
-        when(userDao.updateUserByUserForm(form.extractUser())).thenReturn(true);
+        when(userDao.updateUser(form.extractUser())).thenReturn(true);
         setActionForm(form);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
@@ -57,7 +57,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         when(userDao.getUserByUsername(any(String.class))).thenReturn(user2);
         when(user.getId()).thenReturn(1);
         when(user2.getId()).thenReturn(1);
-        when(userDao.updateWithoutPassword(form.extractUser())).thenReturn(true);
+        when(userDao.updateUser(form.extractUser())).thenReturn(true);
         setActionForm(form);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
@@ -84,7 +84,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         when(userDao.getUserByUsername(any(String.class))).thenReturn(user2);
         when(user.getId()).thenReturn(1);
         when(user2.getId()).thenReturn(1);
-        when(userDao.updateWithoutPassword(form.extractUser())).thenReturn(false);
+        when(userDao.updateUser(form.extractUser())).thenReturn(false);
         setActionForm(form);
         actionPerform();
         verifyForward(StatusAction.ERROR);
@@ -102,7 +102,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         UserForm form = new UserForm();
         form.setId(1);
         form.setLogin("");
-        form.setPass("");
+        form.setPassword("");
         form.setLastName("");
         form.setFirstName("");
         form.setManager(true);
@@ -113,7 +113,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
         UserForm form = new UserForm();
         form.setId(1);
         form.setLogin("");
-        form.setPass("pass");
+        form.setPassword("pass");
         form.setLastName("");
         form.setFirstName("");
         form.setManager(true);
@@ -121,7 +121,7 @@ public class UpdateUserTest extends MockStrutsTestCase {
     }
 
     private User createSessionUser() {
-        return new User.Builder(1,"","").role(Role.MANAGER).build();
+        return new User.Builder(1, "", "").role(Role.MANAGER).build();
     }
 
 }

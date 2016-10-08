@@ -14,15 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class UpdateUser extends SmartAction {
+
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+        ActionErrors errors = new ActionErrors();
+
         if (!isManager(request)) { // TODO: Дублируется
+            errors.add("access denied", new ActionMessage("error.access.denied"));
+            saveErrors(request, errors);
             return mapping.findForward(StatusAction.ERROR);
         }
 
         UserForm userForm = (UserForm) form;
-        ActionErrors errors = new ActionErrors();
         UserDao userDao = getUserDao(request);
 
         if (userForm.getId() == 0) {
@@ -39,12 +43,12 @@ public class UpdateUser extends SmartAction {
             saveErrors(request, errors);
             return mapping.getInputForward();
         }
-        if (userForm.getPass().length() > 0) {
-            if (userDao.updateUserByUserForm(userForm.extractUser())) {
+        if (userForm.getPassword().length() > 0) {
+            if (userDao.updateUser(userForm.extractUser(), userForm.getPassword())) {
                 return mapping.findForward(StatusAction.SUCCESS);
             }
         } else {
-            if (userDao.updateWithoutPassword(userForm.extractUser())) {
+            if (userDao.updateUser(userForm.extractUser())) {
                 return mapping.findForward(StatusAction.SUCCESS);
             }
         }
