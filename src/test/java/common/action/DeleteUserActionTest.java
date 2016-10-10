@@ -4,6 +4,7 @@ import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
 import common.db.model.Role;
 import common.db.model.User;
+import common.utils.Attributes;
 import common.utils.StatusAction;
 import servletunit.struts.MockStrutsTestCase;
 
@@ -27,7 +28,7 @@ public class DeleteUserActionTest extends MockStrutsTestCase {
         super.setUp();
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
-        getSession().setAttribute("sessionUser", userSession);
+        getSession().setAttribute(Attributes.Session.USER, userSession);
     }
 
     public void testSuccessUserDelete() throws SQLException {

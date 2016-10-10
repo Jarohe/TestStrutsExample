@@ -2,13 +2,7 @@ package common.filters;
 
 import org.apache.commons.dbcp.BasicDataSource;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;

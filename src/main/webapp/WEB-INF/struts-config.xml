@@ -21,6 +21,7 @@
                 input="/welcome.html"
                 validate="true">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
+            <forward name="error" path="/welcome.html"/>
         </action>
         <!-- Sign Out -->
         <action path="/system/signOut" type="common.action.SignOutAction">
@@ -34,7 +35,7 @@
                 input="/system/signUp.html"
                 validate="true">
             <forward name="success" path="/WEB-INF/pages/successUserCreate.jsp"/>
-            <forward name="duplicate user" path="/WEB-INF/pages/createUserPage.jsp"/>
+            <forward name="duplicate user" path="/system/signUp.html"/>
             <forward name="error" path="/WEB-INF/pages/createUserPage.jsp"/>
         </action>
         <!-- Show Users -->

@@ -1,6 +1,7 @@
 package common.filters;
 
 import common.db.model.User;
+import common.utils.Attributes;
 import org.junit.Test;
 import servletunit.FilterChainSimulator;
 import servletunit.FilterConfigSimulator;
@@ -36,7 +37,7 @@ public class AuthorizationFilterTest extends MockStrutsTestCase {
     public void setUp() throws Exception {
         super.setUp();
         session = getSession();
-        session.setAttribute("sessionUser",null);
+        session.setAttribute(Attributes.Session.USER,null);
         when(filterConfig.getInitParameter(eq("home_page"))).thenReturn("trololo");
         when(request.getSession()).thenReturn(session);
         when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
@@ -55,7 +56,7 @@ public class AuthorizationFilterTest extends MockStrutsTestCase {
     }
 
     public void testErrorDoFilter() throws IOException, ServletException {
-        session.setAttribute("sessionUser", user);
+        session.setAttribute(Attributes.Session.USER, user);
         filter.doFilter(request,response,filterChain);
         verify(request,times(1)).getRequestDispatcher(anyString());
     }

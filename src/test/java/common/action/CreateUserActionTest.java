@@ -6,6 +6,7 @@ import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
+import common.utils.Attributes;
 import common.utils.StatusAction;
 import servletunit.struts.MockStrutsTestCase;
 
@@ -30,7 +31,7 @@ public class CreateUserActionTest extends MockStrutsTestCase {
         super.setUp();
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
-        getSession().setAttribute("sessionUser",user);
+        getSession().setAttribute(Attributes.Session.USER,user);
     }
 
     public void testSuccessUserCreate() throws SQLException, DublicateUserException {

@@ -12,7 +12,7 @@ public class SignOutActionTest extends MockStrutsTestCase {
     public void testSuccessLogout() {
         setRequestPathInfo(PATH_INFO);
         User user = new User.Builder(1, "login", "password").build();
-        getSession().setAttribute("sessionUser", user);
+        getSession().setAttribute(Attributes.Session.USER, user);
         assertNotNull(getSession().getAttribute(Attributes.Session.USER));
         actionPerform();
         verifyForward(StatusAction.SUCCESS);

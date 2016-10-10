@@ -3,6 +3,7 @@ package common.filters;
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
 import common.db.model.User;
+import common.utils.Attributes;
 import servletunit.struts.MockStrutsTestCase;
 
 import javax.servlet.FilterChain;
@@ -20,7 +21,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 public class AccessFilterTest extends MockStrutsTestCase {
 
-    private AccessFilter filter = new AccessFilter();
+    private ActualUserFilter filter = new ActualUserFilter();
     private HttpServletRequest request;
     private HttpSession session;
 
@@ -35,7 +36,7 @@ public class AccessFilterTest extends MockStrutsTestCase {
         super.setUp();
         request = getRequest();
         session = getSession();
-        session.setAttribute("sessionUser", userSession);
+        session.setAttribute(Attributes.Session.USER, userSession);
         session.getServletContext().setAttribute("daoFactory", factory);
         request.setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);

@@ -3,20 +3,16 @@ package common.filters;
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
 import common.db.model.User;
+import common.utils.Attributes;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class AccessFilter implements Filter { // TODO: Название совершенно не отражает назначение
+public class ActualUserFilter implements Filter {
     private String homePage;
     private String errorPage;
 
@@ -31,7 +27,7 @@ public class AccessFilter implements Filter { // TODO: Название сове
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(false);
-        User user = (User) session.getAttribute("sessionUser");
+        User user = (User) session.getAttribute(Attributes.Session.USER);
         if (user == null) {
             servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
         } else {
@@ -47,7 +43,7 @@ public class AccessFilter implements Filter { // TODO: Название сове
                 }
 
                 if (!user.equals(userFromDb)) {
-                    session.setAttribute("sessionUser", userFromDb);
+                    session.setAttribute(Attributes.Session.USER, userFromDb);
                 }
             } catch (SQLException e) {
                 throw new IOException("SQL:" + this.getClass()); // TODO: Почему IOException???
