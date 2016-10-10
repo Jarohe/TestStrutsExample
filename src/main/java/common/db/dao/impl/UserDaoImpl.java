@@ -73,7 +73,7 @@ public class UserDaoImpl implements UserDao {
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT id, username, firstName,lastName,password,role FROM users")) { // TODO: Сортировка не определена
+                "SELECT id, username, firstName,lastName,password,role FROM users ORDER BY firstName, lastName")) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 users.add(new User.Builder(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"))
