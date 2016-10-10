@@ -23,8 +23,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByLoginAndPassword(String login, String password) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT id, username, firstName,lastName,password,role FROM users WHERE username = ? AND password = ?")) {
+        String sql = "SELECT id, username, firstName,lastName,password,role FROM users WHERE username = ? AND password = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, login);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
@@ -34,8 +34,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserById(int id) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT id, username, firstName,lastName,password,role FROM users WHERE id = ?")) {
+        String sql = "SELECT id, username, firstName,lastName,password,role FROM users WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             return getUser(resultSet);
@@ -44,8 +44,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByUsername(String login) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT id, username, firstName,lastName,password,role FROM users WHERE username = ?")) {
+        String sql = "SELECT id, username, firstName,lastName,password,role FROM users WHERE username = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             return getUser(resultSet);
@@ -72,8 +72,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT id, username, firstName,lastName,password,role FROM users ORDER BY firstName, lastName")) {
+        String sql = "SELECT id, username, firstName,lastName,password,role FROM users ORDER BY firstName, lastName";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 users.add(new User.Builder(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"))
@@ -90,8 +90,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean deleteUserById(int id) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "DELETE FROM users WHERE id = ?")) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             return statement.executeUpdate() == 1;
         }
@@ -99,8 +99,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int addUser(User user, String password) throws SQLException, DublicateUserException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO users (username, firstName,lastName, password,role) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+        String sql = "INSERT INTO users (username, firstName,lastName, password,role) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
@@ -142,8 +142,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean updateUser(User user) throws SQLException, DublicateUserException {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "UPDATE users SET username=?, firstName=?,lastName=?,role=? WHERE id = ?")) {
+        String sql = "UPDATE users SET username=?, firstName=?,lastName=?,role=? WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());

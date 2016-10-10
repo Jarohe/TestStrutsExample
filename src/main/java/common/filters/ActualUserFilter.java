@@ -46,7 +46,7 @@ public class ActualUserFilter implements Filter {
                     session.setAttribute(Attributes.Session.USER, userFromDb);
                 }
             } catch (SQLException e) {
-                throw new IOException("SQL:" + this.getClass()); // TODO: Почему IOException???
+                throw new ServletException(e);
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);
