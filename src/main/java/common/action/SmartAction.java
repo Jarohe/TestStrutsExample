@@ -5,12 +5,14 @@ import common.db.dao.UserDao;
 import common.db.model.Role;
 import common.db.model.User;
 import common.utils.Attributes;
+import common.utils.ErrorForvard;
 import org.apache.struts.action.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 
-class SmartAction extends Action {
+abstract class SmartAction extends Action {
 
     protected UserDao getUserDao(HttpServletRequest request) {
         Connection connection = (Connection) request.getAttribute("connection");
@@ -18,23 +20,25 @@ class SmartAction extends Action {
         return factory.createUserDao(connection);
     }
 
-    protected boolean isManager(HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute(Attributes.Session.USER);
-        return Role.MANAGER.equals(user.getRole());
+    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForvard errorForvard) {
+        ActionErrors errors = new ActionErrors();
+        errors.add(errorForvard.getProperty(), new ActionMessage(errorForvard.getKey()));
+        saveErrors(request, errors);
+        return mapping.findForward(errorForvard.getForwardName());
     }
 
-    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, String forwardName, String property, String key) {
+    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForvard errorForvard, Object value) {
         ActionErrors errors = new ActionErrors();
-        errors.add(property, new ActionMessage(key));
+        errors.add(errorForvard.getProperty(), new ActionMessage(errorForvard.getKey(), value));
         saveErrors(request, errors);
-        return mapping.findForward(forwardName);
+        return mapping.findForward(errorForvard.getForwardName());
     }
 
-    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, String forwardName, String property, String key, Object value) {
+    protected ActionForward actionErrorForward(HttpSession session, ActionMapping mapping, ErrorForvard errorForvard) {
         ActionErrors errors = new ActionErrors();
-        errors.add(property, new ActionMessage(key, value));
-        saveErrors(request, errors);
-        return mapping.findForward(forwardName);
+        errors.add(errorForvard.getProperty(), new ActionMessage(errorForvard.getKey()));
+        saveErrors(session, errors);
+        return mapping.findForward(errorForvard.getForwardName());
     }
 
 

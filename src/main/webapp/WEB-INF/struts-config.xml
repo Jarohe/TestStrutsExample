@@ -54,7 +54,7 @@
         </action>
         <action path="/system/updateUser" type="common.action.UpdateUserAction" name="userForm" scope="request" validate="true">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
-            <forward name="error" path="/system/editUser.html"/>
+            <forward name="error" path="/system/editUser.html" redirect="false"/>
         </action>
 
         <!-- Delete User -->

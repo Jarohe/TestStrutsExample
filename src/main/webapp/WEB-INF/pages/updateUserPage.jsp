@@ -9,6 +9,7 @@
 <body>
 <jsp:include page="general/header.jsp"/>
 <html:form action="/system/updateUser" method="POST">
+    <html:errors/>
     <table border="0">
         <tbody>
         <html:hidden property="id"/>

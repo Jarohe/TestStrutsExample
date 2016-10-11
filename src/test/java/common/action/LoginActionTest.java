@@ -37,7 +37,7 @@ public class LoginActionTest extends MockStrutsTestCase {
     }
 
     public void testSuccessLogin() throws SQLException {
-        when(userDao.getUserByLoginAndPassword("login", "password")).thenReturn(user);
+        when(userDao.getUser("login", "password")).thenReturn(user);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
         User userFromSession = (User) getSession().getAttribute(Attributes.Session.USER);
@@ -45,7 +45,7 @@ public class LoginActionTest extends MockStrutsTestCase {
     }
 
     public void testFailLogin() throws SQLException {
-        when(userDao.getUserByLoginAndPassword("login", "password")).thenReturn(null);
+        when(userDao.getUser("login", "password")).thenReturn(null);
         actionPerform();
         verifyForward(StatusAction.ERROR);
         assertNull(getSession().getAttribute(Attributes.Session.USER));

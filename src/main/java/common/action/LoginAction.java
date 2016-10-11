@@ -4,6 +4,7 @@ import common.db.dao.UserDao;
 import common.db.model.User;
 import common.form.LoginForm;
 import common.utils.Attributes;
+import common.utils.ErrorForvard;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
 import org.apache.struts.action.ActionForm;
@@ -19,11 +20,13 @@ public class LoginAction extends SmartAction {
                                  HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         LoginForm loginForm = (LoginForm) form;
+        ErrorForvard errorForvard;
 
         UserDao userDao = getUserDao(request);
-        User user = userDao.getUserByLoginAndPassword(loginForm.getLogin(), loginForm.getPassword());
+        User user = userDao.getUser(loginForm.getLogin(), loginForm.getPassword());
         if (user == null) {
-            return actionErrorForward(request, mapping, StatusAction.ERROR, "error_authorization", ErrorMessageKey.Login.INVALIDE_LOGIN_PASSWORD);
+            errorForvard = new ErrorForvard(StatusAction.ERROR, "error_authorization", ErrorMessageKey.Login.INVALIDE_LOGIN_PASSWORD);
+            return actionErrorForward(request, mapping, errorForvard);
         }
         request.getSession().setAttribute(Attributes.Session.USER, user);
         return mapping.findForward(StatusAction.SUCCESS);

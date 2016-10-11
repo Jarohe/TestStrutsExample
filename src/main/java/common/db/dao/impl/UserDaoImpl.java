@@ -22,7 +22,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByLoginAndPassword(String login, String password) throws SQLException {
+    public User getUser(String login, String password) throws SQLException {
         String sql = "SELECT id, username, firstName,lastName,password,role FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, login);

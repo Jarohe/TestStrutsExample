@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface UserDao {
-    User getUserByLoginAndPassword(String login, String password) throws SQLException;
+    User getUser(String login, String password) throws SQLException;
 
     User getUserById(int id) throws SQLException;
 
