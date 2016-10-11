@@ -26,14 +26,14 @@ class SmartAction extends Action {
     protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, String forwardName, String property, String key) {
         ActionErrors errors = new ActionErrors();
         errors.add(property, new ActionMessage(key));
-        saveErrors(request.getSession(), errors);
+        saveErrors(request, errors);
         return mapping.findForward(forwardName);
     }
 
     protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, String forwardName, String property, String key, Object value) {
         ActionErrors errors = new ActionErrors();
         errors.add(property, new ActionMessage(key, value));
-        saveErrors(request.getSession(), errors);
+        saveErrors(request, errors);
         return mapping.findForward(forwardName);
     }
 

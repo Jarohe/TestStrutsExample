@@ -50,9 +50,9 @@
                 input="/system/editUser.html"
                 validate="false">
             <forward name="success" path="/WEB-INF/pages/updateUserPage.jsp"/>
-            <forward name="error" path="/system/usersList.html" redirect="true"/>
+            <forward name="error" path="/system/usersList.html"/>
         </action>
-        <action path="/system/updateUser" type="common.action.UpdateUser" name="userForm" scope="request" validate="true">
+        <action path="/system/updateUser" type="common.action.UpdateUserAction" name="userForm" scope="request" validate="true">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
             <forward name="error" path="/system/editUser.html"/>
         </action>
@@ -60,7 +60,7 @@
         <!-- Delete User -->
         <action path="/system/deleteUser" type="common.action.DeleteUserAction">
             <forward name="success" path="/system/usersList.html" redirect="true"/>
-            <forward name="error" path="/system/usersList.html" redirect="true"/>
+            <forward name="error" path="/system/usersList.html"/>
         </action>
     </action-mappings>
 

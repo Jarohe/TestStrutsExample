@@ -38,15 +38,13 @@ public class User {
     public static class Builder {
         private final int id;
         private final String username;
-        private final String password;
         private String firstName = "";
         private String lastName = "";
         private Role role = Role.DEFAULT;
 
-        public Builder(int id, String username, String password) {
+        public Builder(int id, String username) {
             this.id = id;
             this.username = username;
-            this.password = password;
         }
 
         public Builder firstName(String val) {

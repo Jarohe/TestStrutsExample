@@ -3,6 +3,7 @@ package common.action;
 import common.db.dao.UserDao;
 import common.db.dao.exceptions.DublicateUserException;
 import common.form.UserForm;
+import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,14 +19,14 @@ public class CreateUserAction extends SmartAction {
         UserForm userForm = (UserForm) form;
 
         if (userForm.getPassword() == null || userForm.getPassword().length() < 1) {
-            return actionErrorForward(request, mapping, StatusAction.ERROR, "password", "errors.required", "Password");
+            return actionErrorForward(request, mapping, StatusAction.ERROR, "password", ErrorMessageKey.CreateUser.CAN_NOT_BLANK, "Password");
         }
 
         UserDao userDao = getUserDao(request);
         try {
             userDao.addUser(userForm.extractUser(), userForm.getPassword());
         } catch (DublicateUserException e) {
-            return actionErrorForward(request, mapping, StatusAction.CreateUser.DUBLICATE_USER, "dublicateUser", "error.dublicate.user.login");
+            return actionErrorForward(request, mapping, StatusAction.CreateUser.DUBLICATE_USER, "dublicateUser", ErrorMessageKey.CreateUser.DUBLICATE_LOGIN);
         }
         return mapping.findForward(StatusAction.SUCCESS);
     }

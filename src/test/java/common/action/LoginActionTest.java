@@ -3,7 +3,8 @@ package common.action;
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
 import common.db.model.User;
-import common.form.LoginForm;
+import common.utils.Attributes;
+import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
 import servletunit.struts.MockStrutsTestCase;
 
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 public class LoginActionTest extends MockStrutsTestCase {
 
-    private static String PATH_INFO = "/login";
+    private String pathInfo = "/login";
 
     private Connection connection = mock(Connection.class);
     private UserDao userDao = mock(UserDao.class);
@@ -25,43 +26,30 @@ public class LoginActionTest extends MockStrutsTestCase {
 
     public void setUp() throws Exception {
         super.setUp();
-        getRequest().setAttribute("connection",connection);
+        getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
+        setRequestPathInfo(pathInfo);
+        addRequestParameter("login", "login");
+        addRequestParameter("password", "password");
+        when(user.getUsername()).thenReturn("login");
+        getActionServlet().getServletContext().setAttribute("daoFactory", factory);
+
     }
 
     public void testSuccessLogin() throws SQLException {
-        setRequestPathInfo(PATH_INFO);
-        when(user.getUsername()).thenReturn("login");
-        when(userDao.getUserByUsername("login")).thenReturn(user);
-
-        getActionServlet().getServletContext().setAttribute("daoFactory",factory);
-
-        addRequestParameter("login","login");
-        addRequestParameter("pass","password");
+        when(userDao.getUserByLoginAndPassword("login", "password")).thenReturn(user);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
+        User userFromSession = (User) getSession().getAttribute(Attributes.Session.USER);
+        assertTrue(user.equals(userFromSession));
     }
 
     public void testFailLogin() throws SQLException {
-        setRequestPathInfo(PATH_INFO);
-        when(user.getUsername()).thenReturn("login");
-        when(userDao.getUserByUsername("login")).thenReturn(user);
-
-        getActionServlet().getServletContext().setAttribute("daoFactory",factory);
-
-        addRequestParameter("login","login");
-        addRequestParameter("pass","password");
+        when(userDao.getUserByLoginAndPassword("login", "password")).thenReturn(null);
         actionPerform();
-        verifyForward(StatusAction.LoginUser.ACCESS_DENIED);
-    }
-
-    public void testPassNull() {
-        setRequestPathInfo(PATH_INFO);
-        LoginForm loginForm = new LoginForm();
-        loginForm.setLogin("login");
-        setActionForm(loginForm);
-        actionPerform();
-        verifyForward(StatusAction.FAILURE);
+        verifyForward(StatusAction.ERROR);
+        assertNull(getSession().getAttribute(Attributes.Session.USER));
+        verifyActionErrors(new String[]{ErrorMessageKey.Login.INVALIDE_LOGIN_PASSWORD});
     }
 
 }

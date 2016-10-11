@@ -6,6 +6,8 @@ import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
 import common.utils.Attributes;
+import common.utils.ErrorMessageKey;
+import common.utils.StatusAction;
 import servletunit.struts.MockStrutsTestCase;
 
 import java.sql.Connection;
@@ -15,7 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class EditUserActionTest extends MockStrutsTestCase {
-    private static String PATH_INFO = "/system/editUser";
+    private String pathInfo = "/system/editUser";
     private Connection connection = mock(Connection.class);
     private UserDao userDao = mock(UserDao.class);
     private DaoFactory factory = mock(DaoFactory.class);
@@ -23,17 +25,19 @@ public class EditUserActionTest extends MockStrutsTestCase {
 
     public void setUp() throws Exception {
         super.setUp();
+        setRequestPathInfo(pathInfo);
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
         getSession().setAttribute(Attributes.Session.USER, userSession);
+        getActionServlet().getServletContext().setAttribute("daoFactory", factory);
     }
 
     public void testSuccessEditUser() throws SQLException {
-        setRequestPathInfo(PATH_INFO);
+
         addRequestParameter("id", "1");
         User user = createUser(1);
-        getActionServlet().getServletContext().setAttribute("daoFactory", factory);
         when(userDao.getUserById(1)).thenReturn(user);
+
         actionPerform();
         UserForm form = (UserForm) getActionForm();
         assertNotNull(form);
@@ -42,14 +46,23 @@ public class EditUserActionTest extends MockStrutsTestCase {
         assertTrue(user.getFirstName().equals(form.getFirstName()));
         assertTrue(user.getLastName().equals(form.getLastName()));
         assertTrue(!form.isManager());
+        verifyForward(StatusAction.SUCCESS);
+    }
+
+    public void testErrorNoFoundUserId() throws SQLException {
+        addRequestParameter("id", "1");
+        when(userDao.getUserById(1)).thenReturn(null);
+        actionPerform();
+        verifyForward(StatusAction.ERROR);
+        verifyActionErrors(new String[]{ErrorMessageKey.EditUser.NOT_FOUND_USER_ID});
     }
 
     private User createSessionUser() {
-        return new User.Builder(1, "", "").role(Role.MANAGER).build();
+        return new User.Builder(1, "").role(Role.MANAGER).build();
     }
 
     private User createUser(int id) {
-        return new User.Builder(id, "test", "test").firstName("test").lastName("test").role(Role.DEFAULT).build();
+        return new User.Builder(id, "test").firstName("test").lastName("test").role(Role.DEFAULT).build();
     }
 
 }

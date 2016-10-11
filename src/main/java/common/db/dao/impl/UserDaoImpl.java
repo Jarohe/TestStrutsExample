@@ -60,7 +60,7 @@ public class UserDaoImpl implements UserDao {
                     role = i;
                 }
             }
-            return new User.Builder(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"))
+            return new User.Builder(resultSet.getInt("id"), resultSet.getString("username"))
                     .firstName(resultSet.getString("firstName"))
                     .lastName(resultSet.getString("lastName"))
                     .role(role).build();
@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                users.add(new User.Builder(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("password"))
+                users.add(new User.Builder(resultSet.getInt("id"), resultSet.getString("username"))
                         .firstName(resultSet.getString("firstName")).lastName(resultSet.getString("lastName")).build());
             }
             return users;

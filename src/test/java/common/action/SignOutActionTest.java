@@ -7,11 +7,11 @@ import servletunit.struts.MockStrutsTestCase;
 
 
 public class SignOutActionTest extends MockStrutsTestCase {
-    private static String PATH_INFO = "/system/signOut";
+    private String pathInfo = "/system/signOut";
 
     public void testSuccessLogout() {
-        setRequestPathInfo(PATH_INFO);
-        User user = new User.Builder(1, "login", "password").build();
+        setRequestPathInfo(pathInfo);
+        User user = new User.Builder(1, "login").build();
         getSession().setAttribute(Attributes.Session.USER, user);
         assertNotNull(getSession().getAttribute(Attributes.Session.USER));
         actionPerform();

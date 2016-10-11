@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 
 public class UserListActionTest extends MockStrutsTestCase {
-    private static String PATH_INFO = "/system/usersList";
+    private String pathInfo = "/system/usersList";
 
     private Connection connection = mock(Connection.class);
     private UserDao userDao = mock(UserDao.class);
@@ -28,7 +28,7 @@ public class UserListActionTest extends MockStrutsTestCase {
     }
 
     public void testSuccessUserList() throws SQLException {
-        setRequestPathInfo(PATH_INFO);
+        setRequestPathInfo(pathInfo);
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
         when(userDao.getAllUsers()).thenReturn(anyListOf(User.class));
         assertNull(getRequest().getAttribute("userList"));

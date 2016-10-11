@@ -101,11 +101,14 @@ public class UserForm extends ActionForm {
         if (lastName == null || lastName.length() < 1) {
             errors.add("lastName", new ActionMessage("errors.required", "LastName"));
         }
-        return errors;
+        if (!errors.isEmpty()) {
+            return errors;
+        }
+        return null;
     }
 
     public User extractUser() {
-        return new User.Builder(getId(), getLogin(), getPassword())
+        return new User.Builder(getId(), getLogin())
                 .firstName(getFirstName())
                 .lastName(getLastName())
                 .role(getRole(isManager)).build();

@@ -5,6 +5,7 @@ import common.db.dao.UserDao;
 import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
+import common.form.UserForm;
 import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
@@ -16,46 +17,59 @@ import java.sql.SQLException;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-public class CreateUserActionTest extends MockStrutsTestCase {
-    private String pathInfo = "/system/createUser";
+public class UpdateUserActionTest extends MockStrutsTestCase {
+
+    private String pathInfo = "/system/updateUser";
 
     private Connection connection = mock(Connection.class);
     private UserDao userDao = mock(UserDao.class);
     private DaoFactory factory = mock(DaoFactory.class);
-    private User user = createSessionUser();
 
     public void setUp() throws Exception {
         super.setUp();
-        setRequestPathInfo(pathInfo);
-
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
-        getSession().setAttribute(Attributes.Session.USER, user);
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
+        setRequestPathInfo(pathInfo);
         setRequestParameters();
     }
 
-    public void testSuccessUserCreate() throws SQLException, DublicateUserException {
+    public void testSuccessUpdateUserWithPassword() throws SQLException, DublicateUserException {
+        when(userDao.updateUser(any(User.class),eq("password"))).thenReturn(true);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
-        verifyNoActionErrors();
     }
 
-    public void testDuplicateUserCreate() throws SQLException, DublicateUserException {
-        when(userDao.addUser(any(User.class), eq("password"))).thenThrow(new DublicateUserException());
-        actionPerform();
-        verifyForward(StatusAction.CreateUser.DUBLICATE_USER);
-        verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.DUBLICATE_LOGIN});
-    }
-
-    public void testPasswordNull() {
+    public void testSuccessUpdateUserNotPassword() throws SQLException, DublicateUserException {
         addRequestParameter("password", "");
+        when(userDao.updateUser(any(User.class))).thenReturn(true);
+        actionPerform();
+        verifyForward(StatusAction.SUCCESS);
+    }
+
+    public void testErrorDublicateUsernameUpdate() throws SQLException, DublicateUserException {
+        when(userDao.updateUser(any(User.class),eq("password"))).thenThrow(new DublicateUserException());
         actionPerform();
         verifyForward(StatusAction.ERROR);
-        verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.CAN_NOT_BLANK});
+        verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.DUBLICATE_LOGIN});
+    }
+
+    public void testErrorDbUserUpdate() throws SQLException, DublicateUserException {
+        when(userDao.updateUser(any(User.class))).thenReturn(false);
+        actionPerform();
+        verifyForward(StatusAction.ERROR);
+        verifyActionErrors(new String[] {ErrorMessageKey.UpdateUser.USER_NOT_UPDATE});
+    }
+
+    public void testErrorNotSendId() {
+        addRequestParameter("id", "0");
+        actionPerform();
+        verifyForward(StatusAction.ERROR);
+        verifyActionErrors(new String[] {ErrorMessageKey.UpdateUser.NOT_SEND_ID});
     }
 
 
@@ -68,7 +82,4 @@ public class CreateUserActionTest extends MockStrutsTestCase {
         addRequestParameter("manager", "on");
     }
 
-    private User createSessionUser() {
-        return new User.Builder(1, "").role(Role.MANAGER).build();
-    }
 }
