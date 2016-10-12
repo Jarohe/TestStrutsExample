@@ -8,33 +8,35 @@ import servletunit.struts.MockStrutsTestCase;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class UserListActionTest extends MockStrutsTestCase {
+public class UserListActionTest extends UtilActionTest {
     private String pathInfo = "/system/usersList";
-
-    private Connection connection = mock(Connection.class);
-    private UserDao userDao = mock(UserDao.class);
-    private DaoFactory factory = mock(DaoFactory.class);
 
     public void setUp() throws Exception {
         super.setUp();
-        getRequest().setAttribute("connection", connection);
-        when(factory.createUserDao(connection)).thenReturn(userDao);
+        init();
     }
 
     public void testSuccessUserList() throws SQLException {
         setRequestPathInfo(pathInfo);
-        getActionServlet().getServletContext().setAttribute("daoFactory", factory);
-        when(userDao.getAllUsers()).thenReturn(anyListOf(User.class));
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+        when(userDao.getAllUsers()).thenReturn(userList);
         assertNull(getRequest().getAttribute("userList"));
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
         assertNotNull(getRequest().getAttribute("userList"));
+        List<User> resultList = (List<User>) getRequest().getAttribute("userList");
+        assertTrue(userList.equals(resultList));
     }
 
 }

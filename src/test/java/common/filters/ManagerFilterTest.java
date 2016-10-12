@@ -29,7 +29,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
-//TODO
 public class ManagerFilterTest extends MockStrutsTestCase {
 
     private ManagerFilter filter = new ManagerFilter();

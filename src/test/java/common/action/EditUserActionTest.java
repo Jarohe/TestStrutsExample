@@ -16,26 +16,20 @@ import java.sql.SQLException;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class EditUserActionTest extends MockStrutsTestCase {
+public class EditUserActionTest extends UtilActionTest {
     private String pathInfo = "/system/editUser";
-    private Connection connection = mock(Connection.class);
-    private UserDao userDao = mock(UserDao.class);
-    private DaoFactory factory = mock(DaoFactory.class);
-    private User userSession = createSessionUser();
 
     public void setUp() throws Exception {
         super.setUp();
         setRequestPathInfo(pathInfo);
-        getRequest().setAttribute("connection", connection);
-        when(factory.createUserDao(connection)).thenReturn(userDao);
-        getSession().setAttribute(Attributes.Session.USER, userSession);
-        getActionServlet().getServletContext().setAttribute("daoFactory", factory);
+        init();
+        getSession().setAttribute(Attributes.Session.USER, user);
     }
 
     public void testSuccessEditUser() throws SQLException {
 
         addRequestParameter("id", "1");
-        User user = createUser(1);
+        User user = new User(1, "userName", "firstName", "lastName", Role.DEFAULT);
         when(userDao.getUserById(1)).thenReturn(user);
 
         actionPerform();
@@ -55,14 +49,6 @@ public class EditUserActionTest extends MockStrutsTestCase {
         actionPerform();
         verifyForward(StatusAction.ERROR);
         verifyActionErrors(new String[]{ErrorMessageKey.EditUser.NOT_FOUND_USER_ID});
-    }
-
-    private User createSessionUser() {
-        return new User.Builder(1, "").role(Role.MANAGER).build();
-    }
-
-    private User createUser(int id) {
-        return new User.Builder(id, "test").firstName("test").lastName("test").role(Role.DEFAULT).build();
     }
 
 }

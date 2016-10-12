@@ -4,6 +4,15 @@
 <%@ taglib prefix="logic" uri="http://struts.apache.org/tags-logic" %>
 
 <html:errors/>
+
+<logic:messagesPresent message="newUser">
+    Messages:
+    <html:messages id="newUser">
+        <bean:write name="newUser"/>
+    </html:messages>
+
+    <hr>
+</logic:messagesPresent>
 <table border="1">
     <tbody>
     <tr>

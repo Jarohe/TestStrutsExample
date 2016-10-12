@@ -1,35 +1,20 @@
 package common.action;
 
-import common.db.dao.DaoFactory;
-import common.db.dao.UserDao;
-import common.db.model.Role;
-import common.db.model.User;
 import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
-import servletunit.struts.MockStrutsTestCase;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class DeleteUserActionTest extends MockStrutsTestCase {
+public class DeleteUserActionTest extends UtilActionTest {
     private String pathInfo = "/system/deleteUser";
-
-    private Connection connection = mock(Connection.class);
-    private UserDao userDao = mock(UserDao.class);
-    private DaoFactory factory = mock(DaoFactory.class);
-    private User userSession = createSessionUserManager();
 
     public void setUp() throws Exception {
         super.setUp();
-        getRequest().setAttribute("connection", connection);
-        when(factory.createUserDao(connection)).thenReturn(userDao);
-        getSession().setAttribute(Attributes.Session.USER, userSession);
-        getActionServlet().getServletContext().setAttribute("daoFactory", factory);
-
+        init();
+        getSession().setAttribute(Attributes.Session.USER, user);
         setRequestPathInfo(pathInfo);
     }
 
@@ -60,10 +45,6 @@ public class DeleteUserActionTest extends MockStrutsTestCase {
         actionPerform();
         verifyForward(StatusAction.ERROR);
         verifyActionErrors(new String[]{ErrorMessageKey.DeleteUser.NOT_FOUND_USER_ID});
-    }
-
-    private User createSessionUserManager() {
-        return new User.Builder(10, "test").role(Role.MANAGER).build();
     }
 
 }

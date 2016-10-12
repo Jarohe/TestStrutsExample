@@ -21,19 +21,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-public class UpdateUserActionTest extends MockStrutsTestCase {
+public class UpdateUserActionTest extends UtilActionTest {
 
     private String pathInfo = "/system/updateUser";
 
-    private Connection connection = mock(Connection.class);
-    private UserDao userDao = mock(UserDao.class);
-    private DaoFactory factory = mock(DaoFactory.class);
-
     public void setUp() throws Exception {
         super.setUp();
-        getRequest().setAttribute("connection", connection);
-        when(factory.createUserDao(connection)).thenReturn(userDao);
-        getActionServlet().getServletContext().setAttribute("daoFactory", factory);
+        init();
         setRequestPathInfo(pathInfo);
         setRequestParameters();
     }

@@ -14,6 +14,7 @@
 
 <jsp:include page="../general/header.jsp"/>
 
+<%--TODO: Это разделение правильнее делать в Action--%>
 <logic:equal name="role" value="MANAGER">
     <jsp:include page="managerUserList.jsp"/>
 </logic:equal>

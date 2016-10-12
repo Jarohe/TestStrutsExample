@@ -30,25 +30,27 @@ public class ActualUserFilter implements Filter {
         User user = (User) session.getAttribute(Attributes.Session.USER);
         if (user == null) {
             servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
-        } else {
-            try {
-                Connection connection = (Connection) servletRequest.getAttribute("connection");
-                DaoFactory factory = (DaoFactory) session.getServletContext().getAttribute("daoFactory");
-                UserDao userDao = factory.createUserDao(connection);
-                User userFromDb = userDao.getUserById(user.getId());
-
-                if (userFromDb == null) {
-                    session.invalidate();
-                    servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
-                }
-
-                if (!user.equals(userFromDb)) {
-                    session.setAttribute(Attributes.Session.USER, userFromDb);
-                }
-            } catch (SQLException e) {
-                throw new ServletException(e);
-            }
+            return;
         }
+        try {
+            Connection connection = (Connection) servletRequest.getAttribute("connection");
+            DaoFactory factory = (DaoFactory) session.getServletContext().getAttribute("daoFactory");
+            UserDao userDao = factory.createUserDao(connection);
+            User userFromDb = userDao.getUserById(user.getId());
+
+            if (userFromDb == null) {
+                session.invalidate();
+                servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
+                return;
+            }
+
+            if (!user.equals(userFromDb)) {
+                session.setAttribute(Attributes.Session.USER, userFromDb);
+            }
+        } catch (SQLException e) {
+            throw new ServletException(e);
+        }
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 

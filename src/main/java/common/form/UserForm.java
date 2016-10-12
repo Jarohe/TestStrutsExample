@@ -108,10 +108,7 @@ public class UserForm extends ActionForm {
     }
 
     public User extractUser() {
-        return new User.Builder(getId(), getLogin())
-                .firstName(getFirstName())
-                .lastName(getLastName())
-                .role(getRole(isManager)).build();
+        return new User(getId(), getLogin(), getFirstName(), getLastName() , getRole(isManager));
     }
 
     private Role getRole(boolean isManager) {

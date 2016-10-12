@@ -6,9 +6,7 @@ import common.form.UserForm;
 import common.utils.ErrorForvard;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +30,10 @@ public class CreateUserAction extends SmartAction {
             errorForvard = new ErrorForvard(StatusAction.CreateUser.DUBLICATE_USER, "dublicateUser", ErrorMessageKey.CreateUser.DUBLICATE_LOGIN);
             return actionErrorForward(request, mapping, errorForvard);
         }
+        ActionMessages messages = new ActionMessages();
+        messages.add("newUser", new ActionMessage("create.new.user",userForm.getLogin()));
+        saveMessages(request.getSession(),messages);
+
         return mapping.findForward(StatusAction.SUCCESS);
     }
 }

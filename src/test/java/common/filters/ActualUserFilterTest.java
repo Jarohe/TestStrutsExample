@@ -13,13 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 
-public class AccessFilterTest extends MockStrutsTestCase {
+public class ActualUserFilterTest extends MockStrutsTestCase {
 
     private ActualUserFilter filter = new ActualUserFilter();
     private HttpServletRequest request;
@@ -41,6 +42,7 @@ public class AccessFilterTest extends MockStrutsTestCase {
         request.setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
         when(userDao.getUserById(anyInt())).thenReturn(userSession);
+        when(userSession.getUsername()).thenReturn("user");
     }
 
     public void testInit() throws ServletException {
@@ -51,6 +53,22 @@ public class AccessFilterTest extends MockStrutsTestCase {
 
     public void testSuccessDoFilter() throws IOException, ServletException {
         filter.doFilter(getRequest(), getResponse(), filterChain);
+        verify(filterChain).doFilter(request,response);
+    }
+
+    public void testErrorUserAbcentInSession() throws IOException, ServletException {
+        session.setAttribute(Attributes.Session.USER, null);
+        filter.doFilter(request, response, filterChain);
+        verify(filterChain,times(0)).doFilter(request,response);
+    }
+
+    public void testUpdateUserInSession() throws SQLException, IOException, ServletException {
+        User DbUser = mock(User.class);
+        when(DbUser.getUsername()).thenReturn("updateUser");
+        when(userDao.getUserById(anyInt())).thenReturn(DbUser);
+        assertTrue(session.getAttribute(Attributes.Session.USER).equals(userSession));
+        filter.doFilter(request, response, filterChain);
+        assertTrue(session.getAttribute(Attributes.Session.USER).equals(DbUser));
         verify(filterChain).doFilter(request,response);
     }
 

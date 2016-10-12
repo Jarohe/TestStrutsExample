@@ -19,22 +19,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class CreateUserActionTest extends MockStrutsTestCase {
+public class CreateUserActionTest extends UtilActionTest {
     private String pathInfo = "/system/createUser";
-
-    private Connection connection = mock(Connection.class);
-    private UserDao userDao = mock(UserDao.class);
-    private DaoFactory factory = mock(DaoFactory.class);
-    private User user = createSessionUser();
 
     public void setUp() throws Exception {
         super.setUp();
         setRequestPathInfo(pathInfo);
-
-        getRequest().setAttribute("connection", connection);
-        when(factory.createUserDao(connection)).thenReturn(userDao);
+        init();
         getSession().setAttribute(Attributes.Session.USER, user);
-        getActionServlet().getServletContext().setAttribute("daoFactory", factory);
         setRequestParameters();
     }
 
@@ -66,9 +58,5 @@ public class CreateUserActionTest extends MockStrutsTestCase {
         addRequestParameter("firstName", "firstName");
         addRequestParameter("lastName", "lastName");
         addRequestParameter("manager", "on");
-    }
-
-    private User createSessionUser() {
-        return new User.Builder(1, "").role(Role.MANAGER).build();
     }
 }
