@@ -34,7 +34,7 @@
                 scope="request"
                 input="/system/signUp.html"
                 validate="true">
-            <forward name="success" path="/system/usersList.html" redirect="false"/> <!--TODO: // Надо уходить на userlist с сообщением-->
+            <forward name="success" path="/system/usersList.html" redirect="false"/>
             <forward name="duplicate user" path="/system/signUp.html"/>
             <forward name="error" path="/WEB-INF/pages/createUserPage.jsp"/>
         </action>

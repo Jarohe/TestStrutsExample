@@ -4,7 +4,6 @@ import common.db.dao.UserDao;
 import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
-import common.form.UserForm;
 import junit.framework.TestCase;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
@@ -14,9 +13,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-
 public class UserDaoImplTest extends TestCase {
-    //TODO create test DB
     private static String dbUrl = "jdbc:mysql://localhost:3306/actimind";
     private static String dbUser = "actimind";
     private static String dbPassword = "actimindAdmin";
@@ -55,69 +52,74 @@ public class UserDaoImplTest extends TestCase {
 
     public void testGetUserByUsername() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
-        userDao.addUser(defoultUser, "testUser");
-        User user = userDao.getUserByUsername(defoultUser.getUsername());
-        assertTrue(defoultUser.getUsername().equals(user.getUsername()));
-        assertTrue(defoultUser.getFirstName().equals(user.getFirstName()));
-        assertTrue(defoultUser.getLastName().equals(user.getLastName()));
-        assertTrue(Role.DEFAULT.equals(user.getRole()));
+        int id = userDao.addUser(defoultUser, "password");
+        defoultUser.setId(id);
+        User resultUser = userDao.getUserByUsername(defoultUser.getUsername());
+        assertTrue(resultUser.equals(defoultUser));
     }
 
     public void testGetAllUsers() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
-        List<User> resultUsers = userDao.getAllUsers();
-        userDao.addUser(defoultUser, "testUser");
         List<User> userList = userDao.getAllUsers();
-        assertTrue(resultUsers.size() + 1 == userList.size());
+        userDao.addUser(defoultUser, "testUser");
+        List<User> resultUserList = userDao.getAllUsers();
+        assertTrue(userList.size() + 1 == resultUserList.size());
     }
 
     public void testAddUser() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
-        userDao.addUser(defoultUser, "testUser");
-        User user = userDao.getUserByUsername(defoultUser.getUsername());
+        int id = userDao.addUser(defoultUser, "password");
+        User user = userDao.getUserById(id);
         assertTrue(defoultUser.getUsername().equals(user.getUsername()));
         assertTrue(defoultUser.getFirstName().equals(user.getFirstName()));
         assertTrue(defoultUser.getLastName().equals(user.getLastName()));
-        assertTrue(Role.DEFAULT.equals(user.getRole()));
+        assertTrue(defoultUser.getRole().equals(user.getRole()));
     }
 
     public void testDeleteUserById() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
-        userDao.addUser(defoultUser, "testUser");
-        User test1 = userDao.getUserByUsername(defoultUser.getUsername());
-        assertTrue(test1 != null);
-        userDao.deleteUserById(test1.getId());
-        User test2 = userDao.getUserByUsername(defoultUser.getUsername());
-        assertTrue(test2 == null);
+        int id = userDao.addUser(defoultUser, "testUser");
+        User user = userDao.getUserById(id);
+        assertTrue(user != null);
+        userDao.deleteUserById(id);
+        User dropUser = userDao.getUserByUsername(defoultUser.getUsername());
+        assertTrue(dropUser == null);
     }
 
     public void testUpdateUserWithPassword() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
-        int id = userDao.addUser(defoultUser, "testUser");
-        User user1 = userDao.getUserByUsername(defoultUser.getUsername());
+        int id = userDao.addUser(defoultUser, "password");
         defoultUser.setId(id);
-        defoultUser.setRole(Role.MANAGER);
-        userDao.updateUser(defoultUser, "password");
-        User user2 = userDao.getUserById(user1.getId());
-        assertTrue(!user1.getRole().equals(user2.getRole()));
-        assertTrue(user1.getUsername().equals(user2.getUsername()));
-        assertTrue(user1.getFirstName().equals(user2.getFirstName()));
-        assertTrue(user1.getLastName().equals(user2.getLastName()));
-        assertTrue(user1.getId() == user2.getId());
+        User updateUser = buildDefoultUser();
+        updateUser.setId(id);
+        updateUser.setRole(Role.MANAGER);
+        userDao.updateUser(updateUser, "password");
+        updateUser = userDao.getUserById(id);
+        assertTrue(!defoultUser.getRole().equals(updateUser.getRole()));
+        assertTrue(defoultUser.getUsername().equals(updateUser.getUsername()));
+        assertTrue(defoultUser.getFirstName().equals(updateUser.getFirstName()));
+        assertTrue(defoultUser.getLastName().equals(updateUser.getLastName()));
+        assertTrue(defoultUser.getId() == updateUser.getId());
     }
 
     public void testUpdateWithoutPassword() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
-        int id = userDao.addUser(defoultUser, "testUser");
-        User user1 = userDao.getUserByUsername(defoultUser.getUsername());
+        int id = userDao.addUser(defoultUser, "password");
         defoultUser.setId(id);
-        userDao.updateUser(defoultUser);
-        User user2 = userDao.getUserById(user1.getId());
-        assertTrue(user1.equals(user2));
+        User updateUser = buildDefoultUser();
+        updateUser.setId(id);
+        updateUser.setRole(Role.MANAGER);
+        userDao.updateUser(updateUser);
+        updateUser = userDao.getUserById(id);
+        assertTrue(!defoultUser.getRole().equals(updateUser.getRole()));
+        assertTrue(defoultUser.getUsername().equals(updateUser.getUsername()));
+        assertTrue(defoultUser.getFirstName().equals(updateUser.getFirstName()));
+        assertTrue(defoultUser.getLastName().equals(updateUser.getLastName()));
+        assertTrue(defoultUser.getId() == updateUser.getId());
     }
 
     private User buildDefoultUser() {
-        return new User(0,"username","firstName","lastName",Role.DEFAULT);
+        return new User(0, "username", "firstName", "lastName", Role.DEFAULT);
     }
 
 }

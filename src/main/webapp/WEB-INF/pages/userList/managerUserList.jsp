@@ -5,14 +5,11 @@
 
 <html:errors/>
 
-<logic:messagesPresent message="newUser">
-    Messages:
-    <html:messages id="newUser">
-        <bean:write name="newUser"/>
-    </html:messages>
 
-    <hr>
-</logic:messagesPresent>
+<html:messages id="newUser">
+    <bean:write name="newUser"/>
+</html:messages>
+
 <table border="1">
     <tbody>
     <tr>
