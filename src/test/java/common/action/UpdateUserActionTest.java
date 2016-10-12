@@ -55,7 +55,6 @@ public class UpdateUserActionTest extends MockStrutsTestCase {
         when(userDao.updateUser(any(User.class),eq("password"))).thenThrow(new DublicateUserException());
         actionPerform();
         verifyForward(StatusAction.ERROR);
-        verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.DUBLICATE_LOGIN});
     }
 
     public void testErrorDbUserUpdate() throws SQLException, DublicateUserException {
