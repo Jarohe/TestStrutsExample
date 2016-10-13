@@ -1,17 +1,12 @@
 package common.action;
 
-import common.db.dao.DaoFactory;
-import common.db.dao.UserDao;
 import common.db.dao.exceptions.DublicateUserException;
-import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
 import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
-import servletunit.struts.MockStrutsTestCase;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.mockito.Matchers.any;
@@ -20,10 +15,9 @@ import static org.mockito.Mockito.*;
 
 
 public class CreateUserActionTest extends UtilActionTest {
-    private String pathInfo = "/system/createUser";
 
     public void setUp() throws Exception {
-        super.setUp(pathInfo);
+        super.setUp("/system/createUser");
         getSession().setAttribute(Attributes.Session.USER, user);
         setRequestParameters();
     }
@@ -32,7 +26,7 @@ public class CreateUserActionTest extends UtilActionTest {
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
         UserForm form = (UserForm) getActionForm();
-        verify(userDao,times(1)).addUser(form.extractUser(),form.getPassword());
+        verify(userDao, times(1)).addUser(form.extractUser(), form.getPassword());
         verifyNoActionErrors();
     }
 

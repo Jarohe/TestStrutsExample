@@ -1,14 +1,10 @@
 package common.action;
 
-import common.db.dao.DaoFactory;
-import common.db.dao.UserDao;
 import common.db.model.User;
 import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
-import servletunit.struts.MockStrutsTestCase;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.mockito.Mockito.mock;
@@ -17,12 +13,10 @@ import static org.mockito.Mockito.when;
 
 public class LoginActionTest extends UtilActionTest {
 
-    private String pathInfo = "/login";
-
     private User user = mock(User.class);
 
     public void setUp() throws Exception {
-        super.setUp(pathInfo);// TODO: super.setUp()
+        super.setUp("/login");// TODO: super.setUp()
         addRequestParameter("login", "login");
         addRequestParameter("password", "password");
         when(user.getUsername()).thenReturn("login");
@@ -33,7 +27,7 @@ public class LoginActionTest extends UtilActionTest {
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
         User userFromSession = (User) getSession().getAttribute(Attributes.Session.USER);
-        assertTrue(user.equals(userFromSession));
+        assertEquals(user, userFromSession);
     }
 
     public void testFailLogin() throws SQLException {

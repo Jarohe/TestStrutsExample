@@ -9,12 +9,10 @@ import java.sql.SQLException;
 import static org.mockito.Mockito.when;
 
 public class DeleteUserActionTest extends UtilActionTest {
-    private String pathInfo = "/system/deleteUser";
 
     public void setUp() throws Exception {
-        super.setUp(pathInfo);
+        super.setUp("/system/deleteUser");
         getSession().setAttribute(Attributes.Session.USER, user);
-        setRequestPathInfo(pathInfo);
     }
 
     public void testSuccessUserDelete() throws SQLException {

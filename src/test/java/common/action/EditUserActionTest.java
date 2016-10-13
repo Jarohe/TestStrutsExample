@@ -1,26 +1,19 @@
 package common.action;
 
-import common.db.dao.DaoFactory;
-import common.db.dao.UserDao;
 import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
-import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
-import servletunit.struts.MockStrutsTestCase;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class EditUserActionTest extends UtilActionTest {
-    private String pathInfo = "/system/editUser";
 
     public void setUp() throws Exception {
-        super.setUp(pathInfo);
+        super.setUp("/system/editUser");
     }
 
     public void testSuccessEditUser() throws SQLException {

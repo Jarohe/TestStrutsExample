@@ -6,10 +6,9 @@ import common.utils.StatusAction;
 
 
 public class WelcomeActionTest extends UtilActionTest {
-    private String pathInfo = "/welcome";
 
     public void setUp() throws Exception {
-        super.setUp(pathInfo);
+        super.setUp("/welcome");
     }
 
     public void testSuccessWelcomeAction() {
@@ -19,7 +18,7 @@ public class WelcomeActionTest extends UtilActionTest {
     }
 
     public void testErrorWelcomeAction() {
-        getSession().setAttribute(Attributes.Session.USER, new User(10,"username","firstName","lastName"));
+        getSession().setAttribute(Attributes.Session.USER, new User(10, "username", "firstName", "lastName"));
         actionPerform();
         verifyForward(StatusAction.ERROR);
     }

@@ -12,13 +12,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 abstract class UtilActionTest extends MockStrutsTestCase {
-    protected Connection connection = mock(Connection.class);
+    private Connection connection = mock(Connection.class);
     protected UserDao userDao = mock(UserDao.class);
     private DaoFactory factory = mock(DaoFactory.class);
     protected User user = createSessionUser();
 
     private User createSessionUser() {
-        return new User(10,"userName", "firstName", "lastName", Role.MANAGER);
+        return new User(10, "userName", "firstName", "lastName", Role.MANAGER);
     }
 
     public void setUp(String pathInfo) throws Exception {
@@ -26,7 +26,7 @@ abstract class UtilActionTest extends MockStrutsTestCase {
         init(pathInfo);
     }
 
-    protected void init(String pathInfo) {
+    private void init(String pathInfo) {
         setRequestPathInfo(pathInfo);
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);

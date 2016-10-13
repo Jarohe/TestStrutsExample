@@ -1,37 +1,26 @@
 package common.action;
 
-import common.db.dao.DaoFactory;
-import common.db.dao.UserDao;
 import common.db.dao.exceptions.DublicateUserException;
-import common.db.model.Role;
 import common.db.model.User;
-import common.form.UserForm;
-import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
-import servletunit.struts.MockStrutsTestCase;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
 public class UpdateUserActionTest extends UtilActionTest {
 
-    private String pathInfo = "/system/updateUser";
-
     public void setUp() throws Exception {
-        super.setUp(pathInfo);
+        super.setUp("/system/updateUser");
         setRequestParameters();
     }
 
     public void testSuccessUpdateUserWithPassword() throws SQLException, DublicateUserException {
-        when(userDao.updateUser(any(User.class),eq("password"))).thenReturn(true);  // TODO: Так вообще ничего не тестируется
+        when(userDao.updateUser(any(User.class), eq("password"))).thenReturn(true);  // TODO: Так вообще ничего не тестируется
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }
@@ -44,7 +33,7 @@ public class UpdateUserActionTest extends UtilActionTest {
     }
 
     public void testErrorDublicateUsernameUpdate() throws SQLException, DublicateUserException {
-        when(userDao.updateUser(any(User.class),eq("password"))).thenThrow(new DublicateUserException());
+        when(userDao.updateUser(any(User.class), eq("password"))).thenThrow(new DublicateUserException());
         actionPerform();
         verifyForward(StatusAction.ERROR);
     }
@@ -53,14 +42,14 @@ public class UpdateUserActionTest extends UtilActionTest {
         when(userDao.updateUser(any(User.class))).thenReturn(false);
         actionPerform();
         verifyForward(StatusAction.ERROR);
-        verifyActionErrors(new String[] {ErrorMessageKey.UpdateUser.USER_NOT_UPDATE});
+        verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.USER_NOT_UPDATE});
     }
 
     public void testErrorNotSendId() {
         addRequestParameter("id", "0");
         actionPerform();
         verifyForward(StatusAction.ERROR);
-        verifyActionErrors(new String[] {ErrorMessageKey.UpdateUser.NOT_SEND_ID});
+        verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.NOT_SEND_ID});
     }
 
     // TODO: Проверка обязательных полей
