@@ -42,23 +42,13 @@
 
 
     <welcome-file-list>
-        <welcome-file>/WEB-INF/pages/loginPage.jsp</welcome-file>
+        <welcome-file>welcome.html</welcome-file>
     </welcome-file-list>
 
     <!-- Добавляет connection в request -->
     <filter>
         <filter-name>ConnectionFilter</filter-name>
         <filter-class>common.filters.ConnectionFilter</filter-class>
-    </filter>
-
-    <!-- Не пускает авторизированного пользователя на welcome.html -->
-    <filter>
-        <filter-name>AuthorizationFilter</filter-name>
-        <filter-class>common.filters.AuthorizationFilter</filter-class>
-        <init-param>
-            <param-name>home_page</param-name>
-            <param-value>/system/usersList.html</param-value>
-        </init-param>
     </filter>
 
     <!-- Проверяет что пользователь авторизирован -->
@@ -84,11 +74,6 @@
     <filter-mapping>
         <filter-name>ConnectionFilter</filter-name>
         <url-pattern>*.html</url-pattern>
-    </filter-mapping>
-
-    <filter-mapping>
-        <filter-name>AuthorizationFilter</filter-name>
-        <url-pattern>/welcome.html</url-pattern>
     </filter-mapping>
 
     <filter-mapping>

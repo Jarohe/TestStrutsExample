@@ -5,7 +5,6 @@
         "http://struts.apache.org/dtds/struts-config_1_3.dtd">
 
 <struts-config>
-
     <form-beans>
         <form-bean name="loginForm" type="common.form.LoginForm"/>
         <form-bean name="userForm" type="common.form.UserForm"/>
@@ -13,7 +12,15 @@
 
     <action-mappings>
         <!-- Login -->
-        <action path="/welcome" forward="/WEB-INF/pages/loginPage.jsp" input="/welcome.html"/>
+        <!-- <action path="/welcome" forward="/WEB-INF/pages/loginPage.jsp" input="/welcome.html"/> -->
+        <action path="/welcome"
+                name="loginForm"
+                type="common.action.WelcomeAction"
+                input="/WEB-INF/pages/loginPage.jsp"
+                validate="false">
+            <forward name="success" path="/WEB-INF/pages/loginPage.jsp"/>
+            <forward name="error" path="/system/usersList.html" redirect="true"/>
+        </action>
         <action path="/login"
                 name="loginForm"
                 scope="request"
@@ -34,7 +41,7 @@
                 scope="request"
                 input="/system/signUp.html"
                 validate="true">
-            <forward name="success" path="/system/usersList.html" redirect="false"/>
+            <forward name="success" path="/system/usersList.html" redirect="true"/>
             <forward name="duplicate user" path="/system/signUp.html"/>
             <forward name="error" path="/WEB-INF/pages/createUserPage.jsp"/>
         </action>
@@ -65,5 +72,6 @@
     </action-mappings>
 
     <message-resources parameter="i18n.errors"/>
+
 
 </struts-config>
