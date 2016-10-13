@@ -37,11 +37,6 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
         filter.init(config);
     }
 
-    public void testInit() throws ServletException {
-        filter.init(config);
-        verify(config, times(2)).getServletContext(); // todo: это зачем?
-    }
-
     public void testSuccessDoFilter() throws IOException, ServletException, SQLException {
         filter.doFilter(request, response, filterChain);
         verify(filterChain, times(1)).doFilter(request, response);

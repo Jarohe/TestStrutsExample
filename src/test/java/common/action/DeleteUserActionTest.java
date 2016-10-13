@@ -12,8 +12,7 @@ public class DeleteUserActionTest extends UtilActionTest {
     private String pathInfo = "/system/deleteUser";
 
     public void setUp() throws Exception {
-        super.setUp();
-        init();
+        super.setUp(pathInfo);
         getSession().setAttribute(Attributes.Session.USER, user);
         setRequestPathInfo(pathInfo);
     }

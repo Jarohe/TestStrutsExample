@@ -20,10 +20,7 @@ public class EditUserActionTest extends UtilActionTest {
     private String pathInfo = "/system/editUser";
 
     public void setUp() throws Exception {
-        super.setUp();
-        setRequestPathInfo(pathInfo);
-        init();
-        getSession().setAttribute(Attributes.Session.USER, user); // TODO: А зачем?
+        super.setUp(pathInfo);
     }
 
     public void testSuccessEditUser() throws SQLException {

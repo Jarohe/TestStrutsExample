@@ -26,9 +26,7 @@ public class UpdateUserActionTest extends UtilActionTest {
     private String pathInfo = "/system/updateUser";
 
     public void setUp() throws Exception {
-        super.setUp();
-        init();
-        setRequestPathInfo(pathInfo);
+        super.setUp(pathInfo);
         setRequestParameters();
     }
 

@@ -22,12 +22,10 @@ public class UserListActionTest extends UtilActionTest {
     private String pathInfo = "/system/usersList";
 
     public void setUp() throws Exception {
-        super.setUp();
-        init();
+        super.setUp(pathInfo);
     }
 
     public void testSuccessUserList() throws SQLException {
-        setRequestPathInfo(pathInfo);
         List<User> userList = new ArrayList<>();
         userList.add(user);
         when(userDao.getAllUsers()).thenReturn(userList);

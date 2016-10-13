@@ -21,7 +21,13 @@ abstract class UtilActionTest extends MockStrutsTestCase {
         return new User(10,"userName", "firstName", "lastName", Role.MANAGER);
     }
 
-    protected void init() {
+    public void setUp(String pathInfo) throws Exception {
+        super.setUp();
+        init(pathInfo);
+    }
+
+    protected void init(String pathInfo) {
+        setRequestPathInfo(pathInfo);
         getRequest().setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);

@@ -43,12 +43,7 @@ public class ActualUserFilterTest extends MockStrutsTestCase {
         when(factory.createUserDao(connection)).thenReturn(userDao);
         when(userDao.getUserById(anyInt())).thenReturn(userSession);
         when(userSession.getUsername()).thenReturn("user");
-    }
-
-    public void testInit() throws ServletException {
         filter.init(filterConfig);
-        verify(filterConfig, times(1)).getInitParameter("error_page");
-        verify(filterConfig, times(1)).getInitParameter("home_page");
     }
 
     public void testSuccessDoFilter() throws IOException, ServletException { // TODO: Он разве проходит?

@@ -13,6 +13,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
@@ -30,34 +31,27 @@ public class AuthorizationFilterTest extends MockStrutsTestCase {
     private User user = mock(User.class);
     private FilterConfig filterConfig = mock(FilterConfig.class);
 
-    private HttpServletRequest request = mock(HttpServletRequest.class);
-    private RequestDispatcher dispatcher = mock(RequestDispatcher.class);
     private HttpSession session;
+    private HttpServletRequest request;
+
 
     public void setUp() throws Exception {
         super.setUp();
         session = getSession();
+        request = getRequest();
         session.setAttribute(Attributes.Session.USER,null);
         when(filterConfig.getInitParameter(eq("home_page"))).thenReturn("trololo");
-        when(request.getSession()).thenReturn(session);
-        when(request.getRequestDispatcher(anyString())).thenReturn(dispatcher);
-    }
-
-    public void testInit() throws ServletException {
         filter.init(filterConfig);
-        verify(filterConfig,times(1)).getServletContext();
-        verify(filterConfig,times(1)).getInitParameter("error_page"); // TODO: Не ясно зачем всё это
-        verify(filterConfig,times(1)).getInitParameter("home_page");
     }
 
     public void testSuccessDoFilter() throws Exception {
-        filter.doFilter(request,response,filterChain);
+        filter.doFilter(getRequest(),response,filterChain);
         verify(filterChain,times(1)).doFilter(request,response);
     }
 
     public void testErrorDoFilter() throws IOException, ServletException {
         session.setAttribute(Attributes.Session.USER, user);
         filter.doFilter(request,response,filterChain);
-        verify(request,times(1)).getRequestDispatcher(anyString());
+        verify(filterChain,times(0)).doFilter(request,response);
     }
 }

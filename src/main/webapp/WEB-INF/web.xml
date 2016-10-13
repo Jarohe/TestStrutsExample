@@ -57,17 +57,13 @@
         <filter-class>common.filters.AuthorizationFilter</filter-class>
         <init-param>
             <param-name>home_page</param-name>
-            <param-value>/login.html</param-value>
-        </init-param>
-        <init-param>
-            <param-name>error_page</param-name>
-            <param-value>/error.html</param-value>
+            <param-value>/system/usersList.html</param-value>
         </init-param>
     </filter>
 
     <!-- Проверяет что пользователь авторизирован -->
     <filter>
-        <filter-name>AccessFilter</filter-name>
+        <filter-name>ActualUserFilter</filter-name>
         <filter-class>common.filters.ActualUserFilter</filter-class>
         <init-param>
             <param-name>home_page</param-name>
@@ -96,7 +92,7 @@
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>AccessFilter</filter-name>
+        <filter-name>ActualUserFilter</filter-name>
         <url-pattern>/system/*</url-pattern>
     </filter-mapping>
 

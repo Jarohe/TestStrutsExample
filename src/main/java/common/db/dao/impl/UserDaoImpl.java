@@ -28,7 +28,10 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, login);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
-            return getUser(resultSet);
+            if (resultSet.next()) {
+                return getUser(resultSet);
+            }
+            return null;
         }
     }
 
@@ -38,7 +41,10 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            return getUser(resultSet);
+            if (resultSet.next()) {
+                return getUser(resultSet);
+            }
+            return null;
         }
     }
 
@@ -48,7 +54,10 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
-            return getUser(resultSet);
+            if (resultSet.next()) {
+                return getUser(resultSet);
+            }
+            return null;
         }
     }
 
@@ -59,10 +68,7 @@ public class UserDaoImpl implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                users.add(new User(resultSet.getInt("id"),
-                        resultSet.getString("username"),
-                        resultSet.getString("firstName"),
-                        resultSet.getString("lastName"))); // TODO: А Роль?
+                users.add(getUser(resultSet));
             }
             return users;
         }
@@ -144,19 +150,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     private User getUser(ResultSet resultSet) throws SQLException {
-        if (resultSet.next()) {
-            Role role = null;
-            for (Role i : Role.values()) { // TODO: Это, вообщет, лучше поместить в Role
-                if (i.getId() == resultSet.getInt("role")) {
-                    role = i;
-                }
-            }
-            return new User(resultSet.getInt("id"),
-                    resultSet.getString("username"),
-                    resultSet.getString("firstName"),
-                    resultSet.getString("lastName"), role);
-        }
-
-        return null;
+        Role role = Role.getRole(resultSet.getInt("role"));
+        return new User(resultSet.getInt("id"),
+                resultSet.getString("username"),
+                resultSet.getString("firstName"),
+                resultSet.getString("lastName"), role);
     }
 }

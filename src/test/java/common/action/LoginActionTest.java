@@ -22,9 +22,7 @@ public class LoginActionTest extends UtilActionTest {
     private User user = mock(User.class);
 
     public void setUp() throws Exception {
-        super.setUp();
-        init(); // TODO: super.setUp()
-        setRequestPathInfo(pathInfo);
+        super.setUp(pathInfo);// TODO: super.setUp()
         addRequestParameter("login", "login");
         addRequestParameter("password", "password");
         when(user.getUsername()).thenReturn("login");

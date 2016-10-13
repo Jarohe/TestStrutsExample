@@ -18,4 +18,13 @@ public enum Role {
     public String getName() {
         return name;
     }
+
+    public static Role getRole(int id) {
+        for(Role role : Role.values()) {
+            if(role.getId() == id) {
+                return role;
+            }
+        }
+        return null;
+    }
 }
