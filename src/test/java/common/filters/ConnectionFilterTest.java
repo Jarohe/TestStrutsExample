@@ -39,12 +39,15 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
 
     public void testInit() throws ServletException {
         filter.init(config);
-        verify(config, times(2)).getServletContext();
+        verify(config, times(2)).getServletContext(); // todo: это зачем?
     }
 
     public void testSuccessDoFilter() throws IOException, ServletException, SQLException {
         filter.doFilter(request, response, filterChain);
         verify(filterChain, times(1)).doFilter(request, response);
-        verify(connection, times(1)).commit();
+        verify(connection, times(1)).commit(); // TODO: Основное назначение фильтра не проверено
     }
+
+    // TODO: Ну а если ошибка?
+
 }

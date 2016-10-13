@@ -23,7 +23,7 @@ public class EditUserActionTest extends UtilActionTest {
         super.setUp();
         setRequestPathInfo(pathInfo);
         init();
-        getSession().setAttribute(Attributes.Session.USER, user);
+        getSession().setAttribute(Attributes.Session.USER, user); // TODO: А зачем?
     }
 
     public void testSuccessEditUser() throws SQLException {

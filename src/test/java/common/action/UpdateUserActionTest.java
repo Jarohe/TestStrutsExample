@@ -33,7 +33,7 @@ public class UpdateUserActionTest extends UtilActionTest {
     }
 
     public void testSuccessUpdateUserWithPassword() throws SQLException, DublicateUserException {
-        when(userDao.updateUser(any(User.class),eq("password"))).thenReturn(true);
+        when(userDao.updateUser(any(User.class),eq("password"))).thenReturn(true);  // TODO: Так вообще ничего не тестируется
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }
@@ -65,6 +65,8 @@ public class UpdateUserActionTest extends UtilActionTest {
         verifyActionErrors(new String[] {ErrorMessageKey.UpdateUser.NOT_SEND_ID});
     }
 
+    // TODO: Проверка обязательных полей
+    // TODO: Забирание у себя роли manager?
 
     private void setRequestParameters() {
         addRequestParameter("id", "10");

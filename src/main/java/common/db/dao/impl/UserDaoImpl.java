@@ -52,23 +52,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    private User getUser(ResultSet resultSet) throws SQLException {
-        if (resultSet.next()) {
-            Role role = null;
-            for (Role i : Role.values()) {
-                if (i.getId() == resultSet.getInt("role")) {
-                    role = i;
-                }
-            }
-            return new User(resultSet.getInt("id"),
-                    resultSet.getString("username"),
-                    resultSet.getString("firstName"),
-                    resultSet.getString("lastName"), role);
-        }
-
-        return null;
-    }
-
     @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
@@ -79,7 +62,7 @@ public class UserDaoImpl implements UserDao {
                 users.add(new User(resultSet.getInt("id"),
                         resultSet.getString("username"),
                         resultSet.getString("firstName"),
-                        resultSet.getString("lastName")));
+                        resultSet.getString("lastName"))); // TODO: А Роль?
             }
             return users;
         }
@@ -113,7 +96,7 @@ public class UserDaoImpl implements UserDao {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
-            return 0;
+            return 0; // TODO: Хмм, не очень-то
         } catch (SQLException e) {
             if (getUserByUsername(user.getUsername()) != null) {
                 throw new DublicateUserException();
@@ -158,5 +141,22 @@ public class UserDaoImpl implements UserDao {
             }
             throw e;
         }
+    }
+
+    private User getUser(ResultSet resultSet) throws SQLException {
+        if (resultSet.next()) {
+            Role role = null;
+            for (Role i : Role.values()) { // TODO: Это, вообщет, лучше поместить в Role
+                if (i.getId() == resultSet.getInt("role")) {
+                    role = i;
+                }
+            }
+            return new User(resultSet.getInt("id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("firstName"),
+                    resultSet.getString("lastName"), role);
+        }
+
+        return null;
     }
 }

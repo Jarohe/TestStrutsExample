@@ -46,7 +46,7 @@ public class AuthorizationFilterTest extends MockStrutsTestCase {
     public void testInit() throws ServletException {
         filter.init(filterConfig);
         verify(filterConfig,times(1)).getServletContext();
-        verify(filterConfig,times(1)).getInitParameter("error_page");
+        verify(filterConfig,times(1)).getInitParameter("error_page"); // TODO: Не ясно зачем всё это
         verify(filterConfig,times(1)).getInitParameter("home_page");
     }
 

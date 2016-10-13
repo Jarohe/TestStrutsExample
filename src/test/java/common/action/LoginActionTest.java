@@ -23,7 +23,7 @@ public class LoginActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
         super.setUp();
-        init();
+        init(); // TODO: super.setUp()
         setRequestPathInfo(pathInfo);
         addRequestParameter("login", "login");
         addRequestParameter("password", "password");

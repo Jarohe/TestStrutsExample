@@ -42,14 +42,18 @@ public class UserDaoImplTest extends TestCase {
         connection.close();
     }
 
+
+    // TODO: Нет теста, в котором getUserById() не находит пользователя
+    // TODO: Нет теста, в котором getUserById() находит нужного среди нескольких
     public void testGetUserById() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
         int id = userDao.addUser(defoultUser, "password");
         defoultUser.setId(id);
         User resultUser = userDao.getUserById(id);
-        assertTrue(defoultUser.equals(resultUser));
+        assertTrue(defoultUser.equals(resultUser)); // assertEquals
     }
 
+    // TODO: То же самое
     public void testGetUserByUsername() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
         int id = userDao.addUser(defoultUser, "password");
@@ -58,6 +62,8 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(resultUser.equals(defoultUser));
     }
 
+    // TODO: Сортировка?
+    // TODO: Параметры самих пользователей?
     public void testGetAllUsers() throws SQLException, DublicateUserException {
         User defoultUser = buildDefoultUser();
         List<User> userList = userDao.getAllUsers();
@@ -74,6 +80,7 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(defoultUser.getFirstName().equals(user.getFirstName()));
         assertTrue(defoultUser.getLastName().equals(user.getLastName()));
         assertTrue(defoultUser.getRole().equals(user.getRole()));
+        // TODO: id?
     }
 
     public void testDeleteUserById() throws SQLException, DublicateUserException {
@@ -82,7 +89,7 @@ public class UserDaoImplTest extends TestCase {
         User user = userDao.getUserById(id);
         assertTrue(user != null);
         userDao.deleteUserById(id);
-        User dropUser = userDao.getUserByUsername(defoultUser.getUsername());
+        User dropUser = userDao.getUserByUsername(defoultUser.getUsername()); // TODO: По id
         assertTrue(dropUser == null);
     }
 
@@ -90,7 +97,7 @@ public class UserDaoImplTest extends TestCase {
         User defoultUser = buildDefoultUser();
         int id = userDao.addUser(defoultUser, "password");
         defoultUser.setId(id);
-        User updateUser = buildDefoultUser();
+        User updateUser = buildDefoultUser(); // TODO: Тут надо все поля изменить, чтобы убедиться, что в запроси они меняются
         updateUser.setId(id);
         updateUser.setRole(Role.MANAGER);
         userDao.updateUser(updateUser, "password");

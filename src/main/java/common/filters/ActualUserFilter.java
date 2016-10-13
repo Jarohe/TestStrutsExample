@@ -27,9 +27,9 @@ public class ActualUserFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(false);
-        User user = (User) session.getAttribute(Attributes.Session.USER);
+        User user = (User) session.getAttribute(Attributes.Session.USER);// TODO: NullPointerException
         if (user == null) {
-            servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
+            servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);// TODO: Так не очень
             return;
         }
         try {
@@ -44,7 +44,7 @@ public class ActualUserFilter implements Filter {
                 return;
             }
 
-            if (!user.equals(userFromDb)) {
+            if (!user.equals(userFromDb)) { // TODO: А зачем эта проверка?
                 session.setAttribute(Attributes.Session.USER, userFromDb);
             }
         } catch (SQLException e) {

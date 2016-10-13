@@ -34,10 +34,11 @@ public class CreateUserActionTest extends UtilActionTest {
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
         verifyNoActionErrors();
+        // TODO: А ты уверен, что пользователь создался с правильными параметрами?
     }
 
     public void testDuplicateUserCreate() throws SQLException, DublicateUserException {
-        when(userDao.addUser(any(User.class), eq("password"))).thenThrow(new DublicateUserException());
+        when(userDao.addUser(any(User.class), eq("password"))).thenThrow(new DublicateUserException());// TODO: Тут стоило проверку посильнее сделать
         actionPerform();
         verifyForward(StatusAction.CreateUser.DUBLICATE_USER);
         verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.DUBLICATE_LOGIN});
@@ -50,6 +51,7 @@ public class CreateUserActionTest extends UtilActionTest {
         verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.CAN_NOT_BLANK});
     }
 
+    // TODO: А проверки на обязательные поля теперь где?
 
     private void setRequestParameters() {
         addRequestParameter("id", "10");

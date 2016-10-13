@@ -51,7 +51,7 @@ public class ActualUserFilterTest extends MockStrutsTestCase {
         verify(filterConfig, times(1)).getInitParameter("home_page");
     }
 
-    public void testSuccessDoFilter() throws IOException, ServletException {
+    public void testSuccessDoFilter() throws IOException, ServletException { // TODO: Он разве проходит?
         filter.doFilter(getRequest(), getResponse(), filterChain);
         verify(filterChain).doFilter(request,response);
     }
@@ -65,8 +65,8 @@ public class ActualUserFilterTest extends MockStrutsTestCase {
     public void testUpdateUserInSession() throws SQLException, IOException, ServletException {
         User DbUser = mock(User.class);
         when(DbUser.getUsername()).thenReturn("updateUser");
-        when(userDao.getUserById(anyInt())).thenReturn(DbUser);
-        assertTrue(session.getAttribute(Attributes.Session.USER).equals(userSession));
+        when(userDao.getUserById(anyInt())).thenReturn(DbUser); //  TODO: как это ???
+        assertTrue(session.getAttribute(Attributes.Session.USER).equals(userSession)); //TODO: ???
         filter.doFilter(request, response, filterChain);
         assertTrue(session.getAttribute(Attributes.Session.USER).equals(DbUser));
         verify(filterChain).doFilter(request,response);

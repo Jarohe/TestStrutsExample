@@ -23,7 +23,7 @@ public class UpdateUserAction extends SmartAction {
         UserDao userDao = getUserDao(request);
         boolean updated;
 
-        if (userForm.getId() == 0) {
+        if (userForm.getId() == 0) { // TODO: Не ясно для чего это условие
             errorForvard = new ErrorForvard(StatusAction.ERROR, "notId", ErrorMessageKey.UpdateUser.NOT_SEND_ID);
             return actionErrorForward(request, mapping, errorForvard);
         }

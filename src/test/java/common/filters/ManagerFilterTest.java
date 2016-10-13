@@ -67,6 +67,7 @@ public class ManagerFilterTest extends MockStrutsTestCase {
         when(userSession.getRole()).thenReturn(Role.DEFAULT);
         filter.doFilter(request, response, filterChain);
         verify(response,times(1)).sendRedirect(null);
+        // TODO: Опять не проверил, что doFilter не вызывался.
     }
 
 }
