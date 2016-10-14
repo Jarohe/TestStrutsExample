@@ -1,6 +1,7 @@
 package common.action;
 
 import common.db.dao.exceptions.DublicateUserException;
+import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
 import common.utils.Attributes;
@@ -9,7 +10,6 @@ import common.utils.StatusAction;
 
 import java.sql.SQLException;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +31,8 @@ public class CreateUserActionTest extends UtilActionTest {
     }
 
     public void testDuplicateUserCreate() throws SQLException, DublicateUserException {
-        when(userDao.addUser(any(User.class), eq("password"))).thenThrow(new DublicateUserException());// TODO: Тут стоило проверку посильнее сделать
+        User user = new User(10,"login","firstName","lastName", Role.MANAGER);
+        when(userDao.addUser(eq(user), eq("password"))).thenThrow(new DublicateUserException());
         actionPerform();
         verifyForward(StatusAction.CreateUser.DUBLICATE_USER);
         verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.DUBLICATE_LOGIN});

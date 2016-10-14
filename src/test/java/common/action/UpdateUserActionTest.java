@@ -1,6 +1,7 @@
 package common.action;
 
 import common.db.dao.exceptions.DublicateUserException;
+import common.db.model.Role;
 import common.db.model.User;
 import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
@@ -22,7 +23,8 @@ public class UpdateUserActionTest extends UtilActionTest {
     }
 
     public void testSuccessUpdateUserWithPassword() throws SQLException, DublicateUserException {
-        when(userDao.updateUser(any(User.class), eq("password"))).thenReturn(true);  // TODO: Так вообще ничего не тестируется
+        User user = new User(10,"login","firstName","lastName", Role.MANAGER);
+        when(userDao.updateUser(eq(user), eq("password"))).thenReturn(true);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }
