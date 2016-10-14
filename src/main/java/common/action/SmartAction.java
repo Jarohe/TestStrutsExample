@@ -2,10 +2,7 @@ package common.action;
 
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
-import common.db.model.Role;
-import common.db.model.User;
-import common.utils.Attributes;
-import common.utils.ErrorForvard;
+import common.utils.ErrorForward;
 import org.apache.struts.action.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,25 +17,25 @@ abstract class SmartAction extends Action {
         return factory.createUserDao(connection);
     }
 
-    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForvard errorForvard) {
+    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForward errorForward) {
         ActionErrors errors = new ActionErrors();
-        errors.add(errorForvard.getProperty(), new ActionMessage(errorForvard.getKey()));
+        errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey()));
         saveErrors(request, errors);
-        return mapping.findForward(errorForvard.getForwardName());
+        return mapping.findForward(errorForward.getForwardName());
     }
 
-    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForvard errorForvard, Object value) {
+    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForward errorForward, Object value) {
         ActionErrors errors = new ActionErrors();
-        errors.add(errorForvard.getProperty(), new ActionMessage(errorForvard.getKey(), value));
+        errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey(), value));
         saveErrors(request, errors);
-        return mapping.findForward(errorForvard.getForwardName());
+        return mapping.findForward(errorForward.getForwardName());
     }
 
-    protected ActionForward actionErrorForward(HttpSession session, ActionMapping mapping, ErrorForvard errorForvard) {
+    protected ActionForward actionErrorForward(HttpSession session, ActionMapping mapping, ErrorForward errorForward) {
         ActionErrors errors = new ActionErrors();
-        errors.add(errorForvard.getProperty(), new ActionMessage(errorForvard.getKey()));
+        errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey()));
         saveErrors(session, errors);
-        return mapping.findForward(errorForvard.getForwardName());
+        return mapping.findForward(errorForward.getForwardName());
     }
 
 

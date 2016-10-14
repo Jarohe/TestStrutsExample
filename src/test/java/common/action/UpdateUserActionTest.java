@@ -2,6 +2,7 @@ package common.action;
 
 import common.db.dao.exceptions.DublicateUserException;
 import common.db.model.User;
+import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
 
@@ -16,6 +17,7 @@ public class UpdateUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
         super.setUp("/system/updateUser");
+        getSession().setAttribute(Attributes.Session.USER, user);
         setRequestParameters();
     }
 
@@ -46,14 +48,21 @@ public class UpdateUserActionTest extends UtilActionTest {
     }
 
     public void testErrorNotSendId() {
-        addRequestParameter("id", "0");
+        addRequestParameter("id", "");
         actionPerform();
         verifyForward(StatusAction.ERROR);
-        verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.NOT_SEND_ID});
+        verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.USER_NOT_UPDATE});
+    }
+
+    public void testErrorEditYourSalfRole(){
+        addRequestParameter("id", String.valueOf(user.getId()));
+        addRequestParameter("manager","");
+        actionPerform();
+        verifyForward(StatusAction.ERROR);
+        verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.CAN_NOT_EDIT});
     }
 
     // TODO: Проверка обязательных полей
-    // TODO: Забирание у себя роли manager?
 
     private void setRequestParameters() {
         addRequestParameter("id", "10");

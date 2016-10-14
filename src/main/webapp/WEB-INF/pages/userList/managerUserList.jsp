@@ -5,11 +5,6 @@
 
 <html:errors/>
 
-
-<html:messages id="newUser">
-    <bean:write name="newUser"/>
-</html:messages>
-
 <table border="1">
     <tbody>
     <tr>

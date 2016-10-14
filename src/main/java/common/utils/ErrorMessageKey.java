@@ -24,5 +24,7 @@ public class ErrorMessageKey {
         public static String NOT_SEND_ID = "errors.not.id";
         public static String USER_NOT_UPDATE = "error.user.not.update";
         public static String DUBLICATE_LOGIN = "error.dublicate.user.login";
+        public static String CAN_NOT_EDIT = "error.can.not.edit";
+
     }
 }

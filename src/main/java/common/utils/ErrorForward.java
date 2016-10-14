@@ -1,11 +1,11 @@
 package common.utils;
 
-public class ErrorForvard {
+public class ErrorForward {
     private String forwardName;
     private String property;
     private String key;
 
-    public ErrorForvard(String forwardName, String property, String key) {
+    public ErrorForward(String forwardName, String property, String key) {
         this.forwardName = forwardName;
         this.property = property;
         this.key = key;

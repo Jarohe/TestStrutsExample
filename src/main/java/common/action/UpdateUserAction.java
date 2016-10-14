@@ -2,8 +2,10 @@ package common.action;
 
 import common.db.dao.UserDao;
 import common.db.dao.exceptions.DublicateUserException;
+import common.db.model.User;
 import common.form.UserForm;
-import common.utils.ErrorForvard;
+import common.utils.Attributes;
+import common.utils.ErrorForward;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
 import org.apache.struts.action.ActionForm;
@@ -19,31 +21,33 @@ public class UpdateUserAction extends SmartAction {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         UserForm userForm = (UserForm) form;
-        ErrorForvard errorForvard;
+        User updateUser = ((UserForm) form).extractUser();
+        ErrorForward errorForward;
         UserDao userDao = getUserDao(request);
+        User user = (User) request.getSession().getAttribute(Attributes.Session.USER);
         boolean updated;
 
-        if (userForm.getId() == 0) { // TODO: Не ясно для чего это условие
-            errorForvard = new ErrorForvard(StatusAction.ERROR, "notId", ErrorMessageKey.UpdateUser.NOT_SEND_ID);
-            return actionErrorForward(request, mapping, errorForvard);
+        if (user.getId() == updateUser.getId() && !user.getRole().equals(updateUser.getRole())) {
+            errorForward = new ErrorForward(StatusAction.ERROR, "access", ErrorMessageKey.UpdateUser.CAN_NOT_EDIT);
+            return actionErrorForward(request, mapping, errorForward, "your Role");
         }
 
         try {
             if (userForm.getPassword().isEmpty()) {
-                updated = userDao.updateUser(userForm.extractUser());
+                updated = userDao.updateUser(updateUser);
             } else {
-                updated = userDao.updateUser(userForm.extractUser(), userForm.getPassword());
+                updated = userDao.updateUser(updateUser, userForm.getPassword());
             }
         } catch (DublicateUserException e) {
-            errorForvard = new ErrorForvard(StatusAction.ERROR, "dublicateUser", ErrorMessageKey.UpdateUser.DUBLICATE_LOGIN);
-            return actionErrorForward(request.getSession(), mapping, errorForvard);
+            errorForward = new ErrorForward(StatusAction.ERROR, "duplicateUser", ErrorMessageKey.UpdateUser.DUBLICATE_LOGIN);
+            return actionErrorForward(request, mapping, errorForward);
         }
 
         if (updated) {
             return mapping.findForward(StatusAction.SUCCESS);
         } else {
-            errorForvard = new ErrorForvard(StatusAction.ERROR, "userNotUpdate", ErrorMessageKey.UpdateUser.USER_NOT_UPDATE);
-            return actionErrorForward(request, mapping, errorForvard);
+            errorForward = new ErrorForward(StatusAction.ERROR, "userNotUpdate", ErrorMessageKey.UpdateUser.USER_NOT_UPDATE);
+            return actionErrorForward(request, mapping, errorForward);
         }
 
     }
