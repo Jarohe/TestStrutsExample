@@ -2,6 +2,7 @@ package common.filters;
 
 import common.db.dao.DaoFactory;
 import common.db.dao.UserDao;
+import common.db.model.Role;
 import common.db.model.User;
 import common.utils.Attributes;
 import servletunit.struts.MockStrutsTestCase;
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
@@ -27,7 +27,8 @@ public class ActualUserFilterTest extends MockStrutsTestCase {
     private HttpSession session;
 
     private FilterChain filterChain = mock(FilterChain.class);
-    private User userSession = mock(User.class);
+    private User userSession = new User(10, "username", "firstName", "lastName", Role.MANAGER);
+    private User userDb = new User(10, "usernameDb", "firstNameDb", "lastNameDb", Role.DEFAULT);
     private UserDao userDao = mock(UserDao.class);
     private Connection connection = mock(Connection.class);
     private DaoFactory factory = mock(DaoFactory.class);
@@ -41,31 +42,28 @@ public class ActualUserFilterTest extends MockStrutsTestCase {
         session.getServletContext().setAttribute("daoFactory", factory);
         request.setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
-        when(userDao.getUserById(anyInt())).thenReturn(userSession);
-        when(userSession.getUsername()).thenReturn("user");
+        when(userDao.getUserById(10)).thenReturn(userDb);
         filter.init(filterConfig);
     }
 
-    public void testSuccessDoFilter() throws IOException, ServletException { // TODO: Он разве проходит?
+    public void testSuccessDoFilter() throws IOException, ServletException, SQLException {
+        session.setAttribute(Attributes.Session.USER, userSession);
         filter.doFilter(getRequest(), getResponse(), filterChain);
-        verify(filterChain).doFilter(request,response);
+        verify(filterChain).doFilter(request, response);
+        verify(userDao, times(1)).getUserById(10);
+        assertEquals(session.getAttribute(Attributes.Session.USER), userDb);
     }
 
-    public void testErrorUserAbcentInSession() throws IOException, ServletException {
+    public void testErrorUserAbsentInSession() throws IOException, ServletException {
         session.setAttribute(Attributes.Session.USER, null);
         filter.doFilter(request, response, filterChain);
-        verify(filterChain,times(0)).doFilter(request,response);
+        verify(filterChain, times(0)).doFilter(request, response);
     }
 
-    public void testUpdateUserInSession() throws SQLException, IOException, ServletException {
-        User DbUser = mock(User.class);
-        when(DbUser.getUsername()).thenReturn("updateUser");
-        when(userDao.getUserById(anyInt())).thenReturn(DbUser); //  TODO: как это ???
-        assertTrue(session.getAttribute(Attributes.Session.USER).equals(userSession)); //TODO: ???
-        filter.doFilter(request, response, filterChain);
-        assertTrue(session.getAttribute(Attributes.Session.USER).equals(DbUser));
-        verify(filterChain).doFilter(request,response);
+    public void testErrorNotUserInDb() throws SQLException, IOException, ServletException {
+        when(userDao.getUserById(10)).thenReturn(null);
+        filter.doFilter(getRequest(), getResponse(), filterChain);
+        verify(filterChain, times(0)).doFilter(request, response);
     }
-
 
 }

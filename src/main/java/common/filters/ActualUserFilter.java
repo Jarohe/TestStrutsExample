@@ -26,7 +26,7 @@ public class ActualUserFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession(false);
-        if(session == null) {
+        if (session == null) {
             HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
             httpResponse.sendRedirect(homePage);
             return;
@@ -45,7 +45,8 @@ public class ActualUserFilter implements Filter {
 
             if (userFromDb == null) {
                 session.invalidate();
-                servletRequest.getRequestDispatcher(homePage).forward(servletRequest, servletResponse);
+                HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+                httpResponse.sendRedirect(homePage);
                 return;
             }
 
