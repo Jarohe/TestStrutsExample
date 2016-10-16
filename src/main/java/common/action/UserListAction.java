@@ -1,7 +1,9 @@
 package common.action;
 
 import common.db.dao.UserDao;
+import common.db.model.Role;
 import common.db.model.User;
+import common.utils.Attributes;
 import common.utils.StatusAction;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -19,6 +21,11 @@ public class UserListAction extends SmartAction {
         UserDao userDao = getUserDao(request);
         List<User> users = userDao.getAllUsers();
         request.setAttribute("userList", users);
-        return mapping.findForward(StatusAction.SUCCESS);
+
+        User user = (User) request.getSession().getAttribute(Attributes.Session.USER);
+        if(Role.MANAGER.equals(user.getRole())) {
+            return mapping.findForward(StatusAction.UserList.MANAGER);
+        }
+        return mapping.findForward(StatusAction.UserList.DEFAULT);
     }
 }

@@ -47,7 +47,8 @@
         </action>
         <!-- Show Users -->
         <action path="/system/usersList" type="common.action.UserListAction" input="/system/usersList.html">
-            <forward name="success" path="/WEB-INF/pages/userList/usersListPage.jsp"/>
+            <forward name="manager" path="/WEB-INF/pages/userList/managerUserList.jsp"/>
+            <forward name="default" path="/WEB-INF/pages/userList/defaultUserList.jsp"/>
         </action>
 
         <!-- Update User -->

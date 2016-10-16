@@ -6,5 +6,9 @@ public class StatusAction {
     public static class CreateUser{
         public static String DUBLICATE_USER = "duplicate user";
     }
+    public static class UserList {
+        public static String MANAGER = "manager";
+        public static String DEFAULT = "default";
+    }
 
 }

@@ -45,47 +45,47 @@ public class UserDaoImplTest extends TestCase {
     // TODO: Нет теста, в котором getUserById() не находит пользователя
     // TODO: Нет теста, в котором getUserById() находит нужного среди нескольких
     public void testGetUserById() throws SQLException, DublicateUserException {
-        User defoultUser = buildDefoultUser();
-        int id = userDao.addUser(defoultUser, "password");
-        defoultUser.setId(id);
+        User defaultUser = buildDefaultUser();
+        int id = userDao.addUser(defaultUser, "password");
+        defaultUser.setId(id);
         User resultUser = userDao.getUserById(id);
-        assertEquals(defoultUser, resultUser);
+        assertEquals(defaultUser, resultUser);
     }
 
     // TODO: То же самое
     public void testGetUserByUsername() throws SQLException, DublicateUserException {
-        User defoultUser = buildDefoultUser();
-        int id = userDao.addUser(defoultUser, "password");
-        defoultUser.setId(id);
-        User resultUser = userDao.getUserByUsername(defoultUser.getUsername());
-        assertEquals(resultUser, defoultUser);
+        User defaultUser = buildDefaultUser();
+        int id = userDao.addUser(defaultUser, "password");
+        defaultUser.setId(id);
+        User resultUser = userDao.getUserByUsername(defaultUser.getUsername());
+        assertEquals(resultUser, defaultUser);
     }
 
     // TODO: Сортировка?
     // TODO: Параметры самих пользователей?
     public void testGetAllUsers() throws SQLException, DublicateUserException {
-        User defoultUser = buildDefoultUser();
+        User defaultUser = buildDefaultUser();
         List<User> userList = userDao.getAllUsers();
-        userDao.addUser(defoultUser, "testUser");
+        userDao.addUser(defaultUser, "testUser");
         List<User> resultUserList = userDao.getAllUsers();
         assertTrue(userList.size() + 1 == resultUserList.size());
     }
 
     public void testAddUser() throws SQLException, DublicateUserException {
-        User defoultUser = buildDefoultUser();
-        int id = userDao.addUser(defoultUser, "password");
+        User defaultUser = buildDefaultUser();
+        int id = userDao.addUser(defaultUser, "password");
         User user = userDao.getUserById(id);
-        assertEquals(defoultUser.getUsername(), user.getUsername());
-        assertEquals(defoultUser.getUsername(), user.getUsername());
-        assertEquals(defoultUser.getFirstName(), user.getFirstName());
-        assertEquals(defoultUser.getLastName(), user.getLastName());
-        assertEquals(defoultUser.getRole(), user.getRole());
+        assertEquals(defaultUser.getUsername(), user.getUsername());
+        assertEquals(defaultUser.getUsername(), user.getUsername());
+        assertEquals(defaultUser.getFirstName(), user.getFirstName());
+        assertEquals(defaultUser.getLastName(), user.getLastName());
+        assertEquals(defaultUser.getRole(), user.getRole());
         assertTrue(id == user.getId());
     }
 
     public void testDeleteUserById() throws SQLException, DublicateUserException {
-        User defoultUser = buildDefoultUser();
-        int id = userDao.addUser(defoultUser, "testUser");
+        User defaultUser = buildDefaultUser();
+        int id = userDao.addUser(defaultUser, "testUser");
         User user = userDao.getUserById(id);
         assertTrue(user != null);
         userDao.deleteUserById(id);
@@ -94,38 +94,38 @@ public class UserDaoImplTest extends TestCase {
     }
 
     public void testUpdateUserWithPassword() throws SQLException, DublicateUserException {
-        User defoultUser = buildDefoultUser();
-        int id = userDao.addUser(defoultUser, "password");
-        defoultUser.setId(id);
+        User defaultUser = buildDefaultUser();
+        int id = userDao.addUser(defaultUser, "password");
+        defaultUser.setId(id);
         User updateUser = new User(0, "updateUserName", "updateFirstName", "updateLastName", Role.MANAGER);
         updateUser.setId(id);
         userDao.updateUser(updateUser, "UpdatePassword");
         updateUser = userDao.getUserById(id);
-        assertFalse(defoultUser.getUsername().equals(updateUser.getUsername()));
+        assertFalse(defaultUser.getUsername().equals(updateUser.getUsername()));
         assertNotNull(userDao.getUser(updateUser.getUsername(), "UpdatePassword"));
-        assertFalse(defoultUser.getFirstName().equals(updateUser.getFirstName()));
-        assertFalse(defoultUser.getLastName().equals(updateUser.getLastName()));
+        assertFalse(defaultUser.getFirstName().equals(updateUser.getFirstName()));
+        assertFalse(defaultUser.getLastName().equals(updateUser.getLastName()));
         assertEquals(Role.MANAGER, updateUser.getRole());
-        assertTrue(defoultUser.getId() == updateUser.getId());
+        assertTrue(defaultUser.getId() == updateUser.getId());
     }
 
     public void testUpdateWithoutPassword() throws SQLException, DublicateUserException {
-        User defoultUser = buildDefoultUser();
-        int id = userDao.addUser(defoultUser, "password");
-        defoultUser.setId(id);
+        User defaultUser = buildDefaultUser();
+        int id = userDao.addUser(defaultUser, "password");
+        defaultUser.setId(id);
         User updateUser = new User(0, "updateUserName", "updateFirstName", "updateLastName", Role.MANAGER);
         updateUser.setId(id);
         userDao.updateUser(updateUser);
         updateUser = userDao.getUserById(id);
-        assertFalse(defoultUser.getUsername().equals(updateUser.getUsername()));
+        assertFalse(defaultUser.getUsername().equals(updateUser.getUsername()));
         assertNotNull(userDao.getUser(updateUser.getUsername(), "password"));
-        assertFalse(defoultUser.getFirstName().equals(updateUser.getFirstName()));
-        assertFalse(defoultUser.getLastName().equals(updateUser.getLastName()));
+        assertFalse(defaultUser.getFirstName().equals(updateUser.getFirstName()));
+        assertFalse(defaultUser.getLastName().equals(updateUser.getLastName()));
         assertEquals(Role.MANAGER, updateUser.getRole());
-        assertTrue(defoultUser.getId() == updateUser.getId());
+        assertTrue(defaultUser.getId() == updateUser.getId());
     }
 
-    private User buildDefoultUser() {
+    private User buildDefaultUser() {
         return new User(0, "username", "firstName", "lastName", Role.DEFAULT);
     }
 
