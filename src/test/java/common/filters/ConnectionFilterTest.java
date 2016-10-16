@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ConnectionFilterTest extends MockStrutsTestCase {
     private ConnectionFilter filter = new ConnectionFilter();
@@ -45,6 +42,10 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
         verify(connection, times(1)).commit();
     }
 
-    // TODO: Ну а если ошибка?
+    public void testErrorDoFilder() throws IOException, ServletException, SQLException {
+        doThrow(new ServletException()).when(filterChain).doFilter(request, response);
+        filter.doFilter(request, response, filterChain);
+        verify(connection, times(1)).rollback();
+    }
 
 }
