@@ -38,9 +38,11 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
     }
 
     public void testSuccessDoFilter() throws IOException, ServletException, SQLException {
+        assertNull(request.getAttribute("connection"));
         filter.doFilter(request, response, filterChain);
         verify(filterChain, times(1)).doFilter(request, response);
-        verify(connection, times(1)).commit(); // TODO: Основное назначение фильтра не проверено
+        assertNotNull(request.getAttribute("connection"));
+        verify(connection, times(1)).commit();
     }
 
     // TODO: Ну а если ошибка?

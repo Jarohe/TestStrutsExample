@@ -45,8 +45,6 @@ public class CreateUserActionTest extends UtilActionTest {
         verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.CAN_NOT_BLANK});
     }
 
-    // TODO: А проверки на обязательные поля теперь где?
-
     private void setRequestParameters() {
         addRequestParameter("id", "10");
         addRequestParameter("login", "login");

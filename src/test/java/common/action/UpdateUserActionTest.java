@@ -64,8 +64,6 @@ public class UpdateUserActionTest extends UtilActionTest {
         verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.CAN_NOT_EDIT});
     }
 
-    // TODO: Проверка обязательных полей
-
     private void setRequestParameters() {
         addRequestParameter("id", "10");
         addRequestParameter("login", "login");
