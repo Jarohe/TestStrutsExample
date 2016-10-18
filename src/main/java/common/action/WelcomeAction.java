@@ -14,7 +14,7 @@ public class WelcomeAction extends SmartAction {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         User user = (User) request.getSession().getAttribute(Attributes.Session.USER);
-        if(user == null) {
+        if (user == null) {
             return mapping.findForward(StatusAction.SUCCESS);
         }
         return mapping.findForward(StatusAction.ERROR);

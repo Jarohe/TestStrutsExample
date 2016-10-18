@@ -14,7 +14,7 @@ public class SignOutAction extends Action {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
         HttpSession session = request.getSession(false);
-        if(session != null) {
+        if (session != null) {
             session.invalidate();
         }
         return mapping.findForward(StatusAction.SUCCESS);

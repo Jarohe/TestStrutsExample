@@ -6,7 +6,6 @@ import common.utils.ErrorForward;
 import org.apache.struts.action.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 
 abstract class SmartAction extends Action {
@@ -19,24 +18,13 @@ abstract class SmartAction extends Action {
 
     protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForward errorForward) {
         ActionErrors errors = new ActionErrors();
-        errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey()));
+        if (errorForward.getValue() == null) {
+            errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey()));
+        } else {
+            errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey(), errorForward.getValue()));
+        }
         saveErrors(request, errors);
         return mapping.findForward(errorForward.getForwardName());
     }
-
-    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForward errorForward, Object value) {
-        ActionErrors errors = new ActionErrors();
-        errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey(), value));
-        saveErrors(request, errors);
-        return mapping.findForward(errorForward.getForwardName());
-    }
-
-    protected ActionForward actionErrorForward(HttpSession session, ActionMapping mapping, ErrorForward errorForward) {
-        ActionErrors errors = new ActionErrors();
-        errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey()));
-        saveErrors(session, errors);
-        return mapping.findForward(errorForward.getForwardName());
-    }
-
 
 }

@@ -4,6 +4,7 @@ import common.db.dao.UserDao;
 import common.db.dao.exceptions.DuplicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
+import junit.framework.TestCase;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
 import org.junit.Before;
@@ -13,13 +14,12 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class UserDaoImplTest {
     private static String dbUrl = "jdbc:mysql://localhost:3306/test_actimind";
@@ -29,8 +29,8 @@ public class UserDaoImplTest {
     private static BasicDataSource db = new BasicDataSource();
     private Connection connection = null;
     private UserDao userDao = null;
-    private static User userManager = new User(0, "managerUser", "firstName", "lastName", Role.MANAGER);
-    private static User userDefault = new User(0, "defaultUser", "firstName", "lastName", Role.DEFAULT);
+    private static User userManager = new User(0, "managerUser", "managerName", "lastName", Role.MANAGER);
+    private static User userDefault = new User(0, "defaultUser", "defaultName", "lastName", Role.DEFAULT);
 
     static {
         db.setDriverClassName(dbDriver);
@@ -64,8 +64,10 @@ public class UserDaoImplTest {
             stmt.execute(addRoleDefault);
             stmt.execute(addRoleManager);
             UserDao dao = new UserDaoImpl(conn);
-            dao.addUser(userManager, "password");
-            dao.addUser(userDefault, "password");
+            int idManager = dao.addUser(userManager, "password");
+            userManager.setId(idManager);
+            int idDefault = dao.addUser(userDefault, "password");
+            userDefault.setId(idDefault);
             conn.commit();
         } catch (DuplicateUserException e) {
             e.printStackTrace();
@@ -114,15 +116,15 @@ public class UserDaoImplTest {
         assertNull(user);
     }
 
-    // TODO: Сортировка?
-    // TODO: Параметры самих пользователей?
     @Test
     public void testGetAllUsers() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         List<User> userList = userDao.getAllUsers();
-        userDao.addUser(defaultUser, "testUser");
+        int id = userDao.addUser(defaultUser, "testUser");
+        defaultUser.setId(id);
         List<User> resultUserList = userDao.getAllUsers();
         assertTrue(userList.size() + 1 == resultUserList.size());
+        TestCase.assertEquals(resultUserList, Arrays.asList(userDefault, defaultUser, userManager));
     }
 
     @Test
@@ -136,6 +138,11 @@ public class UserDaoImplTest {
         assertEquals(defaultUser.getLastName(), user.getLastName());
         assertEquals(defaultUser.getRole(), user.getRole());
         assertTrue(id == user.getId());
+    }
+
+    @Test(expected = DuplicateUserException.class)
+    public void testAddDuplicateUser() throws SQLException, DuplicateUserException {
+        userDao.addUser(userManager, "password");
     }
 
     @Test
@@ -164,6 +171,18 @@ public class UserDaoImplTest {
         assertFalse(defaultUser.getLastName().equals(updateUser.getLastName()));
         assertEquals(Role.MANAGER, updateUser.getRole());
         assertTrue(defaultUser.getId() == updateUser.getId());
+    }
+
+    @Test(expected = DuplicateUserException.class)
+    public void testUpdateUserDuplicateWithPassword() throws SQLException, DuplicateUserException {
+        User user = new User(userManager.getId(), userDefault.getUsername(), userManager.getFirstName(), userManager.getLastName(), userManager.getRole());
+        userDao.updateUser(user, "password");
+    }
+
+    @Test(expected = DuplicateUserException.class)
+    public void testUpdateUserDuplicate() throws SQLException, DuplicateUserException {
+        User user = new User(userManager.getId(), userDefault.getUsername(), userManager.getFirstName(), userManager.getLastName(), userManager.getRole());
+        userDao.updateUser(user);
     }
 
     @Test

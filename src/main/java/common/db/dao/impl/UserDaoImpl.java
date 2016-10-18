@@ -102,7 +102,7 @@ public class UserDaoImpl implements UserDao {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }
-            return 0; // TODO: Хмм, не очень-то
+            throw new SQLException();
         } catch (SQLException e) {
             if (getUserByUsername(user.getUsername()) != null) {
                 throw new DuplicateUserException();

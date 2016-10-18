@@ -24,8 +24,8 @@ public class EditUserAction extends SmartAction {
         UserDao userDao = getUserDao(request);
         User user = userDao.getUserById(userForm.getId());
         if (user == null) {
-            errorForward = new ErrorForward(StatusAction.ERROR, "noFoundId", ErrorMessageKey.EditUser.NOT_FOUND_USER_ID);
-            return actionErrorForward(request, mapping, errorForward, userForm.getId());// TODO: Не ясно почему просто параметрами не передать
+            errorForward = new ErrorForward(StatusAction.ERROR, "noFoundId", ErrorMessageKey.EditUser.NOT_FOUND_USER_ID, String.valueOf(userForm.getId()));
+            return actionErrorForward(request, mapping, errorForward);
         }
 
         userForm.extractUserForm(user);

@@ -20,8 +20,8 @@ public enum Role {
     }
 
     public static Role getRole(int id) {
-        for(Role role : Role.values()) {
-            if(role.getId() == id) {
+        for (Role role : Role.values()) {
+            if (role.getId() == id) {
                 return role;
             }
         }

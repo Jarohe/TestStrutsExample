@@ -9,7 +9,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 
-public class DbServletContextListener implements ServletContextListener{
+public class DbServletContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         ServletContext context = servletContextEvent.getServletContext();
@@ -26,7 +26,7 @@ public class DbServletContextListener implements ServletContextListener{
         db.setPassword(dbPassword);
 
         db.setDefaultAutoCommit(false);
-        context.setAttribute("db",db);
+        context.setAttribute("db", db);
 
         DaoFactory factory = new UserDaoFactoryImpl();
         context.setAttribute("daoFactory", factory);

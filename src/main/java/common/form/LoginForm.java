@@ -43,7 +43,7 @@ public class LoginForm extends ActionForm {
         if (getPassword() == null || getPassword().length() < 1) {
             errors.add("password", new ActionMessage("errors.required", "Password"));
         }
-        if(!errors.isEmpty()) {
+        if (!errors.isEmpty()) {
             return errors;
         }
         return null;

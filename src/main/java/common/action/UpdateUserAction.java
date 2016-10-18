@@ -28,8 +28,8 @@ public class UpdateUserAction extends SmartAction {
         boolean updated;
 
         if (user.getId() == updateUser.getId() && !user.getRole().equals(updateUser.getRole())) {
-            errorForward = new ErrorForward(StatusAction.ERROR, "access", ErrorMessageKey.UpdateUser.CAN_NOT_EDIT);
-            return actionErrorForward(request, mapping, errorForward, "your Role");
+            errorForward = new ErrorForward(StatusAction.ERROR, "access", ErrorMessageKey.UpdateUser.CAN_NOT_EDIT, "your Role");
+            return actionErrorForward(request, mapping, errorForward);
         }
 
         try {

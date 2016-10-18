@@ -108,7 +108,7 @@ public class UserForm extends ActionForm {
     }
 
     public User extractUser() {
-        return new User(getId(), getLogin(), getFirstName(), getLastName() , getRole(isManager));
+        return new User(getId(), getLogin(), getFirstName(), getLastName(), getRole(isManager));
     }
 
     private Role getRole(boolean isManager) {

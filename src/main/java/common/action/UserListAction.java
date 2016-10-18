@@ -23,7 +23,7 @@ public class UserListAction extends SmartAction {
         request.setAttribute("userList", users);
 
         User user = (User) request.getSession().getAttribute(Attributes.Session.USER);
-        if(Role.MANAGER.equals(user.getRole())) {
+        if (Role.MANAGER.equals(user.getRole())) {
             return mapping.findForward(StatusAction.UserList.MANAGER);
         }
         return mapping.findForward(StatusAction.UserList.DEFAULT);

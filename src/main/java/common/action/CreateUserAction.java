@@ -19,8 +19,8 @@ public class CreateUserAction extends SmartAction {
         ErrorForward errorForward;
 
         if (userForm.getPassword() == null || userForm.getPassword().length() < 1) {
-            errorForward = new ErrorForward(StatusAction.ERROR, "password",ErrorMessageKey.CreateUser.CAN_NOT_BLANK);
-            return actionErrorForward(request, mapping, errorForward, "Password");
+            errorForward = new ErrorForward(StatusAction.ERROR, "password", ErrorMessageKey.CreateUser.CAN_NOT_BLANK, "Password");
+            return actionErrorForward(request, mapping, errorForward);
         }
 
         UserDao userDao = getUserDao(request);
@@ -31,8 +31,8 @@ public class CreateUserAction extends SmartAction {
             return actionErrorForward(request, mapping, errorForward);
         }
         ActionMessages messages = new ActionMessages();
-        messages.add("newUser", new ActionMessage("create.new.user",userForm.getLogin()));
-        saveMessages(request.getSession(),messages);
+        messages.add("newUser", new ActionMessage("create.new.user", userForm.getLogin()));
+        saveMessages(request.getSession(), messages);
 
         return mapping.findForward(StatusAction.SUCCESS);
     }

@@ -21,15 +21,15 @@ public class DeleteUserAction extends SmartAction {
         try {
             Integer userId = Integer.valueOf(request.getParameter("id"));
             if (user.getId() == userId) {
-                errorForward = new ErrorForward(StatusAction.ERROR, "remove", ErrorMessageKey.DeleteUser.CAN_NOT_REMOVE);
-                return actionErrorForward(request, mapping, errorForward, "yourself");
+                errorForward = new ErrorForward(StatusAction.ERROR, "remove", ErrorMessageKey.DeleteUser.CAN_NOT_REMOVE, "yourself");
+                return actionErrorForward(request, mapping, errorForward);
             }
             UserDao userDao = getUserDao(request);
             if (userDao.deleteUserById(userId)) {
                 return mapping.findForward(StatusAction.SUCCESS);
             }
-            errorForward = new ErrorForward(StatusAction.ERROR, "noFoundId", ErrorMessageKey.DeleteUser.NOT_FOUND_USER_ID);
-            return actionErrorForward(request, mapping, errorForward, userId);
+            errorForward = new ErrorForward(StatusAction.ERROR, "noFoundId", ErrorMessageKey.DeleteUser.NOT_FOUND_USER_ID, String.valueOf(userId));
+            return actionErrorForward(request, mapping, errorForward);
         } catch (NumberFormatException e) {
             errorForward = new ErrorForward(StatusAction.ERROR, "notNumber", ErrorMessageKey.DeleteUser.ID_NOT_NUMBER);
             return actionErrorForward(request, mapping, errorForward);
