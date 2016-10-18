@@ -19,6 +19,7 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class UserDaoImplTest {
     private static String dbUrl = "jdbc:mysql://localhost:3306/test_actimind";
@@ -28,6 +29,8 @@ public class UserDaoImplTest {
     private static BasicDataSource db = new BasicDataSource();
     private Connection connection = null;
     private UserDao userDao = null;
+    private static User userManager = new User(0, "managerUser", "firstName", "lastName", Role.MANAGER);
+    private static User userDefault = new User(0, "defaultUser", "firstName", "lastName", Role.DEFAULT);
 
     static {
         db.setDriverClassName(dbDriver);
@@ -52,16 +55,20 @@ public class UserDaoImplTest {
         String addRoleDefault = "INSERT INTO role (name) values ('default');";
         String addRoleManager = "INSERT INTO role (name) values ('manager');";
 
-
         try (Connection conn = db.getConnection();
-             Statement stmt = conn.createStatement();) {
+             Statement stmt = conn.createStatement()) {
             stmt.execute(dropUserTableSql);
             stmt.execute(dropRoleTableSql);
             stmt.execute(usersTableSql);
             stmt.execute(roleTableSql);
             stmt.execute(addRoleDefault);
             stmt.execute(addRoleManager);
+            UserDao dao = new UserDaoImpl(conn);
+            dao.addUser(userManager, "password");
+            dao.addUser(userDefault, "password");
             conn.commit();
+        } catch (DuplicateUserException e) {
+            e.printStackTrace();
         }
     }
 
@@ -77,8 +84,6 @@ public class UserDaoImplTest {
         connection.close();
     }
 
-    // TODO: Нет теста, в котором getUserById() не находит пользователя
-    // TODO: Нет теста, в котором getUserById() находит нужного среди нескольких
     @Test
     public void testGetUserById() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
@@ -88,7 +93,12 @@ public class UserDaoImplTest {
         assertEquals(defaultUser, resultUser);
     }
 
-    // TODO: То же самое
+    @Test
+    public void testNotFoundUserById() throws SQLException {
+        User user = userDao.getUserById(-1);
+        assertNull(user);
+    }
+
     @Test
     public void testGetUserByUsername() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
@@ -96,6 +106,12 @@ public class UserDaoImplTest {
         defaultUser.setId(id);
         User resultUser = userDao.getUserByUsername(defaultUser.getUsername());
         assertEquals(resultUser, defaultUser);
+    }
+
+    @Test
+    public void testNotFoundUserByUsername() throws SQLException {
+        User user = userDao.getUserByUsername("");
+        assertNull(user);
     }
 
     // TODO: Сортировка?
@@ -167,7 +183,7 @@ public class UserDaoImplTest {
         assertTrue(defaultUser.getId() == updateUser.getId());
     }
 
-    private static User buildDefaultUser() {
+    private User buildDefaultUser() {
         return new User(0, "username", "firstName", "lastName", Role.DEFAULT);
     }
 
