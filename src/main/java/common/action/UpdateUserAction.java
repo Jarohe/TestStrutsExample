@@ -1,7 +1,7 @@
 package common.action;
 
 import common.db.dao.UserDao;
-import common.db.dao.exceptions.DublicateUserException;
+import common.db.dao.exceptions.DuplicateUserException;
 import common.db.model.User;
 import common.form.UserForm;
 import common.utils.Attributes;
@@ -38,7 +38,7 @@ public class UpdateUserAction extends SmartAction {
             } else {
                 updated = userDao.updateUser(updateUser, userForm.getPassword());
             }
-        } catch (DublicateUserException e) {
+        } catch (DuplicateUserException e) {
             errorForward = new ErrorForward(StatusAction.ERROR, "duplicateUser", ErrorMessageKey.UpdateUser.DUBLICATE_LOGIN);
             return actionErrorForward(request, mapping, errorForward);
         }

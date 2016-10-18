@@ -1,7 +1,7 @@
 package common.action;
 
 import common.db.dao.UserDao;
-import common.db.dao.exceptions.DublicateUserException;
+import common.db.dao.exceptions.DuplicateUserException;
 import common.form.UserForm;
 import common.utils.ErrorForward;
 import common.utils.ErrorMessageKey;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 public class CreateUserAction extends SmartAction {
     @Override
-    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, DublicateUserException {
+    public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws SQLException, DuplicateUserException {
         UserForm userForm = (UserForm) form;
         ErrorForward errorForward;
 
@@ -26,7 +26,7 @@ public class CreateUserAction extends SmartAction {
         UserDao userDao = getUserDao(request);
         try {
             userDao.addUser(userForm.extractUser(), userForm.getPassword());
-        } catch (DublicateUserException e) {
+        } catch (DuplicateUserException e) {
             errorForward = new ErrorForward(StatusAction.CreateUser.DUBLICATE_USER, "dublicateUser", ErrorMessageKey.CreateUser.DUBLICATE_LOGIN);
             return actionErrorForward(request, mapping, errorForward);
         }

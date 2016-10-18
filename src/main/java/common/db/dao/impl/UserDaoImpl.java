@@ -3,7 +3,7 @@ package common.db.dao.impl;
 
 import com.mysql.jdbc.Statement;
 import common.db.dao.UserDao;
-import common.db.dao.exceptions.DublicateUserException;
+import common.db.dao.exceptions.DuplicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
 
@@ -89,7 +89,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public int addUser(User user, String password) throws SQLException, DublicateUserException {
+    public int addUser(User user, String password) throws SQLException, DuplicateUserException {
         String sql = "INSERT INTO users (username, firstName,lastName, password,role) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getUsername());
@@ -105,14 +105,14 @@ public class UserDaoImpl implements UserDao {
             return 0; // TODO: Хмм, не очень-то
         } catch (SQLException e) {
             if (getUserByUsername(user.getUsername()) != null) {
-                throw new DublicateUserException();
+                throw new DuplicateUserException();
             }
             throw e;
         }
     }
 
     @Override
-    public boolean updateUser(User user, String password) throws SQLException, DublicateUserException {
+    public boolean updateUser(User user, String password) throws SQLException, DuplicateUserException {
         String sql = "UPDATE users SET username=?, password=?,firstName=?,lastName=?,role=? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
@@ -124,7 +124,7 @@ public class UserDaoImpl implements UserDao {
             return statement.executeUpdate() == 1;
         } catch (SQLException e) {
             if (getUserByUsername(user.getUsername()) != null) {
-                throw new DublicateUserException();
+                throw new DuplicateUserException();
             }
             throw e;
         }
@@ -132,7 +132,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean updateUser(User user) throws SQLException, DublicateUserException {
+    public boolean updateUser(User user) throws SQLException, DuplicateUserException {
         String sql = "UPDATE users SET username=?, firstName=?,lastName=?,role=? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
@@ -143,7 +143,7 @@ public class UserDaoImpl implements UserDao {
             return statement.executeUpdate() == 1;
         } catch (SQLException e) {
             if (getUserByUsername(user.getUsername()) != null) {
-                throw new DublicateUserException();
+                throw new DuplicateUserException();
             }
             throw e;
         }

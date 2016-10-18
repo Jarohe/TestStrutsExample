@@ -1,6 +1,6 @@
 package common.db.dao;
 
-import common.db.dao.exceptions.DublicateUserException;
+import common.db.dao.exceptions.DuplicateUserException;
 import common.db.model.User;
 
 import java.sql.SQLException;
@@ -19,9 +19,9 @@ public interface UserDao {
 
     boolean deleteUserById(int id) throws SQLException;
 
-    int addUser(User user, String password) throws SQLException, DublicateUserException;
+    int addUser(User user, String password) throws SQLException, DuplicateUserException;
 
-    boolean updateUser(User user, String password) throws SQLException, DublicateUserException;
+    boolean updateUser(User user, String password) throws SQLException, DuplicateUserException;
 
-    boolean updateUser(User user) throws SQLException, DublicateUserException;
+    boolean updateUser(User user) throws SQLException, DuplicateUserException;
 }

@@ -1,6 +1,6 @@
 package common.action;
 
-import common.db.dao.exceptions.DublicateUserException;
+import common.db.dao.exceptions.DuplicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
 import common.utils.Attributes;
@@ -22,27 +22,27 @@ public class UpdateUserActionTest extends UtilActionTest {
         setRequestParameters();
     }
 
-    public void testSuccessUpdateUserWithPassword() throws SQLException, DublicateUserException {
+    public void testSuccessUpdateUserWithPassword() throws SQLException, DuplicateUserException {
         User user = new User(10,"login","firstName","lastName", Role.MANAGER);
         when(userDao.updateUser(eq(user), eq("password"))).thenReturn(true);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }
 
-    public void testSuccessUpdateUserNotPassword() throws SQLException, DublicateUserException {
+    public void testSuccessUpdateUserNotPassword() throws SQLException, DuplicateUserException {
         addRequestParameter("password", "");
         when(userDao.updateUser(any(User.class))).thenReturn(true);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }
 
-    public void testErrorDublicateUsernameUpdate() throws SQLException, DublicateUserException {
-        when(userDao.updateUser(any(User.class), eq("password"))).thenThrow(new DublicateUserException());
+    public void testErrorDublicateUsernameUpdate() throws SQLException, DuplicateUserException {
+        when(userDao.updateUser(any(User.class), eq("password"))).thenThrow(new DuplicateUserException());
         actionPerform();
         verifyForward(StatusAction.ERROR);
     }
 
-    public void testErrorDbUserUpdate() throws SQLException, DublicateUserException {
+    public void testErrorDbUserUpdate() throws SQLException, DuplicateUserException {
         when(userDao.updateUser(any(User.class))).thenReturn(false);
         actionPerform();
         verifyForward(StatusAction.ERROR);

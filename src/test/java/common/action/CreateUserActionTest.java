@@ -1,6 +1,6 @@
 package common.action;
 
-import common.db.dao.exceptions.DublicateUserException;
+import common.db.dao.exceptions.DuplicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
 import common.form.UserForm;
@@ -22,7 +22,7 @@ public class CreateUserActionTest extends UtilActionTest {
         setRequestParameters();
     }
 
-    public void testSuccessUserCreate() throws SQLException, DublicateUserException {
+    public void testSuccessUserCreate() throws SQLException, DuplicateUserException {
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
         UserForm form = (UserForm) getActionForm();
@@ -30,9 +30,9 @@ public class CreateUserActionTest extends UtilActionTest {
         verifyNoActionErrors();
     }
 
-    public void testDuplicateUserCreate() throws SQLException, DublicateUserException {
+    public void testDuplicateUserCreate() throws SQLException, DuplicateUserException {
         User user = new User(10,"login","firstName","lastName", Role.MANAGER);
-        when(userDao.addUser(eq(user), eq("password"))).thenThrow(new DublicateUserException());
+        when(userDao.addUser(eq(user), eq("password"))).thenThrow(new DuplicateUserException());
         actionPerform();
         verifyForward(StatusAction.CreateUser.DUBLICATE_USER);
         verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.DUBLICATE_LOGIN});

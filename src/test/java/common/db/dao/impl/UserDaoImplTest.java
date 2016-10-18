@@ -1,22 +1,29 @@
 package common.db.dao.impl;
 
 import common.db.dao.UserDao;
-import common.db.dao.exceptions.DublicateUserException;
+import common.db.dao.exceptions.DuplicateUserException;
 import common.db.model.Role;
 import common.db.model.User;
-import junit.framework.TestCase;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
-public class UserDaoImplTest extends TestCase {
-    private static String dbUrl = "jdbc:mysql://localhost:3306/actimind";
-    private static String dbUser = "actimind";
-    private static String dbPassword = "actimindAdmin";
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+public class UserDaoImplTest {
+    private static String dbUrl = "jdbc:mysql://localhost:3306/test_actimind";
+    private static String dbUser = "testActimind";
+    private static String dbPassword = "testActimind";
     private static String dbDriver = "com.mysql.jdbc.Driver";
     private static BasicDataSource db = new BasicDataSource();
     private Connection connection = null;
@@ -28,6 +35,34 @@ public class UserDaoImplTest extends TestCase {
         db.setUsername(dbUser);
         db.setPassword(dbPassword);
         db.setDefaultAutoCommit(false);
+    }
+
+    @BeforeClass
+    public static void initDb() throws SQLException {
+        String dropUserTableSql = "DROP TABLE IF EXISTS users;";
+        String dropRoleTableSql = "DROP TABLE IF EXISTS role;";
+        String usersTableSql = "CREATE TABLE IF NOT EXISTS role (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,name VARCHAR(100) NOT NULL);";
+        String roleTableSql = "CREATE TABLE IF NOT EXISTS users (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,\n" +
+                "username VARCHAR(100) NOT NULL UNIQUE,\n" +
+                "password VARCHAR(100) NOT NULL,\n" +
+                "firstName VARCHAR(100) NOT NULL,\n" +
+                "lastName VARCHAR(100) NOT NULL,\n" +
+                "role INT NOT NULL,\n" +
+                "FOREIGN KEY (role) REFERENCES role(id) ON DELETE CASCADE ON UPDATE CASCADE);";
+        String addRoleDefault = "INSERT INTO role (name) values ('default');";
+        String addRoleManager = "INSERT INTO role (name) values ('manager');";
+
+
+        try (Connection conn = db.getConnection();
+             Statement stmt = conn.createStatement();) {
+            stmt.execute(dropUserTableSql);
+            stmt.execute(dropRoleTableSql);
+            stmt.execute(usersTableSql);
+            stmt.execute(roleTableSql);
+            stmt.execute(addRoleDefault);
+            stmt.execute(addRoleManager);
+            conn.commit();
+        }
     }
 
     @Before
@@ -44,7 +79,8 @@ public class UserDaoImplTest extends TestCase {
 
     // TODO: Нет теста, в котором getUserById() не находит пользователя
     // TODO: Нет теста, в котором getUserById() находит нужного среди нескольких
-    public void testGetUserById() throws SQLException, DublicateUserException {
+    @Test
+    public void testGetUserById() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         int id = userDao.addUser(defaultUser, "password");
         defaultUser.setId(id);
@@ -53,7 +89,8 @@ public class UserDaoImplTest extends TestCase {
     }
 
     // TODO: То же самое
-    public void testGetUserByUsername() throws SQLException, DublicateUserException {
+    @Test
+    public void testGetUserByUsername() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         int id = userDao.addUser(defaultUser, "password");
         defaultUser.setId(id);
@@ -63,7 +100,8 @@ public class UserDaoImplTest extends TestCase {
 
     // TODO: Сортировка?
     // TODO: Параметры самих пользователей?
-    public void testGetAllUsers() throws SQLException, DublicateUserException {
+    @Test
+    public void testGetAllUsers() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         List<User> userList = userDao.getAllUsers();
         userDao.addUser(defaultUser, "testUser");
@@ -71,7 +109,8 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(userList.size() + 1 == resultUserList.size());
     }
 
-    public void testAddUser() throws SQLException, DublicateUserException {
+    @Test
+    public void testAddUser() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         int id = userDao.addUser(defaultUser, "password");
         User user = userDao.getUserById(id);
@@ -83,7 +122,8 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(id == user.getId());
     }
 
-    public void testDeleteUserById() throws SQLException, DublicateUserException {
+    @Test
+    public void testDeleteUserById() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         int id = userDao.addUser(defaultUser, "testUser");
         User user = userDao.getUserById(id);
@@ -93,7 +133,8 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(dropUser == null);
     }
 
-    public void testUpdateUserWithPassword() throws SQLException, DublicateUserException {
+    @Test
+    public void testUpdateUserWithPassword() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         int id = userDao.addUser(defaultUser, "password");
         defaultUser.setId(id);
@@ -109,7 +150,8 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(defaultUser.getId() == updateUser.getId());
     }
 
-    public void testUpdateWithoutPassword() throws SQLException, DublicateUserException {
+    @Test
+    public void testUpdateWithoutPassword() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         int id = userDao.addUser(defaultUser, "password");
         defaultUser.setId(id);
@@ -125,7 +167,7 @@ public class UserDaoImplTest extends TestCase {
         assertTrue(defaultUser.getId() == updateUser.getId());
     }
 
-    private User buildDefaultUser() {
+    private static User buildDefaultUser() {
         return new User(0, "username", "firstName", "lastName", Role.DEFAULT);
     }
 
