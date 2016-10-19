@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class CreateUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
-        super.setUp("/system/createUser");
+        super.setUp("/system/createUser"); // TODO: Оч странно
         getSession().setAttribute(Attributes.Session.USER, user);
         setRequestParameters();
     }
@@ -26,12 +26,12 @@ public class CreateUserActionTest extends UtilActionTest {
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
         UserForm form = (UserForm) getActionForm();
-        verify(userDao, times(1)).addUser(form.extractUser(), form.getPassword());
+        verify(userDao, times(1)).addUser(form.extractUser(), form.getPassword());// TODO: Можно сделать сильнее
         verifyNoActionErrors();
     }
 
     public void testDuplicateUserCreate() throws SQLException, DuplicateUserException {
-        User user = new User(10,"login","firstName","lastName", Role.MANAGER);
+        User user = new User(10,"login","firstName","lastName", Role.MANAGER); // TODO: Гораздо более правильный вариант, но есть дублирование
         when(userDao.addUser(eq(user), eq("password"))).thenThrow(new DuplicateUserException());
         actionPerform();
         verifyForward(StatusAction.CreateUser.DUBLICATE_USER);

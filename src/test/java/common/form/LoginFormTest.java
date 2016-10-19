@@ -31,7 +31,7 @@ public class LoginFormTest extends UtilFormTest {
         assertNotNull(errors);
         assertNotNull(errors.get("login"));
         assertNotNull(errors.get("password"));
-        assertTrue(errors.size() == 2);
+        assertEquals(errors.size(), 2);
     }
 
     @Test

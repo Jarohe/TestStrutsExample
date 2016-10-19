@@ -42,12 +42,11 @@ public class ActualUserFilterTest extends MockStrutsTestCase {
         session.getServletContext().setAttribute("daoFactory", factory);
         request.setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
-        when(userDao.getUserById(10)).thenReturn(userDb);
         filter.init(filterConfig);
     }
 
     public void testSuccessDoFilter() throws IOException, ServletException, SQLException {
-        session.setAttribute(Attributes.Session.USER, userSession);
+        when(userDao.getUserById(10)).thenReturn(userDb);
         filter.doFilter(getRequest(), getResponse(), filterChain);
         verify(filterChain).doFilter(request, response);
         verify(userDao, times(1)).getUserById(10);

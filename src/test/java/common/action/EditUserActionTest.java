@@ -25,10 +25,10 @@ public class EditUserActionTest extends UtilActionTest {
         actionPerform();
         UserForm form = (UserForm) getActionForm();
         assertNotNull(form);
-        assertTrue(user.getId() == form.getId());
-        assertTrue(user.getUsername().equals(form.getLogin()));
-        assertTrue(user.getFirstName().equals(form.getFirstName()));
-        assertTrue(user.getLastName().equals(form.getLastName()));
+        assertEquals(user.getId(),form.getId());
+        assertEquals(user.getUsername(), form.getLogin());
+        assertEquals(user.getFirstName(), form.getFirstName());
+        assertEquals(user.getLastName(), form.getLastName());
         assertTrue(!form.isManager());
         verifyForward(StatusAction.SUCCESS);
     }

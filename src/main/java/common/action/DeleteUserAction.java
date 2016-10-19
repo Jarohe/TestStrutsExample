@@ -19,7 +19,7 @@ public class DeleteUserAction extends SmartAction {
         User user = (User) request.getSession(false).getAttribute(Attributes.Session.USER);
         ErrorForward errorForward;
         try {
-            Integer userId = Integer.valueOf(request.getParameter("id"));
+            int userId = Integer.valueOf(request.getParameter("id"));
             if (user.getId() == userId) {
                 errorForward = new ErrorForward(StatusAction.ERROR, "remove", ErrorMessageKey.DeleteUser.CAN_NOT_REMOVE, "yourself");
                 return actionErrorForward(request, mapping, errorForward);

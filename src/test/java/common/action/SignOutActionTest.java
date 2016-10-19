@@ -9,10 +9,10 @@ public class SignOutActionTest extends UtilActionTest {
     public void testSuccessLogout() {
         setRequestPathInfo("/system/signOut");
         getSession().setAttribute(Attributes.Session.USER, user);
-        assertNotNull(getSession().getAttribute(Attributes.Session.USER));
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
         assertNull(getSession().getAttribute(Attributes.Session.USER));
     }
+    // TODO: Хорошо бы тест на логаут незалогиненного пользователя
 
 }

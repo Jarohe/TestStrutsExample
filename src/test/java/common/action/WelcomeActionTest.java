@@ -12,7 +12,6 @@ public class WelcomeActionTest extends UtilActionTest {
     }
 
     public void testSuccessWelcomeAction() {
-        getSession().setAttribute(Attributes.Session.USER, null);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }

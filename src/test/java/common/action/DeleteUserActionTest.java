@@ -1,5 +1,6 @@
 package common.action;
 
+import common.db.model.User;
 import common.utils.Attributes;
 import common.utils.ErrorMessageKey;
 import common.utils.StatusAction;
@@ -30,7 +31,8 @@ public class DeleteUserActionTest extends UtilActionTest {
     }
 
     public void testErrorDropYourself() {
-        addRequestParameter("id", "10");
+        User userSession = (User) getSession().getAttribute(Attributes.Session.USER);
+        addRequestParameter("id", String.valueOf(userSession.getId()));
         actionPerform();
         verifyForward(StatusAction.ERROR);
         verifyActionErrors(new String[]{ErrorMessageKey.DeleteUser.CAN_NOT_REMOVE});

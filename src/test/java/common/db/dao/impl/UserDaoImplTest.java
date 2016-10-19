@@ -17,8 +17,6 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
 public class UserDaoImplTest {
@@ -123,7 +121,7 @@ public class UserDaoImplTest {
         int id = userDao.addUser(defaultUser, "testUser");
         defaultUser.setId(id);
         List<User> resultUserList = userDao.getAllUsers();
-        assertTrue(userList.size() + 1 == resultUserList.size());
+        assertEquals(userList.size() + 1, resultUserList.size());
         TestCase.assertEquals(resultUserList, Arrays.asList(userDefault, defaultUser, userManager));
     }
 
@@ -137,7 +135,7 @@ public class UserDaoImplTest {
         assertEquals(defaultUser.getFirstName(), user.getFirstName());
         assertEquals(defaultUser.getLastName(), user.getLastName());
         assertEquals(defaultUser.getRole(), user.getRole());
-        assertTrue(id == user.getId());
+        assertEquals(id, user.getId());
     }
 
     @Test(expected = DuplicateUserException.class)
@@ -150,11 +148,13 @@ public class UserDaoImplTest {
         User defaultUser = buildDefaultUser();
         int id = userDao.addUser(defaultUser, "testUser");
         User user = userDao.getUserById(id);
-        assertTrue(user != null);
-        userDao.deleteUserById(id);
+        assertNotNull(user);
+        userDao.deleteUserById(id);// TODO: Почему результат не проверяется?
         User dropUser = userDao.getUserById(id);
-        assertTrue(dropUser == null);
+        assertNull(dropUser);
     }
+
+    // TODO: А где удаление при отсутствии пользователя?
 
     @Test
     public void testUpdateUserWithPassword() throws SQLException, DuplicateUserException {
@@ -165,12 +165,12 @@ public class UserDaoImplTest {
         updateUser.setId(id);
         userDao.updateUser(updateUser, "UpdatePassword");
         updateUser = userDao.getUserById(id);
-        assertFalse(defaultUser.getUsername().equals(updateUser.getUsername()));
+        assertNotEquals(defaultUser.getUsername(), updateUser.getUsername());
         assertNotNull(userDao.getUser(updateUser.getUsername(), "UpdatePassword"));
-        assertFalse(defaultUser.getFirstName().equals(updateUser.getFirstName()));
-        assertFalse(defaultUser.getLastName().equals(updateUser.getLastName()));
+        assertNotEquals(defaultUser.getFirstName(), updateUser.getFirstName()); // TODO: ???
+        assertNotEquals(defaultUser.getLastName(), updateUser.getLastName());
         assertEquals(Role.MANAGER, updateUser.getRole());
-        assertTrue(defaultUser.getId() == updateUser.getId());
+        assertEquals(defaultUser.getId(), updateUser.getId());
     }
 
     @Test(expected = DuplicateUserException.class)
@@ -194,12 +194,12 @@ public class UserDaoImplTest {
         updateUser.setId(id);
         userDao.updateUser(updateUser);
         updateUser = userDao.getUserById(id);
-        assertFalse(defaultUser.getUsername().equals(updateUser.getUsername()));
+        assertNotEquals(defaultUser.getUsername(), updateUser.getUsername());
         assertNotNull(userDao.getUser(updateUser.getUsername(), "password"));
-        assertFalse(defaultUser.getFirstName().equals(updateUser.getFirstName()));
-        assertFalse(defaultUser.getLastName().equals(updateUser.getLastName()));
+        assertNotEquals(defaultUser.getFirstName(), updateUser.getFirstName());
+        assertNotEquals(defaultUser.getLastName(), updateUser.getLastName());
         assertEquals(Role.MANAGER, updateUser.getRole());
-        assertTrue(defaultUser.getId() == updateUser.getId());
+        assertEquals(defaultUser.getId(), updateUser.getId());
     }
 
     private User buildDefaultUser() {

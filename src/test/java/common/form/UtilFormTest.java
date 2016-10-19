@@ -14,14 +14,14 @@ import static org.junit.Assert.assertTrue;
 abstract class UtilFormTest {
     private ActionMapping mapping;
     private HttpServletRequest request;
-    public void testAbsentOneField(ActionForm form, String errorProperty, String messageKey, String messageValue){
+    protected void testAbsentOneField(ActionForm form, String errorProperty, String messageKey, String messageValue){
         ActionErrors errors = form.validate(mapping, request);
         assertNotNull(errors);
         assertNotNull(errors.get(errorProperty));
-        assertTrue(errors.size() == 1);
+        assertEquals(errors.size(), 1);
         ActionMessage message = (ActionMessage) errors.get(errorProperty).next();
         assertEquals(message.getKey(), messageKey);
-        assertTrue(message.getValues().length == 1);
+        assertEquals(message.getValues().length, 1);
         assertEquals(message.getValues()[0], messageValue);
     }
 }

@@ -40,12 +40,14 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
         verify(filterChain, times(1)).doFilter(request, response);
         assertNotNull(request.getAttribute("connection"));
         verify(connection, times(1)).commit();
+        verify(connection, times(1)).close();
     }
 
     public void testErrorDoFilder() throws IOException, ServletException, SQLException {
         doThrow(new ServletException()).when(filterChain).doFilter(request, response);
         filter.doFilter(request, response, filterChain);
         verify(connection, times(1)).rollback();
+        verify(connection, times(1)).close();
     }
 
 }

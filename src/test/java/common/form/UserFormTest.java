@@ -34,7 +34,7 @@ public class UserFormTest extends UtilFormTest {
         assertNotNull(errors.get("login"));
         assertNotNull(errors.get("firstName"));
         assertNotNull(errors.get("lastName"));
-        assertTrue(errors.size() == 3);
+        assertEquals(errors.size(), 3);
     }
 
     @Test
