@@ -8,7 +8,12 @@ import common.utils.StatusAction;
 public class WelcomeActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
-        super.setUp("/welcome");
+        super.setUp();
+    }
+
+    @Override
+    String getRequestPathIbfo() {
+        return "/welcome";
     }
 
     public void testSuccessWelcomeAction() {

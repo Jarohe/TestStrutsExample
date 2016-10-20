@@ -16,10 +16,15 @@ public class LoginActionTest extends UtilActionTest {
     private User user = mock(User.class);
 
     public void setUp() throws Exception {
-        super.setUp("/login");
+        super.setUp();
         addRequestParameter("login", "login");
         addRequestParameter("password", "password");
         when(user.getUsername()).thenReturn("login");
+    }
+
+    @Override
+    String getRequestPathIbfo() {
+        return "/login";
     }
 
     public void testSuccessLogin() throws SQLException {

@@ -13,7 +13,12 @@ import static org.mockito.Mockito.when;
 public class EditUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
-        super.setUp("/system/editUser");
+        super.setUp();
+    }
+
+    @Override
+    String getRequestPathIbfo() {
+        return "/system/editUser";
     }
 
     public void testSuccessEditUser() throws SQLException {

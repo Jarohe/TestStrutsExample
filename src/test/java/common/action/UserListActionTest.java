@@ -15,8 +15,13 @@ import static org.mockito.Mockito.when;
 public class UserListActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
-        super.setUp("/system/usersList");
+        super.setUp();
         getSession().setAttribute(Attributes.Session.USER, user);
+    }
+
+    @Override
+    String getRequestPathIbfo() {
+        return "/system/usersList";
     }
 
     public void testSuccessManagerUserList() throws SQLException {
@@ -27,6 +32,7 @@ public class UserListActionTest extends UtilActionTest {
         actionPerform();
         verifyForward(StatusAction.UserList.MANAGER);
         assertNotNull(getRequest().getAttribute("userList"));
+        @SuppressWarnings("unchecked")
         List<User> resultList = (List<User>) getRequest().getAttribute("userList");
         assertTrue(userList.equals(resultList));
     }
@@ -40,6 +46,7 @@ public class UserListActionTest extends UtilActionTest {
         actionPerform();
         verifyForward(StatusAction.UserList.DEFAULT);
         assertNotNull(getRequest().getAttribute("userList"));
+        @SuppressWarnings("unchecked")
         List<User> resultList = (List<User>) getRequest().getAttribute("userList");
         assertTrue(userList.equals(resultList));
     }

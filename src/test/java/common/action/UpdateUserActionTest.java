@@ -17,9 +17,14 @@ import static org.mockito.Mockito.when;
 public class UpdateUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
-        super.setUp("/system/updateUser");
+        super.setUp();
         getSession().setAttribute(Attributes.Session.USER, user);
         setRequestParameters();
+    }
+
+    @Override
+    String getRequestPathIbfo() {
+        return "/system/updateUser";
     }
 
     public void testSuccessUpdateUserWithPassword() throws SQLException, DuplicateUserException {

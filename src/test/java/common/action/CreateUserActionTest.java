@@ -17,9 +17,14 @@ import static org.mockito.Mockito.*;
 public class CreateUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
-        super.setUp("/system/createUser"); // TODO: Оч странно
+        super.setUp();
         getSession().setAttribute(Attributes.Session.USER, user);
         setRequestParameters();
+    }
+
+    @Override
+    String getRequestPathIbfo() {
+        return "/system/createUser";
     }
 
     public void testSuccessUserCreate() throws SQLException, DuplicateUserException {

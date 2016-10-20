@@ -12,8 +12,13 @@ import static org.mockito.Mockito.when;
 public class DeleteUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
-        super.setUp("/system/deleteUser");
+        super.setUp();
         getSession().setAttribute(Attributes.Session.USER, user);
+    }
+
+    @Override
+    String getRequestPathIbfo() {
+        return "/system/deleteUser";
     }
 
     public void testSuccessUserDelete() throws SQLException {
