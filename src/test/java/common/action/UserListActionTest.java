@@ -16,17 +16,17 @@ public class UserListActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
         super.setUp();
-        getSession().setAttribute(Attributes.Session.USER, user);
+        getSession().setAttribute(Attributes.Session.USER, sessionUser);
     }
 
     @Override
-    String getRequestPathIbfo() {
+    String getRequestPathInfo() {
         return "/system/usersList";
     }
 
     public void testSuccessManagerUserList() throws SQLException {
         List<User> userList = new ArrayList<>();
-        userList.add(user);
+        userList.add(sessionUser);
         when(userDao.getAllUsers()).thenReturn(userList);
         assertNull(getRequest().getAttribute("userList"));
         actionPerform();
@@ -38,9 +38,9 @@ public class UserListActionTest extends UtilActionTest {
     }
 
     public void testSuccessDefaultUserList() throws SQLException {
-        user.setRole(Role.DEFAULT);
+        sessionUser.setRole(Role.DEFAULT);
         List<User> userList = new ArrayList<>();
-        userList.add(user);
+        userList.add(sessionUser);
         when(userDao.getAllUsers()).thenReturn(userList);
         assertNull(getRequest().getAttribute("userList"));
         actionPerform();

@@ -17,7 +17,7 @@ public class EditUserActionTest extends UtilActionTest {
     }
 
     @Override
-    String getRequestPathIbfo() {
+    String getRequestPathInfo() {
         return "/system/editUser";
     }
 

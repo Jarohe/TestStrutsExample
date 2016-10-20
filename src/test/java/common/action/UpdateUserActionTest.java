@@ -16,20 +16,21 @@ import static org.mockito.Mockito.when;
 
 public class UpdateUserActionTest extends UtilActionTest {
 
+    private User user = new User(10, "login", "firstName", "lastName", Role.MANAGER);
+
     public void setUp() throws Exception {
         super.setUp();
-        getSession().setAttribute(Attributes.Session.USER, user);
-        setRequestParameters();
+        getSession().setAttribute(Attributes.Session.USER, sessionUser);
+        setUserFormParameters(user);
     }
 
     @Override
-    String getRequestPathIbfo() {
+    String getRequestPathInfo() {
         return "/system/updateUser";
     }
 
     public void testSuccessUpdateUserWithPassword() throws SQLException, DuplicateUserException {
-        User user = new User(10,"login","firstName","lastName", Role.MANAGER);
-        when(userDao.updateUser(eq(user), eq("password"))).thenReturn(true);
+        when(userDao.updateUser(user, "password")).thenReturn(true);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }
@@ -62,20 +63,11 @@ public class UpdateUserActionTest extends UtilActionTest {
     }
 
     public void testErrorEditYourSalfRole(){
-        addRequestParameter("id", String.valueOf(user.getId()));
+        addRequestParameter("id", String.valueOf(sessionUser.getId()));
         addRequestParameter("manager","");
         actionPerform();
         verifyForward(StatusAction.ERROR);
         verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.CAN_NOT_EDIT});
-    }
-
-    private void setRequestParameters() {
-        addRequestParameter("id", "10");
-        addRequestParameter("login", "login");
-        addRequestParameter("password", "password");
-        addRequestParameter("firstName", "firstName");
-        addRequestParameter("lastName", "lastName");
-        addRequestParameter("manager", "on");
     }
 
 }

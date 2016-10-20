@@ -13,11 +13,11 @@ public class DeleteUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
         super.setUp();
-        getSession().setAttribute(Attributes.Session.USER, user);
+        getSession().setAttribute(Attributes.Session.USER, sessionUser);
     }
 
     @Override
-    String getRequestPathIbfo() {
+    String getRequestPathInfo() {
         return "/system/deleteUser";
     }
 

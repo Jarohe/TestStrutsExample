@@ -23,7 +23,7 @@ public class LoginActionTest extends UtilActionTest {
     }
 
     @Override
-    String getRequestPathIbfo() {
+    String getRequestPathInfo() {
         return "/login";
     }
 

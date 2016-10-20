@@ -12,7 +12,7 @@ public class WelcomeActionTest extends UtilActionTest {
     }
 
     @Override
-    String getRequestPathIbfo() {
+    String getRequestPathInfo() {
         return "/welcome";
     }
 

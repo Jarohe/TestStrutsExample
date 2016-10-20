@@ -170,12 +170,14 @@ public class UserDaoImplTest {
         updateUser.setId(id);
         userDao.updateUser(updateUser, "UpdatePassword");
         updateUser = userDao.getUserById(id);
+
         assertNotEquals(defaultUser.getUsername(), updateUser.getUsername());
         assertNotNull(userDao.getUser(updateUser.getUsername(), "UpdatePassword"));
-        assertNotEquals(defaultUser.getFirstName(), updateUser.getFirstName()); // TODO: ???
-        assertNotEquals(defaultUser.getLastName(), updateUser.getLastName());
+        assertEquals("updateUserName",updateUser.getUsername());
+        assertEquals("updateFirstName", updateUser.getFirstName());
+        assertEquals("updateLastName", updateUser.getLastName());
         assertEquals(Role.MANAGER, updateUser.getRole());
-        assertEquals(defaultUser.getId(), updateUser.getId());
+        assertEquals(id, updateUser.getId());
     }
 
     @Test(expected = DuplicateUserException.class)
