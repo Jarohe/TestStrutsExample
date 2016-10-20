@@ -149,12 +149,17 @@ public class UserDaoImplTest {
         int id = userDao.addUser(defaultUser, "testUser");
         User user = userDao.getUserById(id);
         assertNotNull(user);
-        userDao.deleteUserById(id);// TODO: Почему результат не проверяется?
+        boolean result = userDao.deleteUserById(id);
         User dropUser = userDao.getUserById(id);
+        assertTrue(result);
         assertNull(dropUser);
     }
 
-    // TODO: А где удаление при отсутствии пользователя?
+    @Test
+    public  void testDeleteNoCreateUser() throws SQLException {
+        boolean result = userDao.deleteUserById(-1);
+        assertFalse(result);
+    }
 
     @Test
     public void testUpdateUserWithPassword() throws SQLException, DuplicateUserException {

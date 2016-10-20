@@ -15,8 +15,6 @@ public interface UserDao {
 
     List<User> getAllUsers() throws SQLException;
 
-    boolean deleteUser(User user) throws SQLException;
-
     boolean deleteUserById(int id) throws SQLException;
 
     int addUser(User user, String password) throws SQLException, DuplicateUserException;

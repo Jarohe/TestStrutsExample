@@ -39,7 +39,7 @@ public class UpdateUserAction extends SmartAction {
                 updated = userDao.updateUser(updateUser, userForm.getPassword());
             }
         } catch (DuplicateUserException e) {
-            errorForward = new ErrorForward(StatusAction.ERROR, "duplicateUser", ErrorMessageKey.UpdateUser.DUBLICATE_LOGIN);
+            errorForward = new ErrorForward(StatusAction.ERROR, "duplicateUser", ErrorMessageKey.UpdateUser.DUPLICATE_LOGIN);
             return actionErrorForward(request, mapping, errorForward);
         }
 

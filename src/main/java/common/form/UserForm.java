@@ -17,19 +17,6 @@ public class UserForm extends ActionForm {
     private String lastName;
     private boolean isManager;
 
-    public UserForm() {
-    }
-
-    public UserForm setUserForm(UserForm form) {
-        this.id = form.getId();
-        this.login = form.getLogin();
-        this.password = form.getPassword();
-        this.firstName = form.getFirstName();
-        this.lastName = form.getLastName();
-        this.isManager = form.isManager();
-        return this;
-    }
-
     public String getLogin() {
         return login;
     }

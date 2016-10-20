@@ -40,6 +40,6 @@ public class LoginActionTest extends UtilActionTest {
         actionPerform();
         verifyForward(StatusAction.ERROR);
         assertNull(getSession().getAttribute(Attributes.Session.USER));
-        verifyActionErrors(new String[]{ErrorMessageKey.Login.INVALIDE_LOGIN_PASSWORD});
+        verifyActionErrors(new String[]{ErrorMessageKey.Login.INVALID_LOGIN_PASSWORD});
     }
 }

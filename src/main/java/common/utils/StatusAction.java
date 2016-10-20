@@ -5,7 +5,7 @@ public class StatusAction {
     public static String ERROR = "error";
 
     public static class CreateUser {
-        public static String DUBLICATE_USER = "duplicate user";
+        public static String DUPLICATE_USER = "duplicate user";
     }
 
     public static class UserList {

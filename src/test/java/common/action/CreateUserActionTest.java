@@ -39,8 +39,8 @@ public class CreateUserActionTest extends UtilActionTest {
         User user = new User(10,"login","firstName","lastName", Role.MANAGER); // TODO: Гораздо более правильный вариант, но есть дублирование
         when(userDao.addUser(eq(user), eq("password"))).thenThrow(new DuplicateUserException());
         actionPerform();
-        verifyForward(StatusAction.CreateUser.DUBLICATE_USER);
-        verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.DUBLICATE_LOGIN});
+        verifyForward(StatusAction.CreateUser.DUPLICATE_USER);
+        verifyActionErrors(new String[]{ErrorMessageKey.CreateUser.DUPLICATE_LOGIN});
     }
 
     public void testPasswordNull() {

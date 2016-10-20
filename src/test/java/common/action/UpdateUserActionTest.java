@@ -41,7 +41,7 @@ public class UpdateUserActionTest extends UtilActionTest {
         verifyForward(StatusAction.SUCCESS);
     }
 
-    public void testErrorDublicateUsernameUpdate() throws SQLException, DuplicateUserException {
+    public void testErrorDuplicateUsernameUpdate() throws SQLException, DuplicateUserException {
         when(userDao.updateUser(any(User.class), eq("password"))).thenThrow(new DuplicateUserException());
         actionPerform();
         verifyForward(StatusAction.ERROR);

@@ -27,7 +27,7 @@ public class CreateUserAction extends SmartAction {
         try {
             userDao.addUser(userForm.extractUser(), userForm.getPassword());
         } catch (DuplicateUserException e) {
-            errorForward = new ErrorForward(StatusAction.CreateUser.DUBLICATE_USER, "dublicateUser", ErrorMessageKey.CreateUser.DUBLICATE_LOGIN);
+            errorForward = new ErrorForward(StatusAction.CreateUser.DUPLICATE_USER, "duplicateUser", ErrorMessageKey.CreateUser.DUPLICATE_LOGIN);
             return actionErrorForward(request, mapping, errorForward);
         }
         ActionMessages messages = new ActionMessages();

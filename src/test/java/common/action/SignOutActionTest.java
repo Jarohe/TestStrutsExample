@@ -6,6 +6,11 @@ import common.utils.StatusAction;
 
 public class SignOutActionTest extends UtilActionTest {
 
+    @Override
+    String getRequestPathIbfo() {
+        return "/system/signOut";
+    }
+
     public void testSuccessLogout() {
         getSession().setAttribute(Attributes.Session.USER, user);
         actionPerform();
@@ -13,10 +18,9 @@ public class SignOutActionTest extends UtilActionTest {
         assertNull(getSession().getAttribute(Attributes.Session.USER));
     }
 
-    @Override
-    String getRequestPathIbfo() {
-        return "/system/signOut";
+    public void testLogoutUnloginUser() {
+        actionPerform();
+        verifyForward(StatusAction.SUCCESS);
     }
-    // TODO: Хорошо бы тест на логаут незалогиненного пользователя
 
 }

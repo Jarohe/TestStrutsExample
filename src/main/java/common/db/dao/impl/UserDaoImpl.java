@@ -75,11 +75,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean deleteUser(User user) throws SQLException {
-        return deleteUserById(user.getId());
-    }
-
-    @Override
     public boolean deleteUserById(int id) throws SQLException {
         String sql = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {

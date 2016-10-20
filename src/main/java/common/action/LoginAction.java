@@ -25,7 +25,7 @@ public class LoginAction extends SmartAction {
         UserDao userDao = getUserDao(request);
         User user = userDao.getUser(loginForm.getLogin(), loginForm.getPassword());
         if (user == null) {
-            errorForward = new ErrorForward(StatusAction.ERROR, "error_authorization", ErrorMessageKey.Login.INVALIDE_LOGIN_PASSWORD);
+            errorForward = new ErrorForward(StatusAction.ERROR, "error_authorization", ErrorMessageKey.Login.INVALID_LOGIN_PASSWORD);
             return actionErrorForward(request, mapping, errorForward);
         }
         request.getSession().setAttribute(Attributes.Session.USER, user);

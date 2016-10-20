@@ -9,7 +9,7 @@ public class ErrorMessageKey {
 
     public static class CreateUser {
         public static String CAN_NOT_BLANK = "errors.required";
-        public static String DUBLICATE_LOGIN = "error.dublicate.user.login";
+        public static String DUPLICATE_LOGIN = "error.duplicate.user.login";
     }
 
     public static class EditUser {
@@ -17,13 +17,12 @@ public class ErrorMessageKey {
     }
 
     public static class Login {
-        public static String INVALIDE_LOGIN_PASSWORD = "error.login.password";
+        public static String INVALID_LOGIN_PASSWORD = "error.login.password";
     }
 
     public static class UpdateUser {
-        public static String NOT_SEND_ID = "errors.not.id";
         public static String USER_NOT_UPDATE = "error.user.not.update";
-        public static String DUBLICATE_LOGIN = "error.dublicate.user.login";
+        public static String DUPLICATE_LOGIN = "error.duplicate.user.login";
         public static String CAN_NOT_EDIT = "error.can.not.edit";
 
     }
