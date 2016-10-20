@@ -22,12 +22,11 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
     private FilterConfig config = mock(FilterConfig.class);
 
     private HttpServletRequest request;
-    private HttpSession session;
 
     public void setUp() throws Exception {
         super.setUp();
         request = getRequest();
-        session = getSession();
+        HttpSession session = getSession();
         session.getServletContext().setAttribute("db", dataSource);
         when(dataSource.getConnection()).thenReturn(connection);
         when(config.getServletContext()).thenReturn(session.getServletContext());
@@ -43,7 +42,7 @@ public class ConnectionFilterTest extends MockStrutsTestCase {
         verify(connection, times(1)).close();
     }
 
-    public void testErrorDoFilder() throws IOException, ServletException, SQLException {
+    public void testErrorDoFilter() throws IOException, ServletException, SQLException {
         doThrow(new ServletException()).when(filterChain).doFilter(request, response);
         filter.doFilter(request, response, filterChain);
         verify(connection, times(1)).rollback();

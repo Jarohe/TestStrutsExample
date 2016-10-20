@@ -12,10 +12,10 @@ public class SignOutActionTest extends UtilActionTest {
     }
 
     public void testSuccessLogout() {
-        getSession().setAttribute(Attributes.Session.USER, sessionUser);
+        getSession().setAttribute(Attributes.SESSION_USER, sessionUser);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
-        assertNull(getSession().getAttribute(Attributes.Session.USER));
+        assertNull(getSession().getAttribute(Attributes.SESSION_USER));
     }
 
     public void testLogoutUnloginUser() {

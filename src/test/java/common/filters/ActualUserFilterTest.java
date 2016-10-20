@@ -38,7 +38,7 @@ public class ActualUserFilterTest extends MockStrutsTestCase {
         super.setUp();
         request = getRequest();
         session = getSession();
-        session.setAttribute(Attributes.Session.USER, userSession);
+        session.setAttribute(Attributes.SESSION_USER, userSession);
         session.getServletContext().setAttribute("daoFactory", factory);
         request.setAttribute("connection", connection);
         when(factory.createUserDao(connection)).thenReturn(userDao);
@@ -50,11 +50,11 @@ public class ActualUserFilterTest extends MockStrutsTestCase {
         filter.doFilter(getRequest(), getResponse(), filterChain);
         verify(filterChain).doFilter(request, response);
         verify(userDao, times(1)).getUserById(10);
-        assertEquals(session.getAttribute(Attributes.Session.USER), userDb);
+        assertEquals(session.getAttribute(Attributes.SESSION_USER), userDb);
     }
 
     public void testErrorUserAbsentInSession() throws IOException, ServletException {
-        session.setAttribute(Attributes.Session.USER, null);
+        session.setAttribute(Attributes.SESSION_USER, null);
         filter.doFilter(request, response, filterChain);
         verify(filterChain, times(0)).doFilter(request, response);
     }

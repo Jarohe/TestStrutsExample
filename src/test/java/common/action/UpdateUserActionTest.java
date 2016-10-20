@@ -20,7 +20,7 @@ public class UpdateUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
         super.setUp();
-        getSession().setAttribute(Attributes.Session.USER, sessionUser);
+        getSession().setAttribute(Attributes.SESSION_USER, sessionUser);
         setUserFormParameters(user);
     }
 
@@ -62,7 +62,7 @@ public class UpdateUserActionTest extends UtilActionTest {
         verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.USER_NOT_UPDATE});
     }
 
-    public void testErrorEditYourSalfRole(){
+    public void testErrorEditYourselfRole(){
         addRequestParameter("id", String.valueOf(sessionUser.getId()));
         addRequestParameter("manager","");
         actionPerform();

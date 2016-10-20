@@ -13,7 +13,7 @@ public class DeleteUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
         super.setUp();
-        getSession().setAttribute(Attributes.Session.USER, sessionUser);
+        getSession().setAttribute(Attributes.SESSION_USER, sessionUser);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class DeleteUserActionTest extends UtilActionTest {
     }
 
     public void testErrorDropYourself() {
-        User userSession = (User) getSession().getAttribute(Attributes.Session.USER);
+        User userSession = (User) getSession().getAttribute(Attributes.SESSION_USER);
         addRequestParameter("id", String.valueOf(userSession.getId()));
         actionPerform();
         verifyForward(StatusAction.ERROR);

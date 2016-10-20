@@ -15,7 +15,7 @@ abstract class UtilActionTest extends MockStrutsTestCase {
     private Connection connection = mock(Connection.class);
     protected UserDao userDao = mock(UserDao.class);
     private DaoFactory factory = mock(DaoFactory.class);
-    protected User sessionUser = createSessionUser();
+    User sessionUser = createSessionUser();
 
     private User createSessionUser() {
         return new User(10, "userName", "firstName", "lastName", Role.MANAGER);
@@ -29,7 +29,7 @@ abstract class UtilActionTest extends MockStrutsTestCase {
         getActionServlet().getServletContext().setAttribute("daoFactory", factory);
     }
 
-    protected void setUserFormParameters(User user) {
+    void setUserFormParameters(User user) {
         addRequestParameter("id", String.valueOf(user.getId()));
         addRequestParameter("login", user.getUsername());
         addRequestParameter("password", "password");

@@ -31,7 +31,7 @@ public class ActualUserFilter implements Filter {
             httpResponse.sendRedirect(homePage);
             return;
         }
-        User user = (User) session.getAttribute(Attributes.Session.USER);
+        User user = (User) session.getAttribute(Attributes.SESSION_USER);
         if (user == null) {
             HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
             httpResponse.sendRedirect(homePage);
@@ -50,7 +50,7 @@ public class ActualUserFilter implements Filter {
                 return;
             }
 
-            session.setAttribute(Attributes.Session.USER, userFromDb);
+            session.setAttribute(Attributes.SESSION_USER, userFromDb);
 
         } catch (SQLException e) {
             throw new ServletException(e);

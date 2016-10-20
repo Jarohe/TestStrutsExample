@@ -25,7 +25,7 @@ public class ManagerFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession();
-        User user = (User) session.getAttribute(Attributes.Session.USER);
+        User user = (User) session.getAttribute(Attributes.SESSION_USER);
         if (Role.MANAGER.equals(user.getRole())) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {

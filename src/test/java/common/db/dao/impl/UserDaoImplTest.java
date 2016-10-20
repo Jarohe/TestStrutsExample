@@ -20,13 +20,13 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class UserDaoImplTest {
+    private static BasicDataSource db = new BasicDataSource();
+    private Connection connection = null;
+    private UserDao userDao = null;
     private static String dbUrl = "jdbc:mysql://localhost:3306/test_actimind";
     private static String dbUser = "testActimind";
     private static String dbPassword = "testActimind";
     private static String dbDriver = "com.mysql.jdbc.Driver";
-    private static BasicDataSource db = new BasicDataSource();
-    private Connection connection = null;
-    private UserDao userDao = null;
     private static User userManager = new User(0, "managerUser", "managerName", "lastName", Role.MANAGER);
     private static User userDefault = new User(0, "defaultUser", "defaultName", "lastName", Role.DEFAULT);
 
@@ -50,8 +50,8 @@ public class UserDaoImplTest {
                 "lastName VARCHAR(100) NOT NULL,\n" +
                 "role INT NOT NULL,\n" +
                 "FOREIGN KEY (role) REFERENCES role(id) ON DELETE CASCADE ON UPDATE CASCADE);";
-        String addRoleDefault = "INSERT INTO role (name) values ('default');";
-        String addRoleManager = "INSERT INTO role (name) values ('manager');";
+        String addRoleDefault = "INSERT INTO role (name) VALUES ('default');";
+        String addRoleManager = "INSERT INTO role (name) VALUES ('manager');";
 
         try (Connection conn = db.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -156,7 +156,7 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public  void testDeleteNoCreateUser() throws SQLException {
+    public void testDeleteNoCreateUser() throws SQLException {
         boolean result = userDao.deleteUserById(-1);
         assertFalse(result);
     }
@@ -173,7 +173,7 @@ public class UserDaoImplTest {
 
         assertNotEquals(defaultUser.getUsername(), updateUser.getUsername());
         assertNotNull(userDao.getUser(updateUser.getUsername(), "UpdatePassword"));
-        assertEquals("updateUserName",updateUser.getUsername());
+        assertEquals("updateUserName", updateUser.getUsername());
         assertEquals("updateFirstName", updateUser.getFirstName());
         assertEquals("updateLastName", updateUser.getLastName());
         assertEquals(Role.MANAGER, updateUser.getRole());
@@ -203,8 +203,9 @@ public class UserDaoImplTest {
         updateUser = userDao.getUserById(id);
         assertNotEquals(defaultUser.getUsername(), updateUser.getUsername());
         assertNotNull(userDao.getUser(updateUser.getUsername(), "password"));
-        assertNotEquals(defaultUser.getFirstName(), updateUser.getFirstName());
-        assertNotEquals(defaultUser.getLastName(), updateUser.getLastName());
+        assertEquals("updateUserName", updateUser.getUsername());
+        assertEquals("updateFirstName", updateUser.getFirstName());
+        assertEquals("updateLastName", updateUser.getLastName());
         assertEquals(Role.MANAGER, updateUser.getRole());
         assertEquals(defaultUser.getId(), updateUser.getId());
     }

@@ -22,7 +22,7 @@ public class WelcomeActionTest extends UtilActionTest {
     }
 
     public void testErrorWelcomeAction() {
-        getSession().setAttribute(Attributes.Session.USER, new User(10, "username", "firstName", "lastName"));
+        getSession().setAttribute(Attributes.SESSION_USER, new User(10, "username", "firstName", "lastName"));
         actionPerform();
         verifyForward(StatusAction.ERROR);
     }

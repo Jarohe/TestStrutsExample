@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteUserAction extends SmartAction {
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        User user = (User) request.getSession(false).getAttribute(Attributes.Session.USER);
+        User user = (User) request.getSession(false).getAttribute(Attributes.SESSION_USER);
         ErrorForward errorForward;
         try {
             int userId = Integer.valueOf(request.getParameter("id"));

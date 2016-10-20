@@ -18,7 +18,7 @@ public class CreateUserActionTest extends UtilActionTest {
 
     public void setUp() throws Exception {
         super.setUp();
-        getSession().setAttribute(Attributes.Session.USER, sessionUser);
+        getSession().setAttribute(Attributes.SESSION_USER, sessionUser);
         setUserFormParameters(user);
     }
 

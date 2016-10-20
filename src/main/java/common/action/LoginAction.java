@@ -28,7 +28,7 @@ public class LoginAction extends SmartAction {
             errorForward = new ErrorForward(StatusAction.ERROR, "error_authorization", ErrorMessageKey.Login.INVALID_LOGIN_PASSWORD);
             return actionErrorForward(request, mapping, errorForward);
         }
-        request.getSession().setAttribute(Attributes.Session.USER, user);
+        request.getSession().setAttribute(Attributes.SESSION_USER, user);
         return mapping.findForward(StatusAction.SUCCESS);
     }
 }

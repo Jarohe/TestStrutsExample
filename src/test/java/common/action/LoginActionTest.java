@@ -31,7 +31,7 @@ public class LoginActionTest extends UtilActionTest {
         when(userDao.getUser("login", "password")).thenReturn(user);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
-        User userFromSession = (User) getSession().getAttribute(Attributes.Session.USER);
+        User userFromSession = (User) getSession().getAttribute(Attributes.SESSION_USER);
         assertEquals(user, userFromSession);
     }
 
@@ -39,7 +39,7 @@ public class LoginActionTest extends UtilActionTest {
         when(userDao.getUser("login", "password")).thenReturn(null);
         actionPerform();
         verifyForward(StatusAction.ERROR);
-        assertNull(getSession().getAttribute(Attributes.Session.USER));
+        assertNull(getSession().getAttribute(Attributes.SESSION_USER));
         verifyActionErrors(new String[]{ErrorMessageKey.Login.INVALID_LOGIN_PASSWORD});
     }
 }

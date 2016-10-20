@@ -10,13 +10,13 @@ import java.sql.Connection;
 
 abstract class SmartAction extends Action {
 
-    protected UserDao getUserDao(HttpServletRequest request) {
+    UserDao getUserDao(HttpServletRequest request) {
         Connection connection = (Connection) request.getAttribute("connection");
         DaoFactory factory = (DaoFactory) getServlet().getServletContext().getAttribute("daoFactory");
         return factory.createUserDao(connection);
     }
 
-    protected ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForward errorForward) {
+    ActionForward actionErrorForward(HttpServletRequest request, ActionMapping mapping, ErrorForward errorForward) {
         ActionErrors errors = new ActionErrors();
         if (errorForward.getValue() == null) {
             errors.add(errorForward.getProperty(), new ActionMessage(errorForward.getKey()));

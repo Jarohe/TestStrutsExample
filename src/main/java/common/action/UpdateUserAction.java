@@ -24,7 +24,7 @@ public class UpdateUserAction extends SmartAction {
         User updateUser = ((UserForm) form).extractUser();
         ErrorForward errorForward;
         UserDao userDao = getUserDao(request);
-        User user = (User) request.getSession().getAttribute(Attributes.Session.USER);
+        User user = (User) request.getSession().getAttribute(Attributes.SESSION_USER);
         boolean updated;
 
         if (user.getId() == updateUser.getId() && !user.getRole().equals(updateUser.getRole())) {
