@@ -193,6 +193,14 @@ public class UserDaoImplTest {
     }
 
     @Test
+    public void testUpdateNonexistentUser() throws SQLException, DuplicateUserException {
+        User user = buildDefaultUser();
+        user.setId(-1);
+        boolean result = userDao.updateUser(user, "password");
+        assertFalse(result);
+    }
+
+    @Test
     public void testUpdateWithoutPassword() throws SQLException, DuplicateUserException {
         User defaultUser = buildDefaultUser();
         int id = userDao.addUser(defaultUser, "password");
@@ -208,6 +216,14 @@ public class UserDaoImplTest {
         assertEquals("updateLastName", updateUser.getLastName());
         assertEquals(Role.MANAGER, updateUser.getRole());
         assertEquals(defaultUser.getId(), updateUser.getId());
+    }
+
+    @Test
+    public void testUpdateNonexistentUserWithoutPassword() throws SQLException, DuplicateUserException {
+        User user = buildDefaultUser();
+        user.setId(-1);
+        boolean result = userDao.updateUser(user, "password");
+        assertFalse(result);
     }
 
     private User buildDefaultUser() {
