@@ -168,9 +168,10 @@ public class UserDaoImplTest {
         defaultUser.setId(id);
         User updateUser = new User(0, "updateUserName", "updateFirstName", "updateLastName", Role.MANAGER);
         updateUser.setId(id);
-        userDao.updateUser(updateUser, "UpdatePassword");
+        boolean result = userDao.updateUser(updateUser, "UpdatePassword");
         updateUser = userDao.getUserById(id);
 
+        assertTrue(result);
         assertNotEquals(defaultUser.getUsername(), updateUser.getUsername());
         assertNotNull(userDao.getUser(updateUser.getUsername(), "UpdatePassword"));
         assertEquals("updateUserName", updateUser.getUsername());
@@ -207,8 +208,9 @@ public class UserDaoImplTest {
         defaultUser.setId(id);
         User updateUser = new User(0, "updateUserName", "updateFirstName", "updateLastName", Role.MANAGER);
         updateUser.setId(id);
-        userDao.updateUser(updateUser);
+        boolean result = userDao.updateUser(updateUser);
         updateUser = userDao.getUserById(id);
+        assertTrue(result);
         assertNotEquals(defaultUser.getUsername(), updateUser.getUsername());
         assertNotNull(userDao.getUser(updateUser.getUsername(), "password"));
         assertEquals("updateUserName", updateUser.getUsername());
