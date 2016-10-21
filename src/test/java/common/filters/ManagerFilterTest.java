@@ -8,6 +8,7 @@ import common.utils.Attributes;
 import servletunit.struts.MockStrutsTestCase;
 
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,9 +28,8 @@ public class ManagerFilterTest extends MockStrutsTestCase {
 
     private FilterChain filterChain = mock(FilterChain.class);
     private User userSession = mock(User.class);
-    private UserDao userDao = mock(UserDao.class);
-    private Connection connection = mock(Connection.class);
-    private DaoFactory factory = mock(DaoFactory.class);
+    private FilterConfig filterConfig = mock(FilterConfig.class);
+    private String testHomePage = "testHomePage";
 
     public void setUp() throws Exception {
         super.setUp();
@@ -37,11 +37,8 @@ public class ManagerFilterTest extends MockStrutsTestCase {
         HttpSession session = getSession();
         response = mock(HttpServletResponse.class);
         session.setAttribute(Attributes.SESSION_USER, userSession);
-        session.getServletContext().setAttribute("daoFactory", factory);
-        request.setAttribute("connection", connection);
-        when(factory.createUserDao(connection)).thenReturn(userDao);
-        when(userDao.getUserById(anyInt())).thenReturn(userSession);
-
+        when(filterConfig.getInitParameter("home_page")).thenReturn(testHomePage);
+        filter.init(filterConfig);
     }
 
 
@@ -54,8 +51,8 @@ public class ManagerFilterTest extends MockStrutsTestCase {
     public void testFailDoFilter() throws IOException, ServletException {
         when(userSession.getRole()).thenReturn(Role.DEFAULT);
         filter.doFilter(request, response, filterChain);
-        verify(response,times(1)).sendRedirect(null);
         verify(filterChain,times(0)).doFilter(request,response);
+        verify(response,times(1)).sendRedirect(testHomePage);
     }
 
 }

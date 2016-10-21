@@ -34,7 +34,7 @@ public class UserListActionTest extends UtilActionTest {
         assertNotNull(getRequest().getAttribute("userList"));
         @SuppressWarnings("unchecked")
         List<User> resultList = (List<User>) getRequest().getAttribute("userList");
-        assertTrue(userList.equals(resultList));
+        assertEquals(userList, resultList);
     }
 
     public void testSuccessDefaultUserList() throws SQLException {
@@ -48,7 +48,7 @@ public class UserListActionTest extends UtilActionTest {
         assertNotNull(getRequest().getAttribute("userList"));
         @SuppressWarnings("unchecked")
         List<User> resultList = (List<User>) getRequest().getAttribute("userList");
-        assertTrue(userList.equals(resultList));
+        assertEquals(userList, resultList);
     }
 
 }

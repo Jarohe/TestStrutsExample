@@ -37,19 +37,19 @@ public class UpdateUserActionTest extends UtilActionTest {
 
     public void testSuccessUpdateUserNotPassword() throws SQLException, DuplicateUserException {
         addRequestParameter("password", "");
-        when(userDao.updateUser(any(User.class))).thenReturn(true);
+        when(userDao.updateUser(user)).thenReturn(true);
         actionPerform();
         verifyForward(StatusAction.SUCCESS);
     }
 
     public void testErrorDuplicateUsernameUpdate() throws SQLException, DuplicateUserException {
-        when(userDao.updateUser(any(User.class), eq("password"))).thenThrow(new DuplicateUserException());
+        when(userDao.updateUser(user, "password")).thenThrow(new DuplicateUserException());
         actionPerform();
         verifyForward(StatusAction.ERROR);
     }
 
     public void testErrorDbUserUpdate() throws SQLException, DuplicateUserException {
-        when(userDao.updateUser(any(User.class))).thenReturn(false);
+        when(userDao.updateUser(user)).thenReturn(false);
         actionPerform();
         verifyForward(StatusAction.ERROR);
         verifyActionErrors(new String[]{ErrorMessageKey.UpdateUser.USER_NOT_UPDATE});
